@@ -1,3 +1,3 @@
 ﻿
-using var game = new MonoGameKunskapsspel.Game1();
+using var game = new MonoGameKunskapsspel.KunskapsSpel();
 game.Run();
