@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Diagnostics;
 using System.Drawing;
+using System.Windows.Forms;
 using Color = Microsoft.Xna.Framework.Color;
 
 namespace MonoGameKunskapsspel
@@ -13,7 +14,7 @@ namespace MonoGameKunskapsspel
         public SpriteBatch spriteBatch;
         private Camera camera;
         private Player player;
-        private RoomManager roomManager = new RoomManager();
+        public RoomManager roomManager = new RoomManager();
 
         public static int screenHeight;
         public static int screenWidth;
@@ -21,13 +22,22 @@ namespace MonoGameKunskapsspel
         public KunskapsSpel()
         {
             _graphics = new GraphicsDeviceManager(this);
+
+            
+
             Content.RootDirectory = "Content";
-            IsMouseVisible = true;
         }
 
         protected override void Initialize()
         {
             base.Initialize();
+
+            _graphics.PreferredBackBufferWidth = Screen.PrimaryScreen.Bounds.Width;
+            _graphics.PreferredBackBufferHeight = Screen.PrimaryScreen.Bounds.Height;
+            _graphics.SynchronizeWithVerticalRetrace = true;
+            IsMouseVisible = true;
+            _graphics.ApplyChanges();
+
             screenHeight = _graphics.PreferredBackBufferHeight;
             screenWidth = _graphics.PreferredBackBufferWidth;
         }
@@ -35,7 +45,7 @@ namespace MonoGameKunskapsspel
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            player = new Player(spriteBatch, _graphics, Content);
+            player = new Player(spriteBatch, _graphics, this);
             camera = new Camera();
 
             roomManager.Add(new StartScreen(0), this);
@@ -56,9 +66,10 @@ namespace MonoGameKunskapsspel
 
         protected override void Draw(GameTime gameTime)
         {
+            _graphics.GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin(transformMatrix: camera.Transform); 
 
-            roomManager.Draw(this);
+            roomManager.Draw(this, gameTime);
             player.Draw(gameTime);
 
             spriteBatch.End();

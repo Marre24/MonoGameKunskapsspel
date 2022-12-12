@@ -11,6 +11,8 @@ namespace MonoGameKunskapsspel
     {
         public List<Room> rooms = new List<Room>();
         public int activeRoomId;
+        public Room GetActiveRoom() { return rooms[activeRoomId];}
+
 
         public void Update(GameTime gameTime, KunskapsSpel kunskapsSpel)
         {
@@ -19,11 +21,11 @@ namespace MonoGameKunskapsspel
                     room.Update(gameTime, kunskapsSpel);
         }
 
-        public void Draw(KunskapsSpel kunskapsSpel)
+        public void Draw(KunskapsSpel kunskapsSpel, GameTime gameTime)
         {
             foreach (Room room in rooms)
                 if (room.ID == activeRoomId)
-                    room.Draw(kunskapsSpel);
+                    room.Draw(kunskapsSpel, gameTime);
         }
 
 

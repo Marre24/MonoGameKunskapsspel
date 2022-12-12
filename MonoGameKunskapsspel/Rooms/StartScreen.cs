@@ -13,7 +13,7 @@ namespace MonoGameKunskapsspel
         {
         }
 
-        public override void Draw(KunskapsSpel kunskapsSpel)
+        public override void Draw(KunskapsSpel kunskapsSpel, GameTime gameTime)
         {
         }
 
