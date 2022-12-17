@@ -15,10 +15,8 @@ using SharpDX.Direct2D1.Effects;
 
 namespace MonoGameKunskapsspel
 {
-    public class Player
+    public class Player : Component
     {
-        readonly SpriteBatch spriteBatch;
-        readonly GraphicsDeviceManager graphicsDevice;
         readonly KunskapsSpel kunskapsSpel;
 
         private readonly Texture2D front;
@@ -27,21 +25,16 @@ namespace MonoGameKunskapsspel
         private readonly Texture2D left;
         public Texture2D activeTexture;
 
-        public Vector2 position;
-        private Vector2 velocity;
+        private readonly Point originalLocation = new(100, 100);
+        private readonly Point size = new(50, 50);
+        private Vector2 velocity = new(0f, 0f);
         public Rectangle hitBox;
-        private Point size;
         private const int movementSpeed = 5;
-        public Player(SpriteBatch spriteBatch, GraphicsDeviceManager graphicsDevice, KunskapsSpel kunskapsSpel)
+        public Player(KunskapsSpel kunskapsSpel)
         {
-            this.spriteBatch = spriteBatch;
-            this.graphicsDevice = graphicsDevice;
             this.kunskapsSpel = kunskapsSpel;
 
-            position = new Vector2(100f, 100f);
-            velocity = new Vector2(0f, 0f);
-            size = new Point(50, 50);
-            hitBox = new Rectangle(position.ToPoint(), size);
+            hitBox = new Rectangle(originalLocation, size);
 
             front = kunskapsSpel.Content.Load<Texture2D>("RobotFront");
             back = kunskapsSpel.Content.Load<Texture2D>("RobotBack");
@@ -53,7 +46,7 @@ namespace MonoGameKunskapsspel
         }
 
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             Move();
         }
@@ -65,10 +58,10 @@ namespace MonoGameKunskapsspel
             (bool canMoveX, bool canMoveY) = CanMoveTo((int)velocity.X, (int)velocity.Y);
 
             if (canMoveX)
-                position.X -= velocity.X;
+                hitBox.Location = new Point(hitBox.Location.X - (int)velocity.X, hitBox.Location.Y);
 
             if (canMoveY)
-                position.Y -= velocity.Y;
+                hitBox.Location = new Point(hitBox.Location.X, hitBox.Location.Y - (int)velocity.Y);
 
             velocity = new(0, 0);
         }
@@ -80,10 +73,10 @@ namespace MonoGameKunskapsspel
 
             foreach (FloorSegment floorSegment in kunskapsSpel.roomManager.GetActiveRoom().floorSegments)
             {
-                if (floorSegment.hitBox.Location.X + x <= position.X && floorSegment.hitBox.Location.X + floorSegment.hitBox.Width + x >= position.X + size.X)
+                if (floorSegment.hitBox.Location.X + x <= hitBox.Location.X && floorSegment.hitBox.Location.X + floorSegment.hitBox.Width + x >= hitBox.Location.X + size.X)
                     CanMoveX = true;
 
-                if (floorSegment.hitBox.Location.Y + y <= position.Y + size.Y && floorSegment.hitBox.Location.Y + floorSegment.hitBox.Height + y >= position.Y + size.Y)
+                if (floorSegment.hitBox.Location.Y + y <= hitBox.Location.Y + size.Y && floorSegment.hitBox.Location.Y + floorSegment.hitBox.Height + y >= hitBox.Location.Y + size.Y)
                     CanMoveY = true;
             }
 
@@ -91,9 +84,9 @@ namespace MonoGameKunskapsspel
 
         }
 
-        public void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(activeTexture, new Rectangle((int)position.X, (int)position.Y, 50, 100), Color.White);
+            spriteBatch.Draw(activeTexture, hitBox, Color.White);
         }
 
         private Tuple<int, int> GetOffset()
@@ -104,16 +97,27 @@ namespace MonoGameKunskapsspel
             var keyboardState = Keyboard.GetState();
 
             if (keyboardState.IsKeyDown(Keys.W))
+            {
                 y += movementSpeed;
+                activeTexture = back;
+            }
             if (keyboardState.IsKeyDown(Keys.S))
+            {
                 y -= movementSpeed;
+                activeTexture = front;
+            }
             if (keyboardState.IsKeyDown(Keys.A))
+            {
                 x += movementSpeed;
+                activeTexture = left;
+            }
             if (keyboardState.IsKeyDown(Keys.D))
+            {
                 x -= movementSpeed;
+                activeTexture = right;
+            }
 
             return Tuple.Create(x, y);
         }
-
     }
 }

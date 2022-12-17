@@ -15,8 +15,8 @@ namespace MonoGameKunskapsspel
         public void Follow(Player target)
         {
             var position = Matrix.CreateTranslation(
-                -target.position.X - (target.hitBox.Width / 2),
-                -target.position.Y - (target.hitBox.Height / 2), 0);
+                -target.hitBox.Location.X - (target.hitBox.Width / 2),
+                -target.hitBox.Location.Y - (target.hitBox.Height / 2), 0);
 
             var offset = Matrix.CreateTranslation(
                     KunskapsSpel.screenWidth / 2,

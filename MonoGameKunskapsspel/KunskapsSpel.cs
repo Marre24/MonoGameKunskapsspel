@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
@@ -13,8 +14,9 @@ namespace MonoGameKunskapsspel
         private GraphicsDeviceManager _graphics;
         public SpriteBatch spriteBatch;
         private Camera camera;
-        private Player player;
+        public Player player;
         public RoomManager roomManager = new RoomManager();
+        private List<Component> components = new List<Component>();
 
         public static int screenHeight;
         public static int screenWidth;
@@ -22,8 +24,6 @@ namespace MonoGameKunskapsspel
         public KunskapsSpel()
         {
             _graphics = new GraphicsDeviceManager(this);
-
-            
 
             Content.RootDirectory = "Content";
         }
@@ -45,13 +45,21 @@ namespace MonoGameKunskapsspel
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            player = new Player(spriteBatch, _graphics, this);
+            player = new Player(this);
             camera = new Camera();
 
-            roomManager.Add(new StartScreen(0), this);
-            roomManager.Add(new FirstRoom(1), this);
+            components.Add(player);
 
-            roomManager.SetActiveRoom(1);
+            //Add rooms in list
+            roomManager.Add(new FirstRoom(0), this);
+            roomManager.Add(new SecondRoom(1), this);
+
+            //Set destinations for these Rooms
+            roomManager.rooms[0].SetDestinations(null, roomManager.rooms[1]);
+            roomManager.rooms[1].SetDestinations(roomManager.rooms[0], null);
+
+
+            roomManager.SetActiveRoom(0);
         }
 
         protected override void Update(GameTime gameTime)
@@ -67,10 +75,12 @@ namespace MonoGameKunskapsspel
         protected override void Draw(GameTime gameTime)
         {
             _graphics.GraphicsDevice.Clear(Color.Black);
-            spriteBatch.Begin(transformMatrix: camera.Transform); 
+            spriteBatch.Begin(transformMatrix: camera.Transform, samplerState: SamplerState.LinearWrap);
+
+            foreach (Component component in components)
+                component.Draw(gameTime, spriteBatch);
 
             roomManager.Draw(this, gameTime);
-            player.Draw(gameTime);
 
             spriteBatch.End();
         }

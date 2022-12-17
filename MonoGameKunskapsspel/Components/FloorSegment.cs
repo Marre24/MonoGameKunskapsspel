@@ -21,7 +21,7 @@ namespace MonoGameKunskapsspel
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            kunskapsSpel.spriteBatch.Draw(kunskapsSpel.Content.Load<Texture2D>("StartScreen_WithoutText"), hitBox, Color.White);
+            kunskapsSpel.spriteBatch.Draw(kunskapsSpel.Content.Load<Texture2D>("FloorTile"), hitBox, hitBox, Color.White);
         }
 
         public override void Update(GameTime gameTime)

@@ -7,21 +7,21 @@ using System.Threading.Tasks;
 
 namespace MonoGameKunskapsspel
 {
-    internal class StartScreen : Room
+    internal class StartScreen
     {
-        public StartScreen(int ID) : base(ID)
+        public StartScreen()
         {
         }
 
-        public override void Draw(KunskapsSpel kunskapsSpel, GameTime gameTime)
+        public void Draw(KunskapsSpel kunskapsSpel, GameTime gameTime)
         {
         }
 
-        public override void Initialize(KunskapsSpel kunskapsSpel)
+        public void Initialize(KunskapsSpel kunskapsSpel)
         {
         }
 
-        public override void Update(GameTime gameTime, KunskapsSpel kunskapsSpel)
+        public void Update(GameTime gameTime, KunskapsSpel kunskapsSpel)
         {
         }
     }
