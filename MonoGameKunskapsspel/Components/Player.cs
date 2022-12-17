@@ -25,8 +25,8 @@ namespace MonoGameKunskapsspel
         private readonly Texture2D left;
         public Texture2D activeTexture;
 
-        private readonly Point originalLocation = new(100, 100);
-        private readonly Point size = new(50, 50);
+        public readonly Point originalLocation = new(100, 100);
+        public Point size = new(75, 100);
         private Vector2 velocity = new(0f, 0f);
         public Rectangle hitBox;
         private const int movementSpeed = 5;
@@ -42,7 +42,6 @@ namespace MonoGameKunskapsspel
             left = kunskapsSpel.Content.Load<Texture2D>("RobotLeft");
 
             activeTexture = front;
-
         }
 
 

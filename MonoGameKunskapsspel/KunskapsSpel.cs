@@ -17,6 +17,7 @@ namespace MonoGameKunskapsspel
         public Player player;
         public RoomManager roomManager = new RoomManager();
         private List<Component> components = new List<Component>();
+        public Window activeWindow;
 
         public static int screenHeight;
         public static int screenWidth;
@@ -48,6 +49,7 @@ namespace MonoGameKunskapsspel
             player = new Player(this);
             camera = new Camera();
 
+            components.Add(new NPC(new(500, 200, 200, 200), this));
             components.Add(player);
 
             //Add rooms in list
@@ -64,10 +66,16 @@ namespace MonoGameKunskapsspel
 
         protected override void Update(GameTime gameTime)
         {
-
-            roomManager.Update(gameTime, this);
-            player.Update(gameTime);
-            camera.Follow(player);
+            if (activeWindow == null)
+            {
+                roomManager.Update(gameTime, this);
+                camera.Follow(player);
+                foreach (Component component in components)
+                    component.Update(gameTime);
+            } 
+            else
+                activeWindow.Update(gameTime);
+            
 
             base.Update(gameTime);
         }
@@ -77,10 +85,12 @@ namespace MonoGameKunskapsspel
             _graphics.GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin(transformMatrix: camera.Transform, samplerState: SamplerState.LinearWrap);
 
+            roomManager.Draw(this, gameTime);
+
             foreach (Component component in components)
                 component.Draw(gameTime, spriteBatch);
 
-            roomManager.Draw(this, gameTime);
+            activeWindow?.Draw(gameTime, spriteBatch);
 
             spriteBatch.End();
         }

@@ -58,7 +58,6 @@ namespace MonoGameKunskapsspel
 
             if (!frontDoor.open)
                 frontDoor.TryToOpen();
-            
         }
 
         public override void CreateDoors()
