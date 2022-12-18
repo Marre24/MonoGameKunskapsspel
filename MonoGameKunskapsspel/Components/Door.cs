@@ -13,8 +13,9 @@ namespace MonoGameKunskapsspel
     {
         private readonly Room doorLeedsTo;
         public readonly bool open;
-        private Rectangle hitBox;
+        public Rectangle hitBox;
         private KunskapsSpel kunskapsSpel;
+        private readonly bool showDoor;
 
         public Door(Rectangle hitBox, bool open, Room doorLeedsTo, KunskapsSpel kunskapsSpel)
         {
@@ -22,13 +23,22 @@ namespace MonoGameKunskapsspel
             this.doorLeedsTo = doorLeedsTo;
             this.hitBox = hitBox;
             this.kunskapsSpel = kunskapsSpel;
+            showDoor = true;
+        }
+        public Door(Rectangle hitBox, Room doorLeedsTo, KunskapsSpel kunskapsSpel, bool showDoor)
+        {
+            open = true;
+            this.doorLeedsTo = doorLeedsTo;
+            this.hitBox = hitBox;
+            this.kunskapsSpel = kunskapsSpel;
+            this.showDoor = showDoor;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            if (open)
+            if (open && showDoor)
                 spriteBatch.Draw(kunskapsSpel.Content.Load<Texture2D>("OpenDoorHotPink"), hitBox, Color.White);
-            else
+            else if (showDoor)
                 spriteBatch.Draw(kunskapsSpel.Content.Load<Texture2D>("ShutDoorHotPink"), hitBox, Color.White);
         }
 
@@ -40,6 +50,7 @@ namespace MonoGameKunskapsspel
         public void GoThroughDoor(RoomManager roomManager)
         {
             roomManager.SetActiveRoom(doorLeedsTo);
+            kunskapsSpel.player.hitBox.Location = doorLeedsTo.frontDoorLocation;
         }
 
         public bool PlayerCanInteract(Player player)
@@ -62,7 +73,7 @@ namespace MonoGameKunskapsspel
         }
         public void TryToOpen()
         {
-            MessageBox.Show("I'm trying my best");
+            new UnlockDoorWindow(kunskapsSpel);
         }
     }
 }

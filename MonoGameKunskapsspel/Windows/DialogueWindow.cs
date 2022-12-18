@@ -44,7 +44,11 @@ namespace MonoGameKunskapsspel
         public void Init(List<string> dialogue)
         {
             this.dialogue = dialogue.ToList();
-            words = dialogue[0].Split(" ").ToList();
+            List<string> wordStrings = dialogue[0].Split(" ").ToList();
+            foreach (string word in wordStrings)
+            {
+                words.Add(word.ToCharArray().ToList());
+            }
             activeState = State.ReadingText;
 
             dialogueWindow = new Rectangle(new(
@@ -62,39 +66,64 @@ namespace MonoGameKunskapsspel
         }
 
         private double timeSpan = 0.0;
-        private const double interval = 1.0;
+        private double interval = 0.08;
         private string sentence = "";
-        private List<string> words;
+        private List<List<char>> words = new List<List<char>>();
+        private List<char> activeWord = new List<char>();
+        private int rowCount = 1;
+
 
         public override void Update(GameTime gameTime)
         {
             if (activeState == State.Done)
                 End();
 
-            if (activeState == State.Waiting && Keyboard.GetState().IsKeyDown(Keys.Right))
+            if (activeState == State.ReadingText && timeSpan + interval <= gameTime.TotalGameTime.TotalSeconds)    //Writes out text
+            {
+                if (Keyboard.GetState().GetPressedKeys().Contains(Keys.Up))                                                     //Fast forward
+                    interval = 0;
+
+                timeSpan = gameTime.TotalGameTime.TotalSeconds;
+
+                activeWord = words[0];
+
+                if ((dialogueWindow.Width - 30) * rowCount < 26.7 * (sentence.Length + activeWord.Count))          //Checks if there is space for the next word
+                {
+                    sentence += "\n";
+                    rowCount++;
+                }
+
+                sentence += activeWord[0];
+                activeWord.RemoveAt(0);
+
+                if (activeWord.Count == 0)                  //Word has ended
+                {
+                    words.RemoveAt(0);
+                    sentence += " ";
+                }
+
+                if (words.Count == 0)                       //Phrase has ended
+                {
+                    dialogue.RemoveAt(0);
+                    activeState = State.Waiting;
+                    rowCount = 1;
+                    interval = 0.08;
+                }
+            }
+
+            if (activeState == State.Waiting && Keyboard.GetState().IsKeyDown(Keys.Right))                         //Initializes the next phrase
             {
                 if (dialogue.Count == 0)
                     activeState = State.Done;
                 else
                 {
-                    words = dialogue[0].Split(" ").ToList();
+                    List<string> wordStrings = dialogue[0].Split(" ").ToList();
+                    foreach (string word in wordStrings)
+                        words.Add(word.ToCharArray().ToList());
+
                     sentence = "";
                     activeState = State.ReadingText;
                 }
-            }
-
-            if (activeState == State.ReadingText && timeSpan + interval <= gameTime.TotalGameTime.TotalSeconds)
-            {
-                timeSpan = gameTime.ElapsedGameTime.TotalSeconds;
-                sentence += words[0] + " ";
-                words.RemoveAt(0);
-
-                if (words.Count == 0)
-                {
-                    dialogue.RemoveAt(0);
-                    activeState = State.Waiting;
-                }
-                
             }
         }
 

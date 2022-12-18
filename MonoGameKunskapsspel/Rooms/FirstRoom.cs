@@ -14,9 +14,6 @@ namespace MonoGameKunskapsspel
 {
     public class FirstRoom : Room
     {
-        public Door frontDoor;
-        private KunskapsSpel kunskapsSpel;
-
         public FirstRoom(int ID) : base(ID) {   }
 
 
@@ -25,6 +22,9 @@ namespace MonoGameKunskapsspel
             this.kunskapsSpel = kunskapsSpel;
             //Create Floors
             floorSegments = new List<FloorSegment> { new(new(0, 0, 2000, 700), kunskapsSpel)};
+
+            //Create NPC
+            generalGoofy = new NPC(new(500, 200, 200, 200), kunskapsSpel);
 
             //Create Walls
             Point size = new(floorSegments[0].hitBox.Width, 300);
@@ -41,12 +41,16 @@ namespace MonoGameKunskapsspel
 
             frontDoor.Draw(gameTime, kunskapsSpel.spriteBatch);
 
+            generalGoofy.Draw(gameTime, kunskapsSpel.spriteBatch);
+
             //foreach (Rectangle wall in walls)
             //    kunskapsSpel.spriteBatch.Draw(kunskapsSpel.Content.Load<Texture2D>("WallTiles"), wall, wall, Color.White);
         }
 
         public override void Update(GameTime gameTime, KunskapsSpel kunskapsSpel)
         {
+            generalGoofy.Update(gameTime);
+
             if (!frontDoor.PlayerCanInteract(kunskapsSpel.player))
                 return;
 
@@ -62,7 +66,12 @@ namespace MonoGameKunskapsspel
 
         public override void CreateDoors()
         {
-            frontDoor = new Door(new(new(1000, -104), new(128, 104)), false, frontDoorLeedsTo, kunskapsSpel);
+            frontDoor = new Door(new(new(1000, -104), new(128, 104)), frontDoorLeedsTo, kunskapsSpel, false);
+        }
+
+        public override void SetDoorLocations()
+        {
+            frontDoorLocation = frontDoor.hitBox.Location + new Point(0, 40);
         }
     }
 }

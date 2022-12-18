@@ -16,11 +16,8 @@ namespace MonoGameKunskapsspel
         private Camera camera;
         public Player player;
         public RoomManager roomManager = new RoomManager();
-        private List<Component> components = new List<Component>();
         public Window activeWindow;
 
-        public static int screenHeight;
-        public static int screenWidth;
 
         public KunskapsSpel()
         {
@@ -38,9 +35,6 @@ namespace MonoGameKunskapsspel
             _graphics.SynchronizeWithVerticalRetrace = true;
             IsMouseVisible = true;
             _graphics.ApplyChanges();
-
-            screenHeight = _graphics.PreferredBackBufferHeight;
-            screenWidth = _graphics.PreferredBackBufferWidth;
         }
 
         protected override void LoadContent()
@@ -49,17 +43,13 @@ namespace MonoGameKunskapsspel
             player = new Player(this);
             camera = new Camera();
 
-            components.Add(new NPC(new(500, 200, 200, 200), this));
-            components.Add(player);
-
             //Add rooms in list
             roomManager.Add(new FirstRoom(0), this);
             roomManager.Add(new SecondRoom(1), this);
 
-            //Set destinations for these Rooms
+            //Set destinations for doors in Rooms
             roomManager.rooms[0].SetDestinations(null, roomManager.rooms[1]);
             roomManager.rooms[1].SetDestinations(roomManager.rooms[0], null);
-
 
             roomManager.SetActiveRoom(0);
         }
@@ -69,9 +59,8 @@ namespace MonoGameKunskapsspel
             if (activeWindow == null)
             {
                 roomManager.Update(gameTime, this);
+                player.Update(gameTime);
                 camera.Follow(player);
-                foreach (Component component in components)
-                    component.Update(gameTime);
             } 
             else
                 activeWindow.Update(gameTime);
@@ -87,8 +76,7 @@ namespace MonoGameKunskapsspel
 
             roomManager.Draw(this, gameTime);
 
-            foreach (Component component in components)
-                component.Draw(gameTime, spriteBatch);
+            player.Draw(gameTime, spriteBatch);
 
             activeWindow?.Draw(gameTime, spriteBatch);
 

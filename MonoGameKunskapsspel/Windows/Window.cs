@@ -11,8 +11,6 @@ namespace MonoGameKunskapsspel
 {
     public abstract class Window
     {
-        
-
         public abstract void Draw(GameTime gameTime, SpriteBatch spriteBatch);
         public abstract void Update(GameTime gameTime);
         public abstract void End();

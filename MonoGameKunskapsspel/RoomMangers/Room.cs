@@ -12,9 +12,16 @@ namespace MonoGameKunskapsspel
     {
         public List<FloorSegment> floorSegments;
         public List<Rectangle> walls;
+        public NPC generalGoofy;
         public int ID;
         public Room backDoorLeedsTo;
         public Room frontDoorLeedsTo;
+        public Point frontDoorLocation; 
+        public Point backDoorLocation;
+        public Door frontDoor;
+        public Door backDoor;
+        public KunskapsSpel kunskapsSpel;
+
 
         public Room(int ID)
         {
@@ -23,6 +30,8 @@ namespace MonoGameKunskapsspel
         public abstract void Initialize(KunskapsSpel kunskapsSpel);
         public abstract void Update(GameTime gameTime, KunskapsSpel kunskapsSpel);
         public abstract void Draw(KunskapsSpel kunskapsSpel, GameTime gameTime);
+
+        public abstract void SetDoorLocations();
 
         public virtual void SetDestinations(Room backDoorLeedsTo, Room frontDoorLeedsTo)
         {
