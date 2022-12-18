@@ -73,13 +73,6 @@
 /processorParam:TextureFormat=Color
 /build:OpenDoorHotPink.png
 
-#begin Pixel.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:Pixel.spritefont
-
 #begin PlayerReady.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor

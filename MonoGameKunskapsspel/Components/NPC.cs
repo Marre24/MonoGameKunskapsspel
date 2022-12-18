@@ -17,8 +17,8 @@ namespace MonoGameKunskapsspel
         private KunskapsSpel kunskapsSpel;
         private List<string> dialogue = new()
         {
-            "Halloj Maxi trevligt att se dig har",
-            "Mitt namn ar General Goofy jag vet inte om jag kommer att byta namn :)"
+            "Halloj Maxi trevligt att se dig här",
+            "Mitt namn är General Goofy jag vet inte om jag kommer att byta namn :)"
         };
 
         public NPC(Rectangle hitBox, KunskapsSpel kunskapsSpel)

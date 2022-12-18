@@ -11,7 +11,7 @@ with.
     <!--
     Modify this string to change the font that will be imported.
     -->
-    <FontName>Press Start Regular</FontName>
+    <FontName>Press Start</FontName>
 
     <!--
     Size is a float value, measured in points. Modify this value to change
@@ -52,8 +52,8 @@ with.
     -->
     <CharacterRegions>
       <CharacterRegion>
-        <Start>&#32;</Start>
-        <End>&#126;</End>
+		  <Start>&#32;</Start>
+		  <End>&#246;</End>
       </CharacterRegion>
     </CharacterRegions>
   </Asset>

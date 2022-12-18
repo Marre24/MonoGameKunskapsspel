@@ -21,7 +21,6 @@ namespace MonoGameKunskapsspel
 
         List<string> dialogue;
         KunskapsSpel kunskapsSpel;
-        private SpriteFont pixel;
         private SpriteFont playerReady;
         private State activeState;
 
@@ -37,7 +36,6 @@ namespace MonoGameKunskapsspel
             this.kunskapsSpel = kunskapsSpel;
             kunskapsSpel.activeWindow = this;
 
-            pixel = kunskapsSpel.Content.Load<SpriteFont>("Pixel");
             playerReady = kunskapsSpel.Content.Load<SpriteFont>("PlayerReady");
         }
 
