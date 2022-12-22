@@ -6,27 +6,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
-using Keys = Microsoft.Xna.Framework.Input.Keys;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace MonoGameKunskapsspel
 {
-    public class NPC : Component
+    public class Sign : Component
     {
+        List<string> text;
         private Rectangle hitBox;
         private KunskapsSpel kunskapsSpel;
-        private List<string> dialogue;
 
-        public NPC(Rectangle hitBox, KunskapsSpel kunskapsSpel, List<string> dialog)
+        public Sign(Rectangle hitBox, KunskapsSpel kunskapsSpel, List<string> text)
         {
             this.hitBox = hitBox;
             this.kunskapsSpel = kunskapsSpel;
-            dialogue = dialog.ToList();
+            this.text = text;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(kunskapsSpel.Content.Load<Texture2D>("GeneralGoofy"), hitBox, Color.White);
+
+            spriteBatch.Draw(kunskapsSpel.Content.Load<Texture2D>("PurpleSignFacingLeft"), hitBox, Color.White);
         }
 
         public override void Update(GameTime gameTime)
@@ -38,7 +38,7 @@ namespace MonoGameKunskapsspel
                 return;
 
             DialogueWindow dialogueWindow = new DialogueWindow(kunskapsSpel);
-            dialogueWindow.Init(dialogue);
+            dialogueWindow.Init(text);
         }
 
         public bool PlayerCanInteract(Player player)
@@ -60,5 +60,6 @@ namespace MonoGameKunskapsspel
         {
             return hitBox.Top <= yCord && hitBox.Bottom >= yCord;
         }
+
     }
 }

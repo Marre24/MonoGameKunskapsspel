@@ -21,7 +21,7 @@ namespace MonoGameKunskapsspel
         public Door frontDoor;
         public Door backDoor;
         public KunskapsSpel kunskapsSpel;
-
+        public List<Sign> signs = new List<Sign>();
 
         public Room(int ID)
         {

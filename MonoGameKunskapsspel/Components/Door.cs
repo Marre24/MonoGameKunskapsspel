@@ -1,11 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Keys = Microsoft.Xna.Framework.Input.Keys;
 
 namespace MonoGameKunskapsspel
 {
@@ -44,7 +46,17 @@ namespace MonoGameKunskapsspel
 
         public override void Update(GameTime gameTime)
         {
+            if (!PlayerCanInteract(kunskapsSpel.player))
+                return;
 
+            if (open)
+                GoThroughDoor(kunskapsSpel.roomManager);
+
+            if (!Keyboard.GetState().IsKeyDown(Keys.Space))
+                return;
+
+            if (!open)
+                TryToOpen();
         }
 
         public void GoThroughDoor(RoomManager roomManager)

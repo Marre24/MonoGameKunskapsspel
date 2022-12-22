@@ -24,7 +24,11 @@ namespace MonoGameKunskapsspel
             floorSegments = new List<FloorSegment> { new(new(0, 0, 2000, 700), kunskapsSpel) };
 
             //Create NPC
-            generalGoofy = new NPC(new(500, 200, 200, 200), kunskapsSpel);
+            generalGoofy = new NPC(new(500, 200, 200, 200), kunskapsSpel, new()
+            {
+                "Hej det här rummet är det andra",
+                "Ooga booga :)"
+            });
 
             //Create Walls
             Point size = new(floorSegments[0].hitBox.Width, 300);

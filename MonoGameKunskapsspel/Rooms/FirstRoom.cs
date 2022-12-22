@@ -24,7 +24,18 @@ namespace MonoGameKunskapsspel
             floorSegments = new List<FloorSegment> { new(new(0, 0, 2000, 700), kunskapsSpel)};
 
             //Create NPC
-            generalGoofy = new NPC(new(500, 200, 200, 200), kunskapsSpel);
+            generalGoofy = new NPC(new(500, 200, 200, 200), kunskapsSpel, new()
+            {
+                "Hej det här rummet är det första",
+                "Ooga booga"
+            });
+
+            //Create signs
+            signs.Add(new Sign(new(500, 500, 100, 100), kunskapsSpel, new()
+            {
+                "Det här är en skylt",
+                "Den gör inte så mycket men är glad att vara med i spelet"
+            }));
 
             //Create Walls
             Point size = new(floorSegments[0].hitBox.Width, 300);
@@ -43,6 +54,9 @@ namespace MonoGameKunskapsspel
 
             generalGoofy.Draw(gameTime, kunskapsSpel.spriteBatch);
 
+            foreach (Sign sign in signs)
+                sign.Draw(gameTime, kunskapsSpel.spriteBatch);
+
             //foreach (Rectangle wall in walls)
             //    kunskapsSpel.spriteBatch.Draw(kunskapsSpel.Content.Load<Texture2D>("WallTiles"), wall, wall, Color.White);
         }
@@ -51,17 +65,11 @@ namespace MonoGameKunskapsspel
         {
             generalGoofy.Update(gameTime);
 
-            if (!frontDoor.PlayerCanInteract(kunskapsSpel.player))
-                return;
+            foreach (Sign sign in signs)
+                sign.Update(gameTime);
 
-            if (frontDoor.open)
-                frontDoor.GoThroughDoor(kunskapsSpel.roomManager);
-
-            if (!Keyboard.GetState().IsKeyDown(Keys.Space))
-                return;
-
-            if (!frontDoor.open)
-                frontDoor.TryToOpen();
+            frontDoor.Update(gameTime);
+            
         }
 
         public override void CreateDoors()
