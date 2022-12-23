@@ -43,6 +43,11 @@ namespace MonoGameKunskapsspel
             {
                 new(floorSegments[0].hitBox.Location - new Point(0, size.Y), size)
             };
+
+            //Create Enemies
+            mathias = new Mathias(kunskapsSpel, new Point(1300, 300), new MathiasIntroduction(kunskapsSpel.player, kunskapsSpel, this, new List<string>(){
+                "Hej jag heter Mathias, FEAR ME"
+            }));
         }
 
         public override void Draw(KunskapsSpel kunskapsSpel, GameTime gameTime)
@@ -50,12 +55,13 @@ namespace MonoGameKunskapsspel
             foreach (FloorSegment floorSegment in floorSegments)
                 floorSegment.Draw(gameTime, kunskapsSpel.spriteBatch);
 
-            frontDoor.Draw(gameTime, kunskapsSpel.spriteBatch);
-
-            generalGoofy.Draw(gameTime, kunskapsSpel.spriteBatch);
-
             foreach (Sign sign in signs)
                 sign.Draw(gameTime, kunskapsSpel.spriteBatch);
+
+            frontDoor.Draw(gameTime, kunskapsSpel.spriteBatch);
+            generalGoofy.Draw(gameTime, kunskapsSpel.spriteBatch);
+            mathias.Draw(gameTime, kunskapsSpel.spriteBatch);
+
 
             //foreach (Rectangle wall in walls)
             //    kunskapsSpel.spriteBatch.Draw(kunskapsSpel.Content.Load<Texture2D>("WallTiles"), wall, wall, Color.White);
@@ -69,7 +75,8 @@ namespace MonoGameKunskapsspel
                 sign.Update(gameTime);
 
             frontDoor.Update(gameTime);
-            
+
+            mathias.Update(gameTime);
         }
 
         public override void CreateDoors()

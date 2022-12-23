@@ -22,24 +22,22 @@ namespace MonoGameKunskapsspel
         List<string> dialogue;
         KunskapsSpel kunskapsSpel;
         private SpriteFont playerReady;
-        private State activeState;
+        private readonly Player player;
+        private readonly Camera camera;
 
-        enum State
-        {
-            ReadingText,
-            Waiting,
-            Done,
-        }
-
-        public DialogueWindow(KunskapsSpel kunskapsSpel)
+        public DialogueWindow(KunskapsSpel kunskapsSpel, Player player, Camera camera, List<string> dialogue)
         {
             this.kunskapsSpel = kunskapsSpel;
+            this.player = player;
+            this.camera = camera;
             kunskapsSpel.activeWindow = this;
 
             playerReady = kunskapsSpel.Content.Load<SpriteFont>("PlayerReady");
+
+            Init(dialogue);
         }
 
-        public void Init(List<string> dialogue)
+        private void Init(List<string> dialogue)
         {
             this.dialogue = dialogue.ToList();
             List<string> wordStrings = dialogue[0].Split(" ").ToList();
@@ -47,11 +45,11 @@ namespace MonoGameKunskapsspel
             {
                 words.Add(word.ToCharArray().ToList());
             }
-            activeState = State.ReadingText;
+            player.activeState = State.ReadingText;
 
             dialogueWindow = new Rectangle(new(
-                kunskapsSpel.player.hitBox.X + kunskapsSpel.player.size.X / 2 - size.X / 2,
-                kunskapsSpel.player.hitBox.Y + kunskapsSpel.player.size.Y / 2 + 350 - size.Y / 2), size);
+                camera.window.X + camera.window.Size.X / 2 - size.X / 2,
+                camera.window.Y + camera.window.Size.Y / 2 + 350 - size.Y / 2), size);
 
             textPosition = new Vector2(dialogueWindow.X + 30, dialogueWindow.Y + 30);
         }
@@ -73,46 +71,18 @@ namespace MonoGameKunskapsspel
 
         public override void Update(GameTime gameTime)
         {
-            if (activeState == State.Done)
-                End();
-
-            if (activeState == State.ReadingText && timeSpan + interval <= gameTime.TotalGameTime.TotalSeconds)    //Writes out text
+            if (player.activeState == State.ReadingText && timeSpan + interval <= gameTime.TotalGameTime.TotalSeconds)
             {
-                if (Keyboard.GetState().GetPressedKeys().Contains(Keys.Up))                                                     //Fast forward
-                    interval = 0;
-
-                timeSpan = gameTime.TotalGameTime.TotalSeconds;
-
-                activeWord = words[0];
-
-                if ((dialogueWindow.Width - 30) * rowCount < 26.7 * (sentence.Length + activeWord.Count))          //Checks if there is space for the next word
-                {
-                    sentence += "\n";
-                    rowCount++;
-                }
-
-                sentence += activeWord[0];
-                activeWord.RemoveAt(0);
-
-                if (activeWord.Count == 0)                  //Word has ended
-                {
-                    words.RemoveAt(0);
-                    sentence += " ";
-                }
-
-                if (words.Count == 0)                       //Phrase has ended
-                {
-                    dialogue.RemoveAt(0);
-                    activeState = State.Waiting;
-                    rowCount = 1;
-                    interval = 0.08;
-                }
+                WriteOutText(gameTime);
             }
 
-            if (activeState == State.Waiting && Keyboard.GetState().IsKeyDown(Keys.Right))                         //Initializes the next phrase
+            if (player.activeState == State.WaitingForNextLine && Keyboard.GetState().IsKeyDown(Keys.Right))                         //Initializes the next phrase
             {
                 if (dialogue.Count == 0)
-                    activeState = State.Done;
+                {
+                    player.activeState = State.Walking;
+                    End();
+                }
                 else
                 {
                     List<string> wordStrings = dialogue[0].Split(" ").ToList();
@@ -120,8 +90,41 @@ namespace MonoGameKunskapsspel
                         words.Add(word.ToCharArray().ToList());
 
                     sentence = "";
-                    activeState = State.ReadingText;
+                    player.activeState = State.ReadingText;
                 }
+            }
+        }
+
+        private void WriteOutText(GameTime gameTime)
+        {
+            if (Keyboard.GetState().GetPressedKeys().Contains(Keys.Up))                                                     //Fast forward
+                interval = 0;
+
+            timeSpan = gameTime.TotalGameTime.TotalSeconds;
+
+            activeWord = words[0];
+
+            if ((dialogueWindow.Width - 30) * rowCount < 26.7 * (sentence.Length + activeWord.Count))          //Checks if there is space for the next word
+            {
+                sentence += "\n";
+                rowCount++;
+            }
+
+            sentence += activeWord[0];
+            activeWord.RemoveAt(0);
+
+            if (activeWord.Count == 0)                  //Word has ended
+            {
+                words.RemoveAt(0);
+                sentence += " ";
+            }
+
+            if (words.Count == 0)                       //Phrase has ended
+            {
+                dialogue.RemoveAt(0);
+                player.activeState = State.WaitingForNextLine;
+                rowCount = 1;
+                interval = 0.08;
             }
         }
 

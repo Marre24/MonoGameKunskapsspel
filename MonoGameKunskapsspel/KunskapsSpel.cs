@@ -13,7 +13,7 @@ namespace MonoGameKunskapsspel
     {
         private GraphicsDeviceManager _graphics;
         public SpriteBatch spriteBatch;
-        private Camera camera;
+        public Camera camera;
         public Player player;
         public RoomManager roomManager = new RoomManager();
         public Window activeWindow;
@@ -41,7 +41,7 @@ namespace MonoGameKunskapsspel
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
             player = new Player(this);
-            camera = new Camera();
+            camera = new Camera(player.hitBox);
 
             //Add rooms in list
             roomManager.Add(new FirstRoom(0), this);
@@ -56,15 +56,21 @@ namespace MonoGameKunskapsspel
 
         protected override void Update(GameTime gameTime)
         {
-            if (activeWindow == null)
+            if (player.activeState == State.Walking)
             {
                 roomManager.Update(gameTime, this);
                 player.Update(gameTime);
-                camera.Follow(player);
-            } 
-            else
+                camera.Follow(player.hitBox);
+            }
+
+            if (player.activeState == State.WaitingForNextLine || player.activeState == State.ReadingText)
                 activeWindow.Update(gameTime);
-            
+
+            if (player.activeState == State.WatchingCutScene)
+            {
+                camera.Follow(roomManager.GetActiveRoom().mathias.cutScene.hiddenFollowPoint);
+                roomManager.GetActiveRoom().mathias.cutScene.Update(gameTime);
+            }
 
             base.Update(gameTime);
         }

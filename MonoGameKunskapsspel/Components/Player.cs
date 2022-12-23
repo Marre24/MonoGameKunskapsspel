@@ -15,6 +15,14 @@ using SharpDX.Direct2D1.Effects;
 
 namespace MonoGameKunskapsspel
 {
+    public enum State
+    {
+        ReadingText,
+        WaitingForNextLine,
+        WatchingCutScene,
+        Walking,
+    }
+
     public class Player : Component
     {
         readonly KunskapsSpel kunskapsSpel;
@@ -24,10 +32,11 @@ namespace MonoGameKunskapsspel
         private readonly Texture2D right;
         private readonly Texture2D left;
         public Texture2D activeTexture;
+        public State activeState = State.Walking;
 
         private readonly Point position = new(100, 100);
         public Point size = new(75, 100);
-        private Vector2 velocity = new(0f, 0f);
+        private Point velocity = new(0, 0);
         public Rectangle hitBox;
         private const int movementSpeed = 5;
         public Player(KunskapsSpel kunskapsSpel)
@@ -54,13 +63,16 @@ namespace MonoGameKunskapsspel
         {
             (velocity.X, velocity.Y) = GetOffset();
 
-            (bool canMoveX, bool canMoveY) = CanMoveTo((int)velocity.X, (int)velocity.Y);
+            if (velocity == new Point(0,0))
+                return;
+
+            (bool canMoveX, bool canMoveY) = CanMoveTo(velocity.X, velocity.Y);
 
             if (canMoveX)
-                hitBox.Location = new Point(hitBox.Location.X - (int)velocity.X, hitBox.Location.Y);
+                hitBox.Location = new Point(hitBox.Location.X - velocity.X, hitBox.Location.Y);
 
             if (canMoveY)
-                hitBox.Location = new Point(hitBox.Location.X, hitBox.Location.Y - (int)velocity.Y);
+                hitBox.Location = new Point(hitBox.Location.X, hitBox.Location.Y - velocity.Y);
 
             velocity = new(0, 0);
         }

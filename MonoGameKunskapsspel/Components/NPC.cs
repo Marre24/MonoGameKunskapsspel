@@ -37,8 +37,7 @@ namespace MonoGameKunskapsspel
             if (!Keyboard.GetState().IsKeyDown(Keys.Space))
                 return;
 
-            DialogueWindow dialogueWindow = new DialogueWindow(kunskapsSpel);
-            dialogueWindow.Init(dialogue);
+            DialogueWindow dialogueWindow = new DialogueWindow(kunskapsSpel, kunskapsSpel.player, kunskapsSpel.camera, dialogue);
         }
 
         public bool PlayerCanInteract(Player player)
