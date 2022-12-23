@@ -14,13 +14,11 @@ namespace MonoGameKunskapsspel
     public class NPC : Component
     {
         private Rectangle hitBox;
-        private KunskapsSpel kunskapsSpel;
-        private List<string> dialogue;
+        private readonly List<string> dialogue;
 
-        public NPC(Rectangle hitBox, KunskapsSpel kunskapsSpel, List<string> dialog)
+        public NPC(Rectangle hitBox, KunskapsSpel kunskapsSpel, List<string> dialog) : base(kunskapsSpel)
         {
             this.hitBox = hitBox;
-            this.kunskapsSpel = kunskapsSpel;
             dialogue = dialog.ToList();
         }
 
@@ -37,17 +35,12 @@ namespace MonoGameKunskapsspel
             if (!Keyboard.GetState().IsKeyDown(Keys.Space))
                 return;
 
-            DialogueWindow dialogueWindow = new DialogueWindow(kunskapsSpel, kunskapsSpel.player, kunskapsSpel.camera, dialogue);
+            _ = new DialogueWindow(kunskapsSpel, kunskapsSpel.player, kunskapsSpel.camera, dialogue);
         }
 
         public bool PlayerCanInteract(Player player)
         {
-            return IsTouching(player);
-        }
-
-        private bool IsTouching(Player player)
-        {
-            return ((IsBetweenX(player.hitBox.Right) || IsBetweenX(player.hitBox.Left)) && IsBetweenY(player.hitBox.Top));
+            return (IsBetweenX(player.hitBox.Right) || IsBetweenX(player.hitBox.Left)) && IsBetweenY(player.hitBox.Top);
         }
 
         private bool IsBetweenX(int xCord)

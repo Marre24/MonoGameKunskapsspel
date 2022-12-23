@@ -11,9 +11,9 @@ namespace MonoGameKunskapsspel
 {
     public class Camera
     {
-        public Matrix Transform { get; private set; }
+        public Matrix transform;
 
-        private readonly Point windowSize = new Point(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
+        private readonly Point screenSize = new(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
         public Rectangle window;
 
         public Camera(Rectangle target)
@@ -32,7 +32,7 @@ namespace MonoGameKunskapsspel
                     Screen.PrimaryScreen.Bounds.Width / 2,
                     Screen.PrimaryScreen.Bounds.Height / 2, 0);
 
-            Transform = offset * position;
+            transform = offset * position;
         }
 
         public void Follow(Vector2 target)
@@ -46,15 +46,12 @@ namespace MonoGameKunskapsspel
                     Screen.PrimaryScreen.Bounds.Width / 2,
                     Screen.PrimaryScreen.Bounds.Height / 2, 0);
 
-            Transform = offset * position;
+            transform = offset * position;
         }
 
         private void UpdateWindow(Vector2 target)
         {
-            window = new Rectangle(
-                (int)target.X - Screen.PrimaryScreen.Bounds.Width / 2,
-                (int)target.Y - Screen.PrimaryScreen.Bounds.Height / 2,
-                windowSize.X, windowSize.Y);
+            window = new((int)target.X - Screen.PrimaryScreen.Bounds.Width / 2, (int)target.Y - Screen.PrimaryScreen.Bounds.Height / 2, screenSize.X, screenSize.Y);
         }
 
         private void UpdateWindow(Rectangle target)
@@ -62,7 +59,7 @@ namespace MonoGameKunskapsspel
             window = new Rectangle(
                 target.Location.X + (target.Width / 2) - Screen.PrimaryScreen.Bounds.Width / 2,
                 target.Location.Y + (target.Height / 2) - Screen.PrimaryScreen.Bounds.Height / 2, 
-                windowSize.X , windowSize.Y);
+                screenSize.X , screenSize.Y);
         }
     }
 }

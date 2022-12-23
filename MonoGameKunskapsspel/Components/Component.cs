@@ -10,6 +10,13 @@ namespace MonoGameKunskapsspel
 {
     public abstract class Component
     {
+        public readonly KunskapsSpel kunskapsSpel;
+
+        protected Component(KunskapsSpel kunskapsSpel)
+        {
+            this.kunskapsSpel = kunskapsSpel;
+        }
+
         public abstract void Draw(GameTime gameTime, SpriteBatch spriteBatch);
         public abstract void Update(GameTime gameTime);
 

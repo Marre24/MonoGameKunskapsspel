@@ -15,18 +15,16 @@ namespace MonoGameKunskapsspel
 {
     public class UnlockDoorWindow : Window
     {
-        private readonly KunskapsSpel kunskapsSpel;
         private Rectangle window;
         private Point size = new(Screen.PrimaryScreen.Bounds.Height, Screen.PrimaryScreen.Bounds.Height);
 
-        public UnlockDoorWindow(KunskapsSpel kunskapsSpel) 
+        public UnlockDoorWindow(KunskapsSpel kunskapsSpel, Camera camera, Player player) : base(kunskapsSpel, camera, player)
         {
-            this.kunskapsSpel = kunskapsSpel;
             kunskapsSpel.activeWindow = this;
-
+            
             window = new Rectangle(new(
-                kunskapsSpel.player.hitBox.X + kunskapsSpel.player.size.X / 2 - size.X / 2,
-                kunskapsSpel.player.hitBox.Y + kunskapsSpel.player.size.Y / 2 - Screen.PrimaryScreen.Bounds.Height / 2), size);
+                camera.window.X + camera.window.Size.X / 2 - size.X / 2,
+                camera.window.Y + camera.window.Size.Y / 2 - Screen.PrimaryScreen.Bounds.Height / 2), size);
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -38,10 +36,8 @@ namespace MonoGameKunskapsspel
         public override void Update(GameTime gameTime)
         {
 
-
-
         }
-        public override void End()
+        public override void EndScene()
         {
             kunskapsSpel.activeWindow = null;
         }

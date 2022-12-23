@@ -11,8 +11,22 @@ namespace MonoGameKunskapsspel
 {
     public abstract class Window
     {
+        public readonly KunskapsSpel kunskapsSpel;
+        public readonly Camera camera;
+        public readonly Player player;
+
+        public Window(KunskapsSpel kunskapsSpel, Camera camera, Player player)
+        {
+            this.kunskapsSpel = kunskapsSpel;
+            this.camera = camera;
+            this.player = player;
+        }
         public abstract void Draw(GameTime gameTime, SpriteBatch spriteBatch);
         public abstract void Update(GameTime gameTime);
-        public abstract void End();
+        public virtual void EndScene()
+        {
+            kunskapsSpel.activeWindow = null;
+            player.activeState = State.Walking;
+        }
     }
 }

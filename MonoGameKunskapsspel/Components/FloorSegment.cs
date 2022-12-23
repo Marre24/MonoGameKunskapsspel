@@ -11,12 +11,10 @@ namespace MonoGameKunskapsspel
     public class FloorSegment : Component
     {
         public Rectangle hitBox;
-        private readonly KunskapsSpel kunskapsSpel;
 
-        public FloorSegment(Rectangle hitBox, KunskapsSpel kunskapsSpel)
+        public FloorSegment(Rectangle hitBox, KunskapsSpel kunskapsSpel) : base(kunskapsSpel)
         {
             this.hitBox = hitBox;
-            this.kunskapsSpel = kunskapsSpel;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -26,8 +24,7 @@ namespace MonoGameKunskapsspel
 
         public override void Update(GameTime gameTime)
         {
-
-
+            throw new NotImplementedException();
         }
     }
 }

@@ -11,17 +11,17 @@ namespace MonoGameKunskapsspel
 {
     public class KunskapsSpel : Game
     {
-        private GraphicsDeviceManager _graphics;
+        private readonly GraphicsDeviceManager _graphics;
         public SpriteBatch spriteBatch;
         public Camera camera;
         public Player player;
-        public RoomManager roomManager = new RoomManager();
+        public RoomManager roomManager = new();
         public Window activeWindow;
 
 
         public KunskapsSpel()
         {
-            _graphics = new GraphicsDeviceManager(this);
+            _graphics = new(this);
 
             Content.RootDirectory = "Content";
         }
@@ -44,12 +44,12 @@ namespace MonoGameKunskapsspel
             camera = new Camera(player.hitBox);
 
             //Add rooms in list
-            roomManager.Add(new FirstRoom(0), this);
-            roomManager.Add(new SecondRoom(1), this);
+            roomManager.Add(new FirstRoom(0, this));
+            roomManager.Add(new SecondRoom(1, this));
 
             //Set destinations for doors in Rooms
-            roomManager.rooms[0].SetDestinations(null, roomManager.rooms[1]);
-            roomManager.rooms[1].SetDestinations(roomManager.rooms[0], null);
+            roomManager.rooms[0].CreateDoorsThatLeedsTo(null, roomManager.rooms[1]);
+            roomManager.rooms[1].CreateDoorsThatLeedsTo(roomManager.rooms[0], null);
 
             roomManager.SetActiveRoom(0);
         }
@@ -58,7 +58,7 @@ namespace MonoGameKunskapsspel
         {
             if (player.activeState == State.Walking)
             {
-                roomManager.Update(gameTime, this);
+                roomManager.Update(gameTime);
                 player.Update(gameTime);
                 camera.Follow(player.hitBox);
             }
@@ -78,9 +78,9 @@ namespace MonoGameKunskapsspel
         protected override void Draw(GameTime gameTime)
         {
             _graphics.GraphicsDevice.Clear(Color.Black);
-            spriteBatch.Begin(transformMatrix: camera.Transform, samplerState: SamplerState.LinearWrap);
+            spriteBatch.Begin(transformMatrix: camera.transform, samplerState: SamplerState.LinearWrap);
 
-            roomManager.Draw(this, gameTime);
+            roomManager.Draw(gameTime, spriteBatch);
 
             player.Draw(gameTime, spriteBatch);
 

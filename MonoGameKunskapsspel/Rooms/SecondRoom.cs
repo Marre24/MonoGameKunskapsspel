@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
@@ -11,15 +12,14 @@ namespace MonoGameKunskapsspel
     public class SecondRoom : Room
     {
         
-        public SecondRoom(int ID) : base(ID)
+        public SecondRoom(int ID, KunskapsSpel kunskapsSpel) : base(ID, kunskapsSpel)
         {
 
         }
 
 
-        public override void Initialize(KunskapsSpel kunskapsSpel)
+        public override void Initialize()
         {
-            this.kunskapsSpel = kunskapsSpel;
             //Create Floors
             floorSegments = new List<FloorSegment> { new(new(0, 0, 2000, 700), kunskapsSpel) };
 
@@ -38,18 +38,18 @@ namespace MonoGameKunskapsspel
             };
         }
 
-        public override void Draw(KunskapsSpel kunskapsSpel, GameTime gameTime)
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             foreach (FloorSegment floorSegment in floorSegments)
-                floorSegment.Draw(gameTime, kunskapsSpel.spriteBatch);
+                floorSegment.Draw(gameTime, spriteBatch);
 
-            backDoor.Draw(gameTime, kunskapsSpel.spriteBatch);
+            backDoor.Draw(gameTime, spriteBatch);
 
             //foreach (Rectangle wall in walls)
             //    kunskapsSpel.spriteBatch.Draw(kunskapsSpel.Content.Load<Texture2D>("WallTiles"), wall, wall, Color.White);
         }
 
-        public override void Update(GameTime gameTime, KunskapsSpel kunskapsSpel)
+        public override void Update(GameTime gameTime)
         {
             if (!backDoor.PlayerCanInteract(kunskapsSpel.player))
                 return;
@@ -66,12 +66,12 @@ namespace MonoGameKunskapsspel
 
         public override void CreateDoors()
         {
-            backDoor = new Door(new(new(1000, -104), new(128, 104)), true, backDoorLeedsTo, kunskapsSpel);
+            backDoor = new Door(new(new(1000, -104), new(128, 104)), true, back, kunskapsSpel);
         }
 
         public override void SetDoorLocations()
         {
-            backDoorLocation = backDoor.hitBox.Location + new Point(0, 40);
+            backSpawnLocation = backDoor.hitBox.Location + new Point(0, 40);
         }
     }
 }

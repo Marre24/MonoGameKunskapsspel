@@ -12,20 +12,17 @@ namespace MonoGameKunskapsspel
 {
     public class Sign : Component
     {
-        List<string> text;
+        readonly List<string> text;
         private Rectangle hitBox;
-        private KunskapsSpel kunskapsSpel;
 
-        public Sign(Rectangle hitBox, KunskapsSpel kunskapsSpel, List<string> text)
+        public Sign(Rectangle hitBox, KunskapsSpel kunskapsSpel, List<string> text) : base(kunskapsSpel)
         {
             this.hitBox = hitBox;
-            this.kunskapsSpel = kunskapsSpel;
             this.text = text;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-
             spriteBatch.Draw(kunskapsSpel.Content.Load<Texture2D>("PurpleSignFacingLeft"), hitBox, Color.White);
         }
 
@@ -37,17 +34,12 @@ namespace MonoGameKunskapsspel
             if (!Keyboard.GetState().IsKeyDown(Keys.Space))
                 return;
 
-            DialogueWindow dialogueWindow = new DialogueWindow(kunskapsSpel, kunskapsSpel.player, kunskapsSpel.camera, text);
+            _ = new DialogueWindow(kunskapsSpel, kunskapsSpel.player, kunskapsSpel.camera, text);
         }
 
         public bool PlayerCanInteract(Player player)
         {
-            return IsTouching(player);
-        }
-
-        private bool IsTouching(Player player)
-        {
-            return ((IsBetweenX(player.hitBox.Right) || IsBetweenX(player.hitBox.Left)) && IsBetweenY(player.hitBox.Top));
+            return (IsBetweenX(player.hitBox.Right) || IsBetweenX(player.hitBox.Left)) && IsBetweenY(player.hitBox.Top);
         }
 
         private bool IsBetweenX(int xCord)
@@ -59,6 +51,5 @@ namespace MonoGameKunskapsspel
         {
             return hitBox.Top <= yCord && hitBox.Bottom >= yCord;
         }
-
     }
 }

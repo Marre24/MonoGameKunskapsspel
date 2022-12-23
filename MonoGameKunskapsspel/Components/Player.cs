@@ -25,25 +25,24 @@ namespace MonoGameKunskapsspel
 
     public class Player : Component
     {
-        readonly KunskapsSpel kunskapsSpel;
-
         private readonly Texture2D front;
         private readonly Texture2D back;
         private readonly Texture2D right;
         private readonly Texture2D left;
         public Texture2D activeTexture;
+
         public State activeState = State.Walking;
 
         private readonly Point position = new(100, 100);
         public Point size = new(75, 100);
-        private Point velocity = new(0, 0);
         public Rectangle hitBox;
-        private const int movementSpeed = 5;
-        public Player(KunskapsSpel kunskapsSpel)
-        {
-            this.kunskapsSpel = kunskapsSpel;
 
-            hitBox = new Rectangle(position, size);
+        private Point velocity = new(0, 0);
+        private const int movementSpeed = 5;
+
+        public Player(KunskapsSpel kunskapsSpel) : base(kunskapsSpel)
+        {
+            hitBox = new(position, size);
 
             front = kunskapsSpel.Content.Load<Texture2D>("RobotFront");
             back = kunskapsSpel.Content.Load<Texture2D>("RobotBack");
@@ -53,7 +52,6 @@ namespace MonoGameKunskapsspel
             activeTexture = front;
         }
 
-
         public override void Update(GameTime gameTime)
         {
             Move();
@@ -61,46 +59,22 @@ namespace MonoGameKunskapsspel
 
         private void Move()
         {
-            (velocity.X, velocity.Y) = GetOffset();
+            (velocity.X, velocity.Y) = GetVelocity();
 
-            if (velocity == new Point(0,0))
+            if (velocity == Point.Zero)                                                                 //Standing still
                 return;
 
             (bool canMoveX, bool canMoveY) = CanMoveTo(velocity.X, velocity.Y);
 
-            if (canMoveX)
+            if (canMoveX)                                                                               
                 hitBox.Location = new Point(hitBox.Location.X - velocity.X, hitBox.Location.Y);
-
             if (canMoveY)
                 hitBox.Location = new Point(hitBox.Location.X, hitBox.Location.Y - velocity.Y);
 
             velocity = new(0, 0);
         }
 
-        private Tuple<bool, bool> CanMoveTo(int x, int y)
-        {
-            bool CanMoveX = false;
-            bool CanMoveY = false;
-
-            foreach (FloorSegment floorSegment in kunskapsSpel.roomManager.GetActiveRoom().floorSegments)
-            {
-                if (floorSegment.hitBox.Location.X + x <= hitBox.Location.X && floorSegment.hitBox.Location.X + floorSegment.hitBox.Width + x >= hitBox.Location.X + size.X)
-                    CanMoveX = true;
-
-                if (floorSegment.hitBox.Location.Y + y <= hitBox.Location.Y + size.Y && floorSegment.hitBox.Location.Y + floorSegment.hitBox.Height + y >= hitBox.Location.Y + size.Y)
-                    CanMoveY = true;
-            }
-
-            return Tuple.Create(CanMoveX, CanMoveY);
-
-        }
-
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(activeTexture, hitBox, Color.White);
-        }
-
-        private Tuple<int, int> GetOffset()
+        private Tuple<int, int> GetVelocity()
         {
             int x = 0;
             int y = 0;
@@ -129,6 +103,30 @@ namespace MonoGameKunskapsspel
             }
 
             return Tuple.Create(x, y);
+        }
+
+        private Tuple<bool, bool> CanMoveTo(int xVelocity, int yVelocity)
+        {
+            bool CanMoveX = false;
+            bool CanMoveY = false;
+
+            foreach (FloorSegment floorSegment in kunskapsSpel.roomManager.GetActiveRoom().floorSegments)
+            {
+                if (floorSegment.hitBox.Location.X + xVelocity <= hitBox.Location.X && 
+                    floorSegment.hitBox.Location.X + floorSegment.hitBox.Width + xVelocity >= hitBox.Location.X + size.X)
+                    CanMoveX = true;
+
+                if (floorSegment.hitBox.Location.Y + yVelocity <= hitBox.Location.Y + size.Y && 
+                    floorSegment.hitBox.Location.Y + floorSegment.hitBox.Height + yVelocity >= hitBox.Location.Y + size.Y)
+                    CanMoveY = true;
+            }
+
+            return Tuple.Create(CanMoveX, CanMoveY);
+        }
+
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(activeTexture, hitBox, Color.White);
         }
     }
 }

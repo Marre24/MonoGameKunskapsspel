@@ -14,12 +14,11 @@ namespace MonoGameKunskapsspel
 {
     public class FirstRoom : Room
     {
-        public FirstRoom(int ID) : base(ID) {   }
+        public FirstRoom(int ID, KunskapsSpel kunskapsSpel) : base(ID, kunskapsSpel) {   }
 
 
-        public override void Initialize(KunskapsSpel kunskapsSpel)
+        public override void Initialize()
         {
-            this.kunskapsSpel = kunskapsSpel;
             //Create Floors
             floorSegments = new List<FloorSegment> { new(new(0, 0, 2000, 700), kunskapsSpel)};
 
@@ -50,24 +49,24 @@ namespace MonoGameKunskapsspel
             }));
         }
 
-        public override void Draw(KunskapsSpel kunskapsSpel, GameTime gameTime)
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             foreach (FloorSegment floorSegment in floorSegments)
-                floorSegment.Draw(gameTime, kunskapsSpel.spriteBatch);
+                floorSegment.Draw(gameTime, spriteBatch);
 
             foreach (Sign sign in signs)
-                sign.Draw(gameTime, kunskapsSpel.spriteBatch);
+                sign.Draw(gameTime, spriteBatch);
 
-            frontDoor.Draw(gameTime, kunskapsSpel.spriteBatch);
-            generalGoofy.Draw(gameTime, kunskapsSpel.spriteBatch);
-            mathias.Draw(gameTime, kunskapsSpel.spriteBatch);
+            frontDoor.Draw(gameTime, spriteBatch);
+            generalGoofy.Draw(gameTime, spriteBatch);
+            mathias.Draw(gameTime, spriteBatch);
 
 
             //foreach (Rectangle wall in walls)
             //    kunskapsSpel.spriteBatch.Draw(kunskapsSpel.Content.Load<Texture2D>("WallTiles"), wall, wall, Color.White);
         }
 
-        public override void Update(GameTime gameTime, KunskapsSpel kunskapsSpel)
+        public override void Update(GameTime gameTime)
         {
             generalGoofy.Update(gameTime);
 
@@ -81,12 +80,12 @@ namespace MonoGameKunskapsspel
 
         public override void CreateDoors()
         {
-            frontDoor = new Door(new(new(1000, -104), new(128, 104)), frontDoorLeedsTo, kunskapsSpel, false);
+            frontDoor = new Door(new(new(1000, -104), new(128, 104)), front, kunskapsSpel);
         }
 
         public override void SetDoorLocations()
         {
-            frontDoorLocation = frontDoor.hitBox.Location + new Point(0, 40);
+            frontSpawnLocation = frontDoor.hitBox.Location + new Point(0, 40);
         }
     }
 }

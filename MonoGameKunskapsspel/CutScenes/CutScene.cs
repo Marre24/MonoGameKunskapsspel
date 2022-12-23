@@ -10,11 +10,11 @@ namespace MonoGameKunskapsspel
     public abstract class CutScene
     {
         public Vector2 hiddenFollowPoint;
-        public Player player;
+        public readonly Player player;
         public readonly KunskapsSpel kunskapsSpel;
         public int phaseCounter = 1;
 
-        public CutScene(Player player, KunskapsSpel kunskapsSpel, Room room, List<string> dialogue)
+        public CutScene(Player player, KunskapsSpel kunskapsSpel)
         {
             this.player = player;
             this.kunskapsSpel = kunskapsSpel;

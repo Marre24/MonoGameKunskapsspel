@@ -12,20 +12,16 @@ namespace MonoGameKunskapsspel
 {
     public class Mathias : Component
     {
-        private KunskapsSpel kunskapsSpel;
-        public bool hasInteracted = false;
         public Rectangle hitBox;
-        private Point position;
         public readonly CutScene cutScene;
-        private readonly Point size = new Point(238, 254);
+        public bool hasInteracted = false;
+        private readonly Point size = new(238, 254);
 
-        public Mathias(KunskapsSpel kunskapsSpel, Point position, CutScene cutScene)
+        public Mathias(KunskapsSpel kunskapsSpel, Point position, CutScene cutScene) : base(kunskapsSpel)
         {
-            this.position = position;
             this.cutScene = cutScene;
-            this.kunskapsSpel = kunskapsSpel;
 
-            hitBox = new Rectangle(position, size);
+            hitBox = new(position, size);
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -38,8 +34,6 @@ namespace MonoGameKunskapsspel
         {
             if (kunskapsSpel.camera.window.Contains(hitBox) && !hasInteracted)
                 cutScene.StartScene();
-
         }
-
     }
 }

@@ -11,12 +11,14 @@ namespace MonoGameKunskapsspel
 {
     public class MathiasIntroduction : CutScene
     {
-        public Room room;
+        public readonly Room room;
         private readonly List<string> dialogue;
-        private double timeSpan = 0.0;
         private DialogueWindow dialogueWindow;
 
-        public MathiasIntroduction(Player player, KunskapsSpel kunskapsSpel, Room room, List<string> dialogue) : base(player, kunskapsSpel, room, dialogue)
+        private Vector2 dir;
+        private Vector2 speed = new(5f, 5f);
+
+        public MathiasIntroduction(Player player, KunskapsSpel kunskapsSpel, Room room, List<string> dialogue) : base(player, kunskapsSpel)
         {
             this.room = room;
             this.dialogue = dialogue;
@@ -25,13 +27,21 @@ namespace MonoGameKunskapsspel
         public override void Update(GameTime gameTime)
         {
             if (phaseCounter == 1)
-                PhaseOne(gameTime);
+                PhaseOne();
 
             if (phaseCounter == 2)
                 PhaseTwo();
 
             if (phaseCounter == 3)
                 EndScene();
+        }
+
+        private void PhaseOne()
+        {
+            if (IsGoingAway(hiddenFollowPoint, hiddenFollowPoint + dir * speed, room.mathias.hitBox.Center.ToVector2()))
+                phaseCounter = 2;
+
+            hiddenFollowPoint += dir * speed;
         }
 
         private void PhaseTwo()
@@ -42,16 +52,7 @@ namespace MonoGameKunskapsspel
                 phaseCounter++;
         }
 
-        private void PhaseOne(GameTime gameTime)
-        {
-            if (IsGoingAway(hiddenFollowPoint, hiddenFollowPoint + dir * speed, room.mathias.hitBox.Center.ToVector2()))
-                phaseCounter = 2;
-
-            timeSpan = gameTime.TotalGameTime.TotalSeconds;
-            hiddenFollowPoint += dir * speed;
-        }
-
-        private bool IsGoingAway(Vector2 currentPoint, Vector2 nextPoint, Vector2 goToPoint)
+        private static bool IsGoingAway(Vector2 currentPoint, Vector2 nextPoint, Vector2 goToPoint)
         {
             currentPoint.Normalize();
             nextPoint.Normalize();
@@ -68,17 +69,14 @@ namespace MonoGameKunskapsspel
 
             if (nextHypotenuse < currentHypotenuse)
                 return false;
-
             return true;
         }
-
-        private Vector2 dir;
-        private Vector2 speed = new Vector2(5f, 5f);
 
         public override void StartScene()
         {
             player.activeState = State.WatchingCutScene;
             hiddenFollowPoint = player.hitBox.Location.ToVector2();
+
             dir = room.mathias.hitBox.Center.ToVector2() - hiddenFollowPoint;
             dir.Normalize();
         }
