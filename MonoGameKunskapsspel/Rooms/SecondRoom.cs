@@ -21,21 +21,21 @@ namespace MonoGameKunskapsspel
         public override void Initialize()
         {
             //Create Floors
-            floorSegments = new List<FloorSegment> { new(new(0, 0, 2000, 700), kunskapsSpel) };
+            //floorSegments = new List<FloorSegment> { new FloorSegment(new(0, 0, 2000, 700), kunskapsSpel) };
 
-            //Create NPC
-            generalGoofy = new NPC(new(500, 200, 200, 200), kunskapsSpel, new()
-            {
-                "Hej det här rummet är det andra",
-                "Ooga booga :)"
-            });
+            ////Create NPC
+            //generalGoofy = new NPC(new(500, 200, 200, 200), kunskapsSpel, new()
+            //{
+            //    "Hej det här rummet är det andra",
+            //    "Ooga booga :)"
+            //});
 
-            //Create Walls
-            Point size = new(floorSegments[0].hitBox.Width, 300);
-            walls = new List<Rectangle>()
-            {
-                new(floorSegments[0].hitBox.Location - new Point(0, size.Y), size)
-            };
+            ////Create Walls
+            //Point size = new(floorSegments[0].hitBox.Width, 300);
+            //walls = new List<Rectangle>()
+            //{
+            //    new(floorSegments[0].hitBox.Location - new Point(0, size.Y), size)
+            //};
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)

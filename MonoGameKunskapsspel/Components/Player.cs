@@ -25,10 +25,10 @@ namespace MonoGameKunskapsspel
 
     public class Player : Component
     {
-        private readonly Texture2D front;
-        private readonly Texture2D back;
-        private readonly Texture2D right;
-        private readonly Texture2D left;
+        //private readonly Texture2D front;
+        //private readonly Texture2D back;
+        //private readonly Texture2D right;
+        //private readonly Texture2D left;
         public Texture2D activeTexture;
 
         public State activeState = State.Walking;
@@ -44,12 +44,12 @@ namespace MonoGameKunskapsspel
         {
             hitBox = new(position, size);
 
-            front = kunskapsSpel.Content.Load<Texture2D>("RobotFront");
-            back = kunskapsSpel.Content.Load<Texture2D>("RobotBack");
-            right = kunskapsSpel.Content.Load<Texture2D>("RobotRight");
-            left = kunskapsSpel.Content.Load<Texture2D>("RobotLeft");
+            //front = kunskapsSpel.Content.Load<Texture2D>("RobotFront");
+            //back = kunskapsSpel.Content.Load<Texture2D>("RobotBack");
+            //right = kunskapsSpel.Content.Load<Texture2D>("RobotRight");
+            //left = kunskapsSpel.Content.Load<Texture2D>("RobotLeft");
 
-            activeTexture = front;
+            //activeTexture = front;
         }
 
         public override void Update(GameTime gameTime)
@@ -84,22 +84,22 @@ namespace MonoGameKunskapsspel
             if (keyboardState.IsKeyDown(Keys.W))
             {
                 y += movementSpeed;
-                activeTexture = back;
+                //activeTexture = back;
             }
             if (keyboardState.IsKeyDown(Keys.S))
             {
                 y -= movementSpeed;
-                activeTexture = front;
+                //activeTexture = front;
             }
             if (keyboardState.IsKeyDown(Keys.A))
             {
                 x += movementSpeed;
-                activeTexture = left;
+                //activeTexture = left;
             }
             if (keyboardState.IsKeyDown(Keys.D))
             {
                 x -= movementSpeed;
-                activeTexture = right;
+                //activeTexture = right;
             }
 
             return Tuple.Create(x, y);
@@ -126,7 +126,7 @@ namespace MonoGameKunskapsspel
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(activeTexture, hitBox, Color.White);
+            //spriteBatch.Draw(activeTexture, hitBox, Color.White);
         }
     }
 }
