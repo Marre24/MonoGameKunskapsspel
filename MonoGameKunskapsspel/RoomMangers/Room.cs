@@ -17,7 +17,7 @@ namespace MonoGameKunskapsspel
         public List<Rectangle> walls = new();
         public List<Sign> signs = new();
 
-        public NPC generalGoofy;
+        public NPC npc;
         public Room back;
         public Room front;
         public Door frontDoor;

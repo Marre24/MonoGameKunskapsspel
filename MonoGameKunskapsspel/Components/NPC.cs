@@ -14,21 +14,29 @@ namespace MonoGameKunskapsspel
     public class NPC : Component
     {
         private Rectangle hitBox;
+        private readonly Dictionary<string, Animation> animations;
+        private readonly AnimationManager animationManager;
         private readonly List<string> dialogue;
 
-        public NPC(Rectangle hitBox, KunskapsSpel kunskapsSpel, List<string> dialog) : base(kunskapsSpel)
+        public NPC(Rectangle hitBox, KunskapsSpel kunskapsSpel, List<string> dialog, Dictionary<string, Animation> animations) : base(kunskapsSpel)
         {
             this.hitBox = hitBox;
+            this.animations = animations;
+            animationManager = new AnimationManager(animations.First().Value);
             dialogue = dialog.ToList();
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(kunskapsSpel.Content.Load<Texture2D>("GeneralGoofy"), hitBox, Color.White);
+            animationManager.Draw(spriteBatch);
         }
 
         public override void Update(GameTime gameTime)
         {
+            animationManager.Position = hitBox.Location.ToVector2();
+            animationManager.Update(gameTime);
+            animationManager.Play(animations["NpcIdle"]);
+
             if (!PlayerCanInteract(kunskapsSpel.player))
                 return;
 

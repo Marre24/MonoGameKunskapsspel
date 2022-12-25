@@ -25,36 +25,49 @@ namespace MonoGameKunskapsspel
 
     public class Player : Component
     {
-        //private readonly Texture2D front;
-        //private readonly Texture2D back;
-        //private readonly Texture2D right;
-        //private readonly Texture2D left;
-        public Texture2D activeTexture;
+        AnimationManager animationManager;
+
+        Dictionary<string, Animation> animations;
 
         public State activeState = State.Walking;
 
         private readonly Point position = new(100, 100);
-        public Point size = new(75, 100);
+        public Point size = new(48, 62);
         public Rectangle hitBox;
 
         private Point velocity = new(0, 0);
         private const int movementSpeed = 5;
 
-        public Player(KunskapsSpel kunskapsSpel) : base(kunskapsSpel)
+        public Player(KunskapsSpel kunskapsSpel, Dictionary<string, Animation> animations) : base(kunskapsSpel)
         {
             hitBox = new(position, size);
-
-            //front = kunskapsSpel.Content.Load<Texture2D>("RobotFront");
-            //back = kunskapsSpel.Content.Load<Texture2D>("RobotBack");
-            //right = kunskapsSpel.Content.Load<Texture2D>("RobotRight");
-            //left = kunskapsSpel.Content.Load<Texture2D>("RobotLeft");
-
-            //activeTexture = front;
+            this.animations = animations;
+            animationManager = new AnimationManager(animations.First().Value);
         }
 
         public override void Update(GameTime gameTime)
         {
             Move();
+
+            animationManager.Position = hitBox.Location.ToVector2();
+            animationManager.Update(gameTime);
+
+            if (velocity == Point.Zero)                                                                 //Standing still
+            {
+                animationManager.Play(animations["Idle"]);
+                velocity = new(0, 0);
+            }
+
+            if (velocity.X < 0)
+                animationManager.Play(animations["WalkRight"]);
+            else if (velocity.X > 0)
+                animationManager.Play(animations["WalkLeft"]);
+            else if (velocity.Y < 0)
+                animationManager.Play(animations["WalkLeft"]);
+            else if (velocity.Y > 0)
+                animationManager.Play(animations["WalkRight"]);
+            
+
         }
 
         private void Move()
@@ -71,7 +84,6 @@ namespace MonoGameKunskapsspel
             if (canMoveY)
                 hitBox.Location = new Point(hitBox.Location.X, hitBox.Location.Y - velocity.Y);
 
-            velocity = new(0, 0);
         }
 
         private Tuple<int, int> GetVelocity()
@@ -84,22 +96,18 @@ namespace MonoGameKunskapsspel
             if (keyboardState.IsKeyDown(Keys.W))
             {
                 y += movementSpeed;
-                //activeTexture = back;
             }
             if (keyboardState.IsKeyDown(Keys.S))
             {
                 y -= movementSpeed;
-                //activeTexture = front;
             }
             if (keyboardState.IsKeyDown(Keys.A))
             {
                 x += movementSpeed;
-                //activeTexture = left;
             }
             if (keyboardState.IsKeyDown(Keys.D))
             {
                 x -= movementSpeed;
-                //activeTexture = right;
             }
 
             return Tuple.Create(x, y);
@@ -112,12 +120,12 @@ namespace MonoGameKunskapsspel
 
             foreach (FloorSegment floorSegment in kunskapsSpel.roomManager.GetActiveRoom().floorSegments)
             {
-                if (floorSegment.hitBox.Location.X + xVelocity <= hitBox.Location.X && 
-                    floorSegment.hitBox.Location.X + floorSegment.hitBox.Width + xVelocity >= hitBox.Location.X + size.X)
+                if (floorSegment.hitBox.Location.X + xVelocity <= hitBox.Location.X - 20 && 
+                    floorSegment.hitBox.Location.X + floorSegment.hitBox.Width + xVelocity >= hitBox.Location.X + size.X + 20)
                     CanMoveX = true;
 
-                if (floorSegment.hitBox.Location.Y + yVelocity <= hitBox.Location.Y + size.Y && 
-                    floorSegment.hitBox.Location.Y + floorSegment.hitBox.Height + yVelocity >= hitBox.Location.Y + size.Y)
+                if (floorSegment.hitBox.Location.Y + yVelocity <= hitBox.Location.Y + size.Y - 30 && 
+                    floorSegment.hitBox.Location.Y + floorSegment.hitBox.Height + yVelocity >= hitBox.Location.Y + size.Y + 30)
                     CanMoveY = true;
             }
 
@@ -126,7 +134,7 @@ namespace MonoGameKunskapsspel
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            //spriteBatch.Draw(activeTexture, hitBox, Color.White);
+            animationManager.Draw(spriteBatch);
         }
     }
 }

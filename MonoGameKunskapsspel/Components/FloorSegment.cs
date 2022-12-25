@@ -15,7 +15,7 @@ namespace MonoGameKunskapsspel
         private List<List<Tile>> tiles = new();
         public Rectangle hitBox;
 
-        private readonly Point tileSize = new Point(32, 32);
+        private readonly Point tileSize = new Point(96, 96);
 
         public FloorSegment(Point tileAmount, Point location, KunskapsSpel kunskapsSpel) : base(kunskapsSpel)
         {
