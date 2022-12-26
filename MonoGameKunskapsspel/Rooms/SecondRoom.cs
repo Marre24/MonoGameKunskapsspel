@@ -66,7 +66,7 @@ namespace MonoGameKunskapsspel
 
         public override void CreateDoors()
         {
-            backDoor = new Door(new(new(1000, -104), new(128, 104)), true, back, kunskapsSpel);
+            //backDoor = new Door(new(new(1000, -104), new(128, 104)), true, back, kunskapsSpel);
         }
 
         public override void SetDoorLocations()

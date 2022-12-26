@@ -15,22 +15,33 @@ namespace MonoGameKunskapsspel
         public override void Initialize()
         {
             //Create Floors
-            floorSegments = new List<FloorSegment> { 
-                new FloorSegment(new(12, 6), new(0, 0), kunskapsSpel),
-                new FloorSegment(new(2, 8), new(4 * 96, - 8 * 96), kunskapsSpel),
-                new FloorSegment(new(8, 2), new(12 * 96, 3 * 96), kunskapsSpel), 
+            floorSegments = new List<FloorSegment> {
+                new FloorSegment(new(12, 6), new(0, 0), kunskapsSpel),                                         //Main
+                new FloorSegment(new(2, 12), new(4 * 96, - 12 * 96), kunskapsSpel),                            //Going North
+                new FloorSegment(new(12, 2), new(12 * 96, 3 * 96), kunskapsSpel),                              //Going East
+                new FloorSegment(new(2, 8), new(12 * 96 + 10 * 96, 3 * 96 - 8 * 96), kunskapsSpel),            //Going North from East road
+                new FloorSegment(new(4, 4), new Point(2112, -480) - new Point(96, 3 * 96), kunskapsSpel),      //Around the Cave Door
             };
 
             floorSegments[0].tiles[0][4].ChangeToMiddleTexture();
             floorSegments[0].tiles[0][5].ChangeToMiddleTexture();
-            floorSegments[1].tiles[7][0].ChangeToEdgeTexture("Left");
-            floorSegments[1].tiles[7][1].ChangeToEdgeTexture("Right");
+            floorSegments[1].tiles[11][0].ChangeToEdgeTexture("Left");
+            floorSegments[1].tiles[11][1].ChangeToEdgeTexture("Right");
 
             floorSegments[0].tiles[3][11].ChangeToMiddleTexture();
             floorSegments[0].tiles[4][11].ChangeToMiddleTexture();
             floorSegments[2].tiles[0][0].ChangeToEdgeTexture("Top");
             floorSegments[2].tiles[1][0].ChangeToEdgeTexture("Bottom");
-            
+
+            floorSegments[2].tiles[0][10].ChangeToMiddleTexture();
+            floorSegments[2].tiles[0][11].ChangeToEdgeTexture("Right");
+            floorSegments[3].tiles[7][0].ChangeToEdgeTexture("Left");
+            floorSegments[3].tiles[7][1].ChangeToEdgeTexture("Right");
+            floorSegments[3].tiles[0][0].ChangeToMiddleTexture();
+            floorSegments[3].tiles[0][1].ChangeToMiddleTexture();
+
+            floorSegments[4].tiles[3][1].ChangeToMiddleTexture();
+            floorSegments[4].tiles[3][2].ChangeToMiddleTexture();
 
             //Create NPC
             npc = new NPC(new(500, 200, 200, 200), kunskapsSpel, new()
@@ -42,10 +53,13 @@ namespace MonoGameKunskapsspel
 
         public override void CreateDoors()
         {
-            //backDoor = new Door(new(new(1000, -104), new(128, 104)), back, kunskapsSpel);
+            backDoor = new Door(new(new(floorSegments[1].hitBox.Left, floorSegments[1].hitBox.Top + 600), new(floorSegments[1].hitBox.Width, 60)), back, kunskapsSpel);
 
-            //frontDoor = new Door(new(new(1000, -104), new(128, 104)), back, kunskapsSpel);
-
+            frontDoor = new Door(
+                new Rectangle(floorSegments[3].hitBox.Location - new Point(0, floorSegments[3].hitBox.Width), new(floorSegments[3].hitBox.Width, floorSegments[3].hitBox.Width)), 
+                true, back, kunskapsSpel,
+                kunskapsSpel.Content.Load<Texture2D>("Enviroment/CaveEntrance"),
+                kunskapsSpel.Content.Load<Texture2D>("Enviroment/CaveEntrance"));
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -53,8 +67,9 @@ namespace MonoGameKunskapsspel
             foreach (FloorSegment floorSegment in floorSegments)
                 floorSegment.Draw(gameTime, spriteBatch);
 
-            //frontDoor.Draw(gameTime, spriteBatch);
-            //backDoor.Draw(gameTime, spriteBatch);
+            frontDoor.Draw(gameTime, spriteBatch);
+            backDoor.Draw(gameTime, spriteBatch);
+
             npc.Draw(gameTime, spriteBatch);
 
 
@@ -72,6 +87,9 @@ namespace MonoGameKunskapsspel
         public override void Update(GameTime gameTime)
         {
             npc.Update(gameTime);
+
+            frontDoor.Update(gameTime);
+            backDoor.Update(gameTime);
         }
     }
 }

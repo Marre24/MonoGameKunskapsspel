@@ -58,8 +58,9 @@ namespace MonoGameKunskapsspel
             roomManager.Add(new SecondRoom(2, this));
 
             //Set destinations for doors in Rooms
-            roomManager.rooms[1].CreateDoorsThatLeedsTo(null, roomManager.rooms[1]);
-            roomManager.rooms[2].CreateDoorsThatLeedsTo(roomManager.rooms[0], null);
+            roomManager.rooms[0].CreateDoorsThatLeedsTo(roomManager.rooms[1], roomManager.rooms[2]);
+            //roomManager.rooms[1].CreateDoorsThatLeedsTo(null, roomManager.rooms[1]);
+            //roomManager.rooms[2].CreateDoorsThatLeedsTo(roomManager.rooms[0], null);
 
             roomManager.SetActiveRoom(0);
         }

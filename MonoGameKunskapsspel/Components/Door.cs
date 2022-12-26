@@ -14,14 +14,18 @@ namespace MonoGameKunskapsspel
     public class Door : Component
     {
         private readonly Room doorLeedsTo;
+        private readonly Texture2D shutTexture;
+        private readonly Texture2D openTexture;
         public readonly bool open;
         public Rectangle hitBox;
         private readonly bool showDoor;
 
-        public Door(Rectangle hitBox, bool open, Room doorLeedsTo, KunskapsSpel kunskapsSpel) : base(kunskapsSpel)              //Visibel door
+        public Door(Rectangle hitBox, bool open, Room doorLeedsTo, KunskapsSpel kunskapsSpel, Texture2D shutTexture, Texture2D openTexture) : base(kunskapsSpel)              //Visible door
         {
             this.open = open;
             this.doorLeedsTo = doorLeedsTo;
+            this.shutTexture = shutTexture;
+            this.openTexture = openTexture;
             this.hitBox = hitBox;
             showDoor = true;
         }
@@ -41,11 +45,11 @@ namespace MonoGameKunskapsspel
 
             if (open)
             {
-                spriteBatch.Draw(kunskapsSpel.Content.Load<Texture2D>("OpenDoorHotPink"), hitBox, Color.White);
+                spriteBatch.Draw(openTexture, hitBox, Color.White);
                 return;
             }
 
-            spriteBatch.Draw(kunskapsSpel.Content.Load<Texture2D>("ShutDoorHotPink"), hitBox, Color.White);
+            spriteBatch.Draw(shutTexture, hitBox, Color.White);
         }
 
         public override void Update(GameTime gameTime)
