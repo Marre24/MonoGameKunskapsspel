@@ -12,7 +12,7 @@ namespace MonoGameKunskapsspel
 {
     public class FloorSegment : Component
     {
-        private List<List<Tile>> tiles = new();
+        public List<List<Tile>> tiles = new();
         public Rectangle hitBox;
 
         private readonly Point tileSize = new Point(96, 96);
@@ -26,15 +26,8 @@ namespace MonoGameKunskapsspel
             {
                 tiles.Add(new List<Tile>());
                 for (int x = 0; x < tileAmount.X; x++)
-                    tiles[y].Add(new Tile(tileSize, new(x,y), tileAmount, kunskapsSpel));
+                    tiles[y].Add(new Tile(tileSize, new Point(x,y), tileAmount, new Point(x, y) * tileSize + location, kunskapsSpel));
             }
-
-        }
-
-        public void ChangeTileWithIndexToMiddleTexture(int x, int y)
-        {
-
-
 
         }
 

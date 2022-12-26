@@ -17,7 +17,7 @@ namespace MonoGameKunskapsspel
         private Rectangle hitbox;
 
 
-        public Tile(Point size, Point index,Point tileAmount, KunskapsSpel kunskapsSpel) : base(kunskapsSpel)
+        public Tile(Point size, Point index, Point tileAmount, Point location, KunskapsSpel kunskapsSpel) : base(kunskapsSpel)
         {
             grassTextures.Add(kunskapsSpel.Content.Load<Texture2D>("Enviroment/GrassTileBottom"));          //0
             grassTextures.Add(kunskapsSpel.Content.Load<Texture2D>("Enviroment/GrassTileBottomLeft"));
@@ -31,7 +31,7 @@ namespace MonoGameKunskapsspel
             grassTextures.Add(kunskapsSpel.Content.Load<Texture2D>("Enviroment/GrassTileTopLeft"));
             grassTextures.Add(kunskapsSpel.Content.Load<Texture2D>("Enviroment/GrassTileTopRight"));
 
-            hitbox = new Rectangle(new(size.X * index.X, size.Y * index.Y), size);
+            hitbox = new Rectangle(location, size);
 
             if (index.X == 0 && index.Y == tileAmount.Y - 1)
             {
@@ -73,7 +73,7 @@ namespace MonoGameKunskapsspel
                 activeTexture = grassTextures[5];           //Right
                 return;
             }
-            
+
 
             activeTexture = grassTextures[4];               //Middle
         }
@@ -87,6 +87,19 @@ namespace MonoGameKunskapsspel
         {
             activeTexture = grassTextures[4];
         }
+        public void ChangeToEdgeTexture(string edge)
+        {
+            if (edge == "Top")
+                activeTexture = grassTextures[6];
+            if (edge == "Bottom")
+                activeTexture = grassTextures[0];
+            if (edge == "Right")
+                activeTexture = grassTextures[5];
+            if (edge == "Left")
+                activeTexture = grassTextures[3];
+        }
+
+
 
         public override void Update(GameTime gameTime)
         {

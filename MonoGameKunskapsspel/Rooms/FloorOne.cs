@@ -15,7 +15,22 @@ namespace MonoGameKunskapsspel
         public override void Initialize()
         {
             //Create Floors
-            floorSegments = new List<FloorSegment> { new FloorSegment(new(10, 5), new(0, 0), kunskapsSpel) };
+            floorSegments = new List<FloorSegment> { 
+                new FloorSegment(new(12, 6), new(0, 0), kunskapsSpel),
+                new FloorSegment(new(2, 8), new(4 * 96, - 8 * 96), kunskapsSpel),
+                new FloorSegment(new(8, 2), new(12 * 96, 3 * 96), kunskapsSpel), 
+            };
+
+            floorSegments[0].tiles[0][4].ChangeToMiddleTexture();
+            floorSegments[0].tiles[0][5].ChangeToMiddleTexture();
+            floorSegments[1].tiles[7][0].ChangeToEdgeTexture("Left");
+            floorSegments[1].tiles[7][1].ChangeToEdgeTexture("Right");
+
+            floorSegments[0].tiles[3][11].ChangeToMiddleTexture();
+            floorSegments[0].tiles[4][11].ChangeToMiddleTexture();
+            floorSegments[2].tiles[0][0].ChangeToEdgeTexture("Top");
+            floorSegments[2].tiles[1][0].ChangeToEdgeTexture("Bottom");
+            
 
             //Create NPC
             npc = new NPC(new(500, 200, 200, 200), kunskapsSpel, new()

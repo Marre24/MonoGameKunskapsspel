@@ -113,6 +113,8 @@ namespace MonoGameKunskapsspel
             return Tuple.Create(x, y);
         }
 
+        private readonly Point wallOffset = new(20,20);
+
         private Tuple<bool, bool> CanMoveTo(int xVelocity, int yVelocity)
         {
             bool CanMoveX = false;
@@ -120,17 +122,40 @@ namespace MonoGameKunskapsspel
 
             foreach (FloorSegment floorSegment in kunskapsSpel.roomManager.GetActiveRoom().floorSegments)
             {
-                if (floorSegment.hitBox.Location.X + xVelocity <= hitBox.Location.X - 20 && 
-                    floorSegment.hitBox.Location.X + floorSegment.hitBox.Width + xVelocity >= hitBox.Location.X + size.X + 20)
-                    CanMoveX = true;
+                if (AreInsideOfFloorsegment(floorSegment))
+                {
+                    if (floorSegment.hitBox.Left <= hitBox.Left - velocity.X && floorSegment.hitBox.Right >= hitBox.Right - velocity.X)
+                        CanMoveX = true;
 
-                if (floorSegment.hitBox.Location.Y + yVelocity <= hitBox.Location.Y + size.Y - 30 && 
-                    floorSegment.hitBox.Location.Y + floorSegment.hitBox.Height + yVelocity >= hitBox.Location.Y + size.Y + 30)
-                    CanMoveY = true;
+                    if (floorSegment.hitBox.Top <= hitBox.Bottom - velocity.Y && floorSegment.hitBox.Bottom >= hitBox.Bottom - velocity.Y)
+                        CanMoveY = true;
+                }
+                else if (WillBeInsideOfFloorsegment(floorSegment))
+                {
+                    if (floorSegment.hitBox.Left <= hitBox.Right - velocity.X && floorSegment.hitBox.Right >= hitBox.Left - velocity.X)
+                        CanMoveX = true;
+
+                    if (floorSegment.hitBox.Top <= hitBox.Bottom - velocity.Y && floorSegment.hitBox.Bottom >= hitBox.Bottom - velocity.Y)
+                        CanMoveY = true;
+                }
+                
             }
 
             return Tuple.Create(CanMoveX, CanMoveY);
         }
+
+        private bool WillBeInsideOfFloorsegment(FloorSegment floorSegment)
+        {
+            return (floorSegment.hitBox.Left <= hitBox.Right - velocity.X && floorSegment.hitBox.Right >= hitBox.Left - velocity.X) &&
+                (floorSegment.hitBox.Top <= hitBox.Bottom - velocity.Y && floorSegment.hitBox.Bottom >= hitBox.Bottom - velocity.Y);
+        }
+
+        private bool AreInsideOfFloorsegment(FloorSegment floorSegment)
+        {
+            return (floorSegment.hitBox.Left <= hitBox.Left && floorSegment.hitBox.Right >= hitBox.Right) &&
+                (floorSegment.hitBox.Top <= hitBox.Bottom && floorSegment.hitBox.Bottom >= hitBox.Bottom);
+        }
+        
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
