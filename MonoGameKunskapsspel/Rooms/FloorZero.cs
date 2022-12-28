@@ -17,16 +17,16 @@ namespace MonoGameKunskapsspel
         public override void CreateDoors()
         {
             backDoor = new Door(
-                new Rectangle(floorSegments[3].hitBox.Location - new Point(0, floorSegments[3].hitBox.Width),
-                new(floorSegments[3].hitBox.Width, floorSegments[3].hitBox.Width)),
-                false, front, kunskapsSpel,
+                new Rectangle(floorSegments[0].hitBox.Location + new Point(floorSegments[0].hitBox.Width / 2 - 64, - 184),
+                new(128, 184)), 
+                true, back, kunskapsSpel,
                 kunskapsSpel.Content.Load<Texture2D>("Dungeon/ClosedDoor"),
                 kunskapsSpel.Content.Load<Texture2D>("Dungeon/OpenDoor"));
 
             frontDoor = new Door(
-                new Rectangle(floorSegments[3].hitBox.Location - new Point(0, floorSegments[3].hitBox.Width),
-                new Point(floorSegments[3].hitBox.Width, floorSegments[3].hitBox.Width)),
-                false, front, kunskapsSpel,
+                new Rectangle(floorSegments[6].hitBox.Location + new Point(floorSegments[6].hitBox.Width / 2 - 64, - 184),
+                new(128, 184)),
+                true, front, kunskapsSpel,
                 kunskapsSpel.Content.Load<Texture2D>("Dungeon/ClosedDoor"),
                 kunskapsSpel.Content.Load<Texture2D>("Dungeon/OpenDoor"));
 
@@ -44,13 +44,13 @@ namespace MonoGameKunskapsspel
             foreach (SideWall sideWall in sideWalls)
                 sideWall.Draw(gameTime, spriteBatch);
 
-            //frontDoor.Draw(gameTime, spriteBatch);
-            //backDoor.Draw(gameTime, spriteBatch);
+            frontDoor.Draw(gameTime, spriteBatch);
+            backDoor.Draw(gameTime, spriteBatch);
         }
 
         public override void Initialize()
         {
-            const int x = 4;
+            const int x = 6;
 
             //Create Floors
             floorSegments = new List<FloorSegment> {
@@ -100,18 +100,20 @@ namespace MonoGameKunskapsspel
                 new SideWall(x / 2, new(x + x / 2, 5 * x - x / 2), kunskapsSpel, "LeftWall"),
                 new SideWall(x + x / 2, new(3 * x + x / 2, 5 * x - x / 2), kunskapsSpel, "RightWall"),
             };
+
+
         }
 
         public override void SetDoorLocations()
         {
-            backSpawnLocation = new(floorSegments[1].hitBox.Left + 48, floorSegments[1].hitBox.Top + 700);
-            frontSpawnLocation = floorSegments[3].hitBox.Location + new Point(48, 0);
+            backSpawnLocation = backDoor.hitBox.Location + new Point(0, 200);
+            frontSpawnLocation = frontDoor.hitBox.Location + new Point(0, 200);
         }
 
         public override void Update(GameTime gameTime)
         {
-            //frontDoor.Update(gameTime);
-            //backDoor.Update(gameTime);
+            frontDoor.Update(gameTime);
+            backDoor.Update(gameTime);
         }
     }
 }

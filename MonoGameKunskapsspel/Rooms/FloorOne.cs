@@ -17,10 +17,10 @@ namespace MonoGameKunskapsspel
             //Create Floors
             floorSegments = new List<FloorSegment> {
                 new FloorSegment(new(12, 6), new(0, 0), kunskapsSpel, "Grass"),                                         //Main
-                new FloorSegment(new(2, 12), new(4 * 96, - 12 * 96), kunskapsSpel, "Grass"),                            //Going North
-                new FloorSegment(new(12, 2), new(12 * 96, 3 * 96), kunskapsSpel, "Grass"),                              //Going East
-                new FloorSegment(new(2, 8), new(12 * 96 + 10 * 96, 3 * 96 - 8 * 96), kunskapsSpel, "Grass"),            //Going North from East road
-                new FloorSegment(new(4, 4), new Point(2112, -480) - new Point(96, 3 * 96), kunskapsSpel, "Grass"),      //Around the Cave Door
+                new FloorSegment(new(2, 12), new(4, - 12), kunskapsSpel, "Grass"),                            //Going North
+                new FloorSegment(new(12, 2), new(12, 3), kunskapsSpel, "Grass"),                              //Going East
+                new FloorSegment(new(2, 8), new(22, - 5), kunskapsSpel, "Grass"),            //Going North from East road
+                new FloorSegment(new(4, 4), new Point(21, - 8), kunskapsSpel, "Grass"),      //Around the Cave Door
             };
 
             floorSegments[0].tiles[0][4].ChangeToMiddleTexture();
@@ -49,6 +49,13 @@ namespace MonoGameKunskapsspel
                 "Hej det här rummet är det första",
                 "Ooga booga"
             }, kunskapsSpel.animations);
+
+
+            chests = new()
+            {
+                new Chest(kunskapsSpel.player.hitBox.Location, kunskapsSpel),
+            };
+
         }
 
         public override void CreateDoors()
@@ -70,25 +77,29 @@ namespace MonoGameKunskapsspel
             foreach (FloorSegment floorSegment in floorSegments)
                 floorSegment.Draw(gameTime, spriteBatch);
 
-            //frontDoor.Draw(gameTime, spriteBatch);
-            //backDoor.Draw(gameTime, spriteBatch);
+            frontDoor.Draw(gameTime, spriteBatch);
+            backDoor.Draw(gameTime, spriteBatch);
 
             npc.Draw(gameTime, spriteBatch);
 
+            foreach (Chest chest in chests)
+                chest.Draw(gameTime, spriteBatch);
         }
 
         public override void SetDoorLocations()
         {
             backSpawnLocation = new(floorSegments[1].hitBox.Left + 48, floorSegments[1].hitBox.Top + 700);
-            frontSpawnLocation = floorSegments[3].hitBox.Location + new Point(48, 0);
+            frontSpawnLocation = frontDoor.hitBox.Location + new Point(30, 200);
         }
 
         public override void Update(GameTime gameTime)
         {
             npc.Update(gameTime);
+            frontDoor.Update(gameTime);
+            backDoor.Update(gameTime);
 
-            //frontDoor.Update(gameTime);
-            //backDoor.Update(gameTime);
+            foreach (Chest chest in chests)
+                chest.Update(gameTime);
         }
     }
 }

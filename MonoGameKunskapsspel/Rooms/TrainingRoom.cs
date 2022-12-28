@@ -34,7 +34,7 @@ namespace MonoGameKunskapsspel
             //Create Floors
             floorSegments = new List<FloorSegment> {
                 new FloorSegment(new(8, 8), new(0, 0), kunskapsSpel, "Grass"),                                         //Main
-                new FloorSegment(new(2, 14), new(3 * 96, 8 * 96), kunskapsSpel, "Grass"),                            //Going North
+                new FloorSegment(new(2, 14), new(3, 8), kunskapsSpel, "Grass"),                            //Going North
             };
 
             floorSegments[0].tiles[7][3].ChangeToMiddleTexture();

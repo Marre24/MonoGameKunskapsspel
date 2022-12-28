@@ -18,6 +18,7 @@ namespace MonoGameKunskapsspel
         public RoomManager roomManager = new();
         public Window activeWindow;
         public Dictionary<string, Animation> animations;
+        public Problems problems = new Problems();
 
         public KunskapsSpel()
         {
@@ -52,18 +53,22 @@ namespace MonoGameKunskapsspel
             camera = new Camera(player.hitBox);
 
             //Add rooms in list
-            roomManager.Add(new FloorZero(0, this));
-            //roomManager.Add(new FloorOne(0, this));
-            //roomManager.Add(new TrainingRoom(1, this));
+            roomManager.Add(new FloorOne(0, this));
+            roomManager.Add(new TrainingRoom(1, this));
+            roomManager.Add(new FloorZero(2, this));
+            roomManager.Add(new FloorMinusOne(3, this));
+            roomManager.Add(new FloorMinusTwo(4, this));
+
 
             //Set destinations for doors in Rooms
 
-            //roomManager.rooms[0].CreateDoorsThatLeedsTo(roomManager.rooms[1], null);
-            //roomManager.rooms[1].CreateDoorsThatLeedsTo(null, roomManager.rooms[0]);
+            roomManager.rooms[0].CreateDoorsThatLeedsTo(roomManager.rooms[1], roomManager.rooms[2]);
+            roomManager.rooms[1].CreateDoorsThatLeedsTo(null, roomManager.rooms[0]);
+            roomManager.rooms[2].CreateDoorsThatLeedsTo(roomManager.rooms[0], roomManager.rooms[3]);
+            roomManager.rooms[3].CreateDoorsThatLeedsTo(roomManager.rooms[2], roomManager.rooms[4]);
+            roomManager.rooms[4].CreateDoorsThatLeedsTo(roomManager.rooms[3], null);
 
-            //roomManager.rooms[2].CreateDoorsThatLeedsTo(roomManager.rooms[0], null);
-
-            roomManager.SetActiveRoom(0);
+            roomManager.SetActiveRoom(roomManager.rooms[0]);
         }
 
         protected override void Update(GameTime gameTime)

@@ -17,6 +17,7 @@ namespace MonoGameKunskapsspel
         public List<Wall> walls = new();
         public List<SideWall> sideWalls = new();
         public List<Sign> signs = new();
+        public List<Chest> chests = new();
 
         public NPC npc;
         public Room back;

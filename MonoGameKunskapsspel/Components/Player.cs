@@ -26,17 +26,17 @@ namespace MonoGameKunskapsspel
     public class Player : Component
     {
         AnimationManager animationManager;
-
         Dictionary<string, Animation> animations;
-
         public State activeState = State.Walking;
 
-        private readonly Point position = new(100, 100);
+        private readonly Point position = new(0, 0);
         public Point size = new(48, 62);
         public Rectangle hitBox;
 
         private Point velocity = new(0, 0);
         private const int movementSpeed = 5;
+
+        public int keyAmount;
 
         public Player(KunskapsSpel kunskapsSpel, Dictionary<string, Animation> animations) : base(kunskapsSpel)
         {
