@@ -16,11 +16,11 @@ namespace MonoGameKunskapsspel
         {
             //Create Floors
             floorSegments = new List<FloorSegment> {
-                new FloorSegment(new(12, 6), new(0, 0), kunskapsSpel),                                         //Main
-                new FloorSegment(new(2, 12), new(4 * 96, - 12 * 96), kunskapsSpel),                            //Going North
-                new FloorSegment(new(12, 2), new(12 * 96, 3 * 96), kunskapsSpel),                              //Going East
-                new FloorSegment(new(2, 8), new(12 * 96 + 10 * 96, 3 * 96 - 8 * 96), kunskapsSpel),            //Going North from East road
-                new FloorSegment(new(4, 4), new Point(2112, -480) - new Point(96, 3 * 96), kunskapsSpel),      //Around the Cave Door
+                new FloorSegment(new(12, 6), new(0, 0), kunskapsSpel, "Grass"),                                         //Main
+                new FloorSegment(new(2, 12), new(4 * 96, - 12 * 96), kunskapsSpel, "Grass"),                            //Going North
+                new FloorSegment(new(12, 2), new(12 * 96, 3 * 96), kunskapsSpel, "Grass"),                              //Going East
+                new FloorSegment(new(2, 8), new(12 * 96 + 10 * 96, 3 * 96 - 8 * 96), kunskapsSpel, "Grass"),            //Going North from East road
+                new FloorSegment(new(4, 4), new Point(2112, -480) - new Point(96, 3 * 96), kunskapsSpel, "Grass"),      //Around the Cave Door
             };
 
             floorSegments[0].tiles[0][4].ChangeToMiddleTexture();
@@ -53,13 +53,16 @@ namespace MonoGameKunskapsspel
 
         public override void CreateDoors()
         {
-            backDoor = new Door(new(new(floorSegments[1].hitBox.Left, floorSegments[1].hitBox.Top + 600), new(floorSegments[1].hitBox.Width, 60)), back, kunskapsSpel);
+            backDoor = new Door(new(new(floorSegments[1].hitBox.Left, floorSegments[1].hitBox.Top + 500),
+                new(floorSegments[1].hitBox.Width, 60)), back, kunskapsSpel);
 
             frontDoor = new Door(
-                new Rectangle(floorSegments[3].hitBox.Location - new Point(0, floorSegments[3].hitBox.Width), new(floorSegments[3].hitBox.Width, floorSegments[3].hitBox.Width)), 
-                true, back, kunskapsSpel,
+                new Rectangle(floorSegments[3].hitBox.Location - new Point(0, floorSegments[3].hitBox.Width),
+                new(floorSegments[3].hitBox.Width, floorSegments[3].hitBox.Width)), 
+                true, front, kunskapsSpel,
                 kunskapsSpel.Content.Load<Texture2D>("Enviroment/CaveEntrance"),
                 kunskapsSpel.Content.Load<Texture2D>("Enviroment/CaveEntrance"));
+            SetDoorLocations();
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -67,29 +70,25 @@ namespace MonoGameKunskapsspel
             foreach (FloorSegment floorSegment in floorSegments)
                 floorSegment.Draw(gameTime, spriteBatch);
 
-            frontDoor.Draw(gameTime, spriteBatch);
-            backDoor.Draw(gameTime, spriteBatch);
+            //frontDoor.Draw(gameTime, spriteBatch);
+            //backDoor.Draw(gameTime, spriteBatch);
 
             npc.Draw(gameTime, spriteBatch);
-
-
-            //foreach (Rectangle wall in walls)
-            //    kunskapsSpel.spriteBatch.Draw(kunskapsSpel.Content.Load<Texture2D>("WallTiles"), wall, wall, Color.White);
 
         }
 
         public override void SetDoorLocations()
         {
-
-
+            backSpawnLocation = new(floorSegments[1].hitBox.Left + 48, floorSegments[1].hitBox.Top + 700);
+            frontSpawnLocation = floorSegments[3].hitBox.Location + new Point(48, 0);
         }
 
         public override void Update(GameTime gameTime)
         {
             npc.Update(gameTime);
 
-            frontDoor.Update(gameTime);
-            backDoor.Update(gameTime);
+            //frontDoor.Update(gameTime);
+            //backDoor.Update(gameTime);
         }
     }
 }

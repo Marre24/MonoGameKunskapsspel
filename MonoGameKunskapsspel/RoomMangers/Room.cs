@@ -14,7 +14,8 @@ namespace MonoGameKunskapsspel
         public KunskapsSpel kunskapsSpel;
 
         public List<FloorSegment> floorSegments = new();
-        public List<Rectangle> walls = new();
+        public List<Wall> walls = new();
+        public List<SideWall> sideWalls = new();
         public List<Sign> signs = new();
 
         public NPC npc;

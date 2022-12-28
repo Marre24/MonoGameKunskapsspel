@@ -52,14 +52,15 @@ namespace MonoGameKunskapsspel
             camera = new Camera(player.hitBox);
 
             //Add rooms in list
-            roomManager.Add(new FloorOne(0, this));
-
-            roomManager.Add(new FirstRoom(1, this));
-            roomManager.Add(new SecondRoom(2, this));
+            roomManager.Add(new FloorZero(0, this));
+            //roomManager.Add(new FloorOne(0, this));
+            //roomManager.Add(new TrainingRoom(1, this));
 
             //Set destinations for doors in Rooms
-            roomManager.rooms[0].CreateDoorsThatLeedsTo(roomManager.rooms[1], roomManager.rooms[2]);
-            //roomManager.rooms[1].CreateDoorsThatLeedsTo(null, roomManager.rooms[1]);
+
+            //roomManager.rooms[0].CreateDoorsThatLeedsTo(roomManager.rooms[1], null);
+            //roomManager.rooms[1].CreateDoorsThatLeedsTo(null, roomManager.rooms[0]);
+
             //roomManager.rooms[2].CreateDoorsThatLeedsTo(roomManager.rooms[0], null);
 
             roomManager.SetActiveRoom(0);
@@ -88,7 +89,12 @@ namespace MonoGameKunskapsspel
 
         protected override void Draw(GameTime gameTime)
         {
-            _graphics.GraphicsDevice.Clear(Color.SkyBlue);
+            if (roomManager.activeRoomId > 1)
+                _graphics.GraphicsDevice.Clear(Color.Black);
+            else
+                _graphics.GraphicsDevice.Clear(Color.DarkGreen);
+
+
             spriteBatch.Begin(transformMatrix: camera.transform, samplerState: SamplerState.LinearWrap);
 
             roomManager.Draw(gameTime, spriteBatch);

@@ -69,8 +69,14 @@ namespace MonoGameKunskapsspel
 
         public void GoThroughDoor(RoomManager roomManager)
         {
+            if (this == roomManager.GetActiveRoom().backDoor)
+            {
+                roomManager.SetActiveRoom(doorLeedsTo);
+                kunskapsSpel.player.hitBox.Location = doorLeedsTo.frontSpawnLocation;
+                return;
+            }
             roomManager.SetActiveRoom(doorLeedsTo);
-            kunskapsSpel.player.hitBox.Location = doorLeedsTo.frontSpawnLocation;
+            kunskapsSpel.player.hitBox.Location = doorLeedsTo.backSpawnLocation;
         }
 
         public bool PlayerCanInteract(Player player)

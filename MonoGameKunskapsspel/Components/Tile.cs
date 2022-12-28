@@ -12,70 +12,59 @@ namespace MonoGameKunskapsspel
 {
     public class Tile : Component
     {
-        private List<Texture2D> grassTextures = new();
         private Texture2D activeTexture;
         private Rectangle hitbox;
+        private readonly List<Texture2D> tileTextures;
 
-
-        public Tile(Point size, Point index, Point tileAmount, Point location, KunskapsSpel kunskapsSpel) : base(kunskapsSpel)
+        public Tile(Point index, Point tileAmount, Point location, KunskapsSpel kunskapsSpel, List<Texture2D> tileTextures) : base(kunskapsSpel)
         {
-            grassTextures.Add(kunskapsSpel.Content.Load<Texture2D>("Enviroment/GrassTileBottom"));          //0
-            grassTextures.Add(kunskapsSpel.Content.Load<Texture2D>("Enviroment/GrassTileBottomLeft"));
-            grassTextures.Add(kunskapsSpel.Content.Load<Texture2D>("Enviroment/GrassTileBottomRight"));
+            this.tileTextures = tileTextures;
 
-            grassTextures.Add(kunskapsSpel.Content.Load<Texture2D>("Enviroment/GrassTileLeft"));            //3
-            grassTextures.Add(kunskapsSpel.Content.Load<Texture2D>("Enviroment/GrassTileMiddle"));
-            grassTextures.Add(kunskapsSpel.Content.Load<Texture2D>("Enviroment/GrassTileRight"));
-
-            grassTextures.Add(kunskapsSpel.Content.Load<Texture2D>("Enviroment/GrassTileTop"));             //6
-            grassTextures.Add(kunskapsSpel.Content.Load<Texture2D>("Enviroment/GrassTileTopLeft"));
-            grassTextures.Add(kunskapsSpel.Content.Load<Texture2D>("Enviroment/GrassTileTopRight"));
-
-            hitbox = new Rectangle(location, size);
+            hitbox = new Rectangle(location, new(96, 96));
 
             if (index.X == 0 && index.Y == tileAmount.Y - 1)
             {
-                activeTexture = grassTextures[1];           //BotLeft
+                activeTexture = tileTextures[1];           //BotLeft
                 return;
             }
             if (index.Y == tileAmount.Y - 1 && index.X == tileAmount.X - 1)
             {
-                activeTexture = grassTextures[2];           //BotRight
+                activeTexture = tileTextures[2];           //BotRight
                 return;
             }
             if (index.Y == 0 && index.X == 0)
             {
-                activeTexture = grassTextures[7];           //TopLeft
+                activeTexture = tileTextures[7];           //TopLeft
                 return;
             }
             if (index.Y == 0 && index.X == tileAmount.X - 1)
             {
-                activeTexture = grassTextures[8];           //TopRight
+                activeTexture = tileTextures[8];           //TopRight
                 return;
             }
             if (index.X == 0)
             {
-                activeTexture = grassTextures[3];           //Left
+                activeTexture = tileTextures[3];           //Left
                 return;
             }
             if (index.Y == 0)
             {
-                activeTexture = grassTextures[6];           //Top
+                activeTexture = tileTextures[6];           //Top
                 return;
             }
             if (index.Y == tileAmount.Y - 1)
             {
-                activeTexture = grassTextures[0];           //Bottom
+                activeTexture = tileTextures[0];           //Bottom
                 return;
             }
             if (index.X == tileAmount.X - 1)
             {
-                activeTexture = grassTextures[5];           //Right
+                activeTexture = tileTextures[5];           //Right
                 return;
             }
 
 
-            activeTexture = grassTextures[4];               //Middle
+            activeTexture = tileTextures[4];               //Middle
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -85,18 +74,18 @@ namespace MonoGameKunskapsspel
 
         public void ChangeToMiddleTexture()
         {
-            activeTexture = grassTextures[4];
+            activeTexture = tileTextures[4];
         }
         public void ChangeToEdgeTexture(string edge)
         {
             if (edge == "Top")
-                activeTexture = grassTextures[6];
+                activeTexture = tileTextures[6];
             if (edge == "Bottom")
-                activeTexture = grassTextures[0];
+                activeTexture = tileTextures[0];
             if (edge == "Right")
-                activeTexture = grassTextures[5];
+                activeTexture = tileTextures[5];
             if (edge == "Left")
-                activeTexture = grassTextures[3];
+                activeTexture = tileTextures[3];
         }
 
 
