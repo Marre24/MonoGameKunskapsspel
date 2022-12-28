@@ -80,7 +80,7 @@ namespace MonoGameKunskapsspel
                 camera.Follow(player.hitBox);
             }
 
-            if (player.activeState == State.WaitingForNextLine || player.activeState == State.ReadingText)
+            if (player.activeState == State.WaitingForNextLine || player.activeState == State.ReadingText || player.activeState == State.SolvingProblems)
                 activeWindow.Update(gameTime);
 
             if (player.activeState == State.WatchingCutScene)

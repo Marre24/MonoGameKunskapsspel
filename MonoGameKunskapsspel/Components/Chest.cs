@@ -52,7 +52,7 @@ namespace MonoGameKunskapsspel
             if (!Keyboard.GetState().IsKeyDown(Keys.Space))
                 return;
 
-            MessageBox.Show(problem);
+            _ = new UnlockChestWindow(kunskapsSpel, kunskapsSpel.camera, kunskapsSpel.player, this);
         }
 
         public bool PlayerCanInteract(Player player)

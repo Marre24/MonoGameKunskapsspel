@@ -21,6 +21,7 @@ namespace MonoGameKunskapsspel
         WaitingForNextLine,
         WatchingCutScene,
         Walking,
+        SolvingProblems,
     }
 
     public class Player : Component
