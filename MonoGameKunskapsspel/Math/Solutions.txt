@@ -1,3 +1,1 @@
-Bra;Bättre;Bäst
-Bättre;Bäst
-Bäst
+Bra;Bättre;Bäst;Dålig

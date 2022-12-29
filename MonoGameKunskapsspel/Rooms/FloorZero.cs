@@ -21,14 +21,14 @@ namespace MonoGameKunskapsspel
                 new(128, 184)), 
                 true, back, kunskapsSpel,
                 kunskapsSpel.Content.Load<Texture2D>("Dungeon/ClosedDoor"),
-                kunskapsSpel.Content.Load<Texture2D>("Dungeon/OpenDoor"));
+                kunskapsSpel.Content.Load<Texture2D>("Dungeon/OpenDoor"), 5);
 
             frontDoor = new Door(
                 new Rectangle(floorSegments[6].hitBox.Location + new Point(floorSegments[6].hitBox.Width / 2 - 64, - 184),
                 new(128, 184)),
-                true, front, kunskapsSpel,
+                false, front, kunskapsSpel,
                 kunskapsSpel.Content.Load<Texture2D>("Dungeon/ClosedDoor"),
-                kunskapsSpel.Content.Load<Texture2D>("Dungeon/OpenDoor"));
+                kunskapsSpel.Content.Load<Texture2D>("Dungeon/OpenDoor"), 5);
 
             SetDoorLocations();
         }

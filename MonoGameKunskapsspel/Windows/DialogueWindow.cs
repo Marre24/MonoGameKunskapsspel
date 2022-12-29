@@ -65,7 +65,7 @@ namespace MonoGameKunskapsspel
             if (player.activeState == State.ReadingText && timeSpan + interval <= gameTime.TotalGameTime.TotalSeconds)               //Writes out the phrase 
                 WriteOutText(gameTime);
 
-            if (player.activeState == State.WaitingForNextLine && Keyboard.GetState().IsKeyDown(Keys.Right))                         //Initializes the next phrase
+            if (player.activeState == State.WaitingForNextLine && Keyboard.GetState().IsKeyDown(Keys.Up))                         //Initializes the next phrase
             {
                 if (dialogue.Count == 0)
                 {
@@ -83,13 +83,13 @@ namespace MonoGameKunskapsspel
 
         private void WriteOutText(GameTime gameTime)
         {
-            if (Keyboard.GetState().GetPressedKeys().Contains(Keys.Up))                                                 //Fast forward
+            if (Keyboard.GetState().GetPressedKeys().Contains(Keys.Right))                                                 //Fast forward
                 interval = 0;
 
             activeWord = words[0];
             timeSpan = gameTime.TotalGameTime.TotalSeconds;
 
-            if ((dialogueWindow.Width - 30) * rowCount < 26.7 * (sentence.Length + activeWord.Count))                   //Checks if there is space for the next word
+            if ((dialogueWindow.Width - 30) * rowCount < 20 * (sentence.Length + activeWord.Count))                   //Checks if there is space for the next word
             {
                 sentence += "\n";
                 rowCount++;

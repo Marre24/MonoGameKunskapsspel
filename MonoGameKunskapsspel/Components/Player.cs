@@ -17,6 +17,7 @@ namespace MonoGameKunskapsspel
 {
     public enum State
     {
+        InStartScreen,
         ReadingText,
         WaitingForNextLine,
         WatchingCutScene,
@@ -26,10 +27,12 @@ namespace MonoGameKunskapsspel
 
     public class Player : Component
     {
-        AnimationManager animationManager;
-        Dictionary<string, Animation> animations;
-        public State activeState = State.Walking;
+        readonly AnimationManager animationManager;
+        readonly Dictionary<string, Animation> animations;
+        public State activeState = State.InStartScreen;
 
+        private Rectangle inventoryHitbox;
+        private Texture2D inventoryTexture;
         private readonly Point position = new(0, 0);
         public Point size = new(48, 62);
         public Rectangle hitBox;
@@ -37,7 +40,7 @@ namespace MonoGameKunskapsspel
         private Point velocity = new(0, 0);
         private const int movementSpeed = 5;
 
-        public int keyAmount;
+        public int keyAmount = 10;
 
         public Player(KunskapsSpel kunskapsSpel, Dictionary<string, Animation> animations) : base(kunskapsSpel)
         {
@@ -48,7 +51,14 @@ namespace MonoGameKunskapsspel
 
         public override void Update(GameTime gameTime)
         {
-            Move();
+            velocity = new(0, 0);
+            if (keyAmount > 0)
+                inventoryTexture = kunskapsSpel.Content.Load<Texture2D>("Msc/KeyInventory");
+            else
+                inventoryTexture = kunskapsSpel.Content.Load<Texture2D>("Msc/EmptyInventory");
+
+            if (activeState == State.Walking)
+                Move();
 
             animationManager.Position = hitBox.Location.ToVector2();
             animationManager.Update(gameTime);
@@ -57,8 +67,10 @@ namespace MonoGameKunskapsspel
             {
                 animationManager.Play(animations["Idle"]);
                 velocity = new(0, 0);
+                return;
             }
-
+            
+            inventoryHitbox = new(kunskapsSpel.camera.window.Right - 200, kunskapsSpel.camera.window.Top + 50, 150, 80);
             if (velocity.X < 0)
                 animationManager.Play(animations["WalkRight"]);
             else if (velocity.X > 0)
@@ -67,8 +79,6 @@ namespace MonoGameKunskapsspel
                 animationManager.Play(animations["WalkLeft"]);
             else if (velocity.Y > 0)
                 animationManager.Play(animations["WalkRight"]);
-            
-
         }
 
         private void Move()
@@ -78,7 +88,7 @@ namespace MonoGameKunskapsspel
             if (velocity == Point.Zero)                                                                 //Standing still
                 return;
 
-            (bool canMoveX, bool canMoveY) = CanMoveTo(velocity.X, velocity.Y);
+            (bool canMoveX, bool canMoveY) = CanMove();
 
             if (canMoveX)                                                                               
                 hitBox.Location = new Point(hitBox.Location.X - velocity.X, hitBox.Location.Y);
@@ -87,7 +97,7 @@ namespace MonoGameKunskapsspel
 
         }
 
-        private Tuple<int, int> GetVelocity()
+        private static Tuple<int, int> GetVelocity()
         {
             int x = 0;
             int y = 0;
@@ -114,9 +124,7 @@ namespace MonoGameKunskapsspel
             return Tuple.Create(x, y);
         }
 
-        private readonly Point wallOffset = new(20,20);
-
-        private Tuple<bool, bool> CanMoveTo(int xVelocity, int yVelocity)
+        private Tuple<bool, bool> CanMove()
         {
             bool CanMoveX = false;
             bool CanMoveY = false;
@@ -161,6 +169,9 @@ namespace MonoGameKunskapsspel
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             animationManager.Draw(spriteBatch);
+            spriteBatch.Draw(inventoryTexture, inventoryHitbox, Color.White);
+            if (keyAmount > 0)
+                spriteBatch.DrawString(kunskapsSpel.Content.Load<SpriteFont>("PlayerReady"), "x" + keyAmount.ToString(), inventoryHitbox.Center.ToVector2() + new Vector2(20, - 10), Color.White);
         }
     }
 }

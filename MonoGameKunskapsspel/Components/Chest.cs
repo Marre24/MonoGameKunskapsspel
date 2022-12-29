@@ -14,10 +14,11 @@ namespace MonoGameKunskapsspel
 {
     public class Chest : Component
     {
-        private readonly Point size = new Point(64, 80);
-        private readonly Rectangle hitBox;
-        private string problem;
-        private List<string> solutions;
+        private readonly Point size = new(64, 80);
+        private Rectangle hitBox;
+        private readonly string problem;
+        private readonly int rightAnswer;
+        private readonly List<string> solutions;
         private bool open = false;
         private readonly Texture2D openTexture;
         private readonly Texture2D closedTexture;
@@ -25,7 +26,7 @@ namespace MonoGameKunskapsspel
         public Chest(Point locaiton, KunskapsSpel kunskapsSpel) : base(kunskapsSpel)
         {
             hitBox = new Rectangle(locaiton, size);
-            (problem, solutions) = kunskapsSpel.problems.GetCurrentProblem();
+            (problem, rightAnswer, solutions) = kunskapsSpel.problems.GetCurrentProblem();
 
             openTexture = kunskapsSpel.Content.Load<Texture2D>("Dungeon./OpenChest");
             closedTexture = kunskapsSpel.Content.Load<Texture2D>("Dungeon./ClosedChest");
@@ -52,7 +53,7 @@ namespace MonoGameKunskapsspel
             if (!Keyboard.GetState().IsKeyDown(Keys.Space))
                 return;
 
-            _ = new UnlockChestWindow(kunskapsSpel, kunskapsSpel.camera, kunskapsSpel.player, this);
+            _ = new UnlockChestWindow(rightAnswer, problem, solutions, kunskapsSpel, kunskapsSpel.camera, kunskapsSpel.player, this);
         }
 
         public bool PlayerCanInteract(Player player)
@@ -69,5 +70,15 @@ namespace MonoGameKunskapsspel
         {
             return hitBox.Top <= yCord && hitBox.Bottom >= yCord;
         }
+
+        private readonly Point diff = new(0, 24);
+
+        public void Open()
+        {
+            open = true;
+            kunskapsSpel.player.keyAmount++;
+            hitBox = new Rectangle(hitBox.Location - diff, size + diff);
+        }
+
     }
 }

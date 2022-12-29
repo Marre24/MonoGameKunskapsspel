@@ -12,6 +12,7 @@ namespace MonoGameKunskapsspel
     public abstract class Room
     {
         public KunskapsSpel kunskapsSpel;
+        public Rectangle window;
 
         public List<FloorSegment> floorSegments = new();
         public List<Wall> walls = new();

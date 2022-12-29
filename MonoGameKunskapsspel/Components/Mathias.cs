@@ -32,6 +32,7 @@ namespace MonoGameKunskapsspel
 
         public override void Update(GameTime gameTime)
         {
+            kunskapsSpel.camera.Follow(cutScene.hiddenFollowPoint);
             if (kunskapsSpel.camera.window.Contains(hitBox) && !hasInteracted)
                 cutScene.StartScene();
         }

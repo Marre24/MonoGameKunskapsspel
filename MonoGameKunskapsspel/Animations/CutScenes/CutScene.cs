@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace MonoGameKunskapsspel
         public readonly Player player;
         public readonly KunskapsSpel kunskapsSpel;
         public int phaseCounter = 1;
-
+        public bool changeRoom = false;
         public CutScene(Player player, KunskapsSpel kunskapsSpel)
         {
             this.player = player;
@@ -21,6 +22,10 @@ namespace MonoGameKunskapsspel
         }
 
         public abstract void Update(GameTime gameTime);
+        public virtual void Draw(SpriteBatch spriteBatch)
+        {
+
+        }
         public abstract void StartScene();
         public abstract void EndScene();
 

@@ -68,7 +68,7 @@ namespace MonoGameKunskapsspel
                 new(floorSegments[3].hitBox.Width, floorSegments[3].hitBox.Width)), 
                 true, front, kunskapsSpel,
                 kunskapsSpel.Content.Load<Texture2D>("Enviroment/CaveEntrance"),
-                kunskapsSpel.Content.Load<Texture2D>("Enviroment/CaveEntrance"));
+                kunskapsSpel.Content.Load<Texture2D>("Enviroment/CaveEntrance"), 0);
             SetDoorLocations();
         }
 
@@ -94,6 +94,7 @@ namespace MonoGameKunskapsspel
 
         public override void Update(GameTime gameTime)
         {
+            kunskapsSpel.IsMouseVisible = false;
             npc.Update(gameTime);
             frontDoor.Update(gameTime);
             backDoor.Update(gameTime);

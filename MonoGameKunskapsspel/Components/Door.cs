@@ -16,16 +16,18 @@ namespace MonoGameKunskapsspel
         private readonly Room doorLeedsTo;
         private readonly Texture2D shutTexture;
         private readonly Texture2D openTexture;
-        public readonly bool open;
+        private int amountOfKeysToOpen;
+        public bool open;
         public Rectangle hitBox;
         private readonly bool showDoor;
 
-        public Door(Rectangle hitBox, bool open, Room doorLeedsTo, KunskapsSpel kunskapsSpel, Texture2D shutTexture, Texture2D openTexture) : base(kunskapsSpel)              //Visible door
+        public Door(Rectangle hitBox, bool open, Room doorLeedsTo, KunskapsSpel kunskapsSpel, Texture2D shutTexture, Texture2D openTexture, int amountOfKeysToOpen) : base(kunskapsSpel)              //Visible door
         {
             this.open = open;
             this.doorLeedsTo = doorLeedsTo;
             this.shutTexture = shutTexture;
             this.openTexture = openTexture;
+            this.amountOfKeysToOpen = amountOfKeysToOpen;
             this.hitBox = hitBox;
             showDoor = true;
         }
@@ -48,17 +50,27 @@ namespace MonoGameKunskapsspel
                 spriteBatch.Draw(openTexture, hitBox, Color.White);
                 return;
             }
-
             spriteBatch.Draw(shutTexture, hitBox, Color.White);
         }
 
+        public bool first = true;
         public override void Update(GameTime gameTime)
         {
             if (!PlayerCanInteract(kunskapsSpel.player))
                 return;
 
             if (open)
-                GoThroughDoor(kunskapsSpel.roomManager);
+            {
+                if (first)
+                {
+                    kunskapsSpel.activeCutscene = new ChangeRoomAnimation(kunskapsSpel.player, kunskapsSpel.camera, kunskapsSpel, this);
+                    first = false;
+                }
+                kunskapsSpel.player.activeState = State.WatchingCutScene;
+                if (kunskapsSpel.activeCutscene.changeRoom)
+                    GoThroughDoor(kunskapsSpel.roomManager);
+            }
+
 
             if (!Keyboard.GetState().IsKeyDown(Keys.Space))
                 return;
@@ -96,7 +108,23 @@ namespace MonoGameKunskapsspel
 
         public void TryToOpen()
         {
-            _ = new UnlockDoorWindow(kunskapsSpel, kunskapsSpel.camera, kunskapsSpel.player);
+            if (kunskapsSpel.player.keyAmount >= amountOfKeysToOpen)
+            {
+                kunskapsSpel.player.keyAmount -= amountOfKeysToOpen;
+                _ = new DialogueWindow(kunskapsSpel, kunskapsSpel.player, kunskapsSpel.camera, new()
+                {
+                    "*Knak*"
+                });
+                open = true;
+                return;
+            }
+
+            amountOfKeysToOpen -= kunskapsSpel.player.keyAmount;
+            kunskapsSpel.player.keyAmount = 0;
+            _ = new DialogueWindow(kunskapsSpel, kunskapsSpel.player, kunskapsSpel.camera, new()
+            {
+                $"Du behöver {amountOfKeysToOpen} st nycklar till för att öppna denna dörr"
+            });
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using Color = Microsoft.Xna.Framework.Color;
+using System.Windows;
 
 namespace MonoGameKunskapsspel
 {
@@ -17,8 +18,9 @@ namespace MonoGameKunskapsspel
         public Player player;
         public RoomManager roomManager = new();
         public Window activeWindow;
+        public CutScene activeCutscene;
         public Dictionary<string, Animation> animations;
-        public Problems problems = new Problems();
+        public Problems problems = new();
 
         public KunskapsSpel()
         {
@@ -53,20 +55,21 @@ namespace MonoGameKunskapsspel
             camera = new Camera(player.hitBox);
 
             //Add rooms in list
-            roomManager.Add(new FloorOne(0, this));
-            roomManager.Add(new TrainingRoom(1, this));
-            roomManager.Add(new FloorZero(2, this));
-            roomManager.Add(new FloorMinusOne(3, this));
-            roomManager.Add(new FloorMinusTwo(4, this));
+            roomManager.Add(new StartScreen(0, this));
+            roomManager.Add(new FloorOne(1, this));
+            roomManager.Add(new TrainingRoom(2, this));
+            roomManager.Add(new FloorZero(3, this));
+            roomManager.Add(new FloorMinusOne(4, this));
+            roomManager.Add(new FloorMinusTwo(5, this));
 
 
             //Set destinations for doors in Rooms
 
-            roomManager.rooms[0].CreateDoorsThatLeedsTo(roomManager.rooms[1], roomManager.rooms[2]);
-            roomManager.rooms[1].CreateDoorsThatLeedsTo(null, roomManager.rooms[0]);
-            roomManager.rooms[2].CreateDoorsThatLeedsTo(roomManager.rooms[0], roomManager.rooms[3]);
-            roomManager.rooms[3].CreateDoorsThatLeedsTo(roomManager.rooms[2], roomManager.rooms[4]);
-            roomManager.rooms[4].CreateDoorsThatLeedsTo(roomManager.rooms[3], null);
+            roomManager.rooms[1].CreateDoorsThatLeedsTo(roomManager.rooms[2], roomManager.rooms[3]);
+            roomManager.rooms[2].CreateDoorsThatLeedsTo(null, roomManager.rooms[1]);
+            roomManager.rooms[3].CreateDoorsThatLeedsTo(roomManager.rooms[1], roomManager.rooms[4]);
+            roomManager.rooms[4].CreateDoorsThatLeedsTo(roomManager.rooms[3], roomManager.rooms[5]);
+            roomManager.rooms[5].CreateDoorsThatLeedsTo(roomManager.rooms[4], null);
 
             roomManager.SetActiveRoom(roomManager.rooms[0]);
         }
@@ -85,8 +88,14 @@ namespace MonoGameKunskapsspel
 
             if (player.activeState == State.WatchingCutScene)
             {
-                camera.Follow(roomManager.GetActiveRoom().mathias.cutScene.hiddenFollowPoint);
-                roomManager.GetActiveRoom().mathias.cutScene.Update(gameTime);
+                activeCutscene.Update(gameTime);
+                //roomManager.GetActiveRoom().mathias.cutScene.Update(gameTime);
+            }
+
+            if (player.activeState == State.InStartScreen)
+            {
+                roomManager.Update(gameTime);
+                camera.Follow(roomManager.GetActiveRoom().window);
             }
 
             base.Update(gameTime);
@@ -99,14 +108,24 @@ namespace MonoGameKunskapsspel
             else
                 _graphics.GraphicsDevice.Clear(Color.DarkGreen);
 
+            if (roomManager.activeRoomId == 0)
+                _graphics.GraphicsDevice.Clear(Color.Black);
 
             spriteBatch.Begin(transformMatrix: camera.transform, samplerState: SamplerState.LinearWrap);
 
+            if (player.activeState == State.InStartScreen)
+            {
+                roomManager.Draw(gameTime, spriteBatch);
+                spriteBatch.End();
+                return;
+            }
+
             roomManager.Draw(gameTime, spriteBatch);
-
             player.Draw(gameTime, spriteBatch);
-
             activeWindow?.Draw(gameTime, spriteBatch);
+
+            if (player.activeState == State.WatchingCutScene)
+                activeCutscene.Draw(spriteBatch);
 
             spriteBatch.End();
         }
