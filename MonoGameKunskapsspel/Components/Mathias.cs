@@ -12,9 +12,7 @@ namespace MonoGameKunskapsspel
 {
     public class Mathias : Component
     {
-        public Rectangle hitBox;
         public readonly CutScene cutScene;
-        public bool hasInteracted = false;
         private readonly Point size = new(238, 254);
 
         public Mathias(KunskapsSpel kunskapsSpel, Point position, CutScene cutScene) : base(kunskapsSpel)

@@ -33,14 +33,13 @@ namespace MonoGameKunskapsspel
 
         private Rectangle inventoryHitbox;
         private Texture2D inventoryTexture;
-        private readonly Point position = new(0, 0);
+        private readonly Point position = new(700, 50);
         public Point size = new(48, 62);
-        public Rectangle hitBox;
 
-        private Point velocity = new(0, 0);
+        public Point velocity = new(0, 0);
         private const int movementSpeed = 5;
 
-        public int keyAmount = 10;
+        public int keyAmount = 0;
 
         public Player(KunskapsSpel kunskapsSpel, Dictionary<string, Animation> animations) : base(kunskapsSpel)
         {
@@ -76,7 +75,7 @@ namespace MonoGameKunskapsspel
             else if (velocity.X > 0)
                 animationManager.Play(animations["WalkLeft"]);
             else if (velocity.Y < 0)
-                animationManager.Play(animations["WalkLeft"]);
+                animationManager.Play(animations["WalkRight"]);
             else if (velocity.Y > 0)
                 animationManager.Play(animations["WalkRight"]);
         }
@@ -131,7 +130,7 @@ namespace MonoGameKunskapsspel
 
             foreach (FloorSegment floorSegment in kunskapsSpel.roomManager.GetActiveRoom().floorSegments)
             {
-                if (AreInsideOfFloorsegment(floorSegment))
+                if (AreInsideOfComponent(floorSegment))
                 {
                     if (floorSegment.hitBox.Left <= hitBox.Left - velocity.X && floorSegment.hitBox.Right >= hitBox.Right - velocity.X)
                         CanMoveX = true;
@@ -139,7 +138,7 @@ namespace MonoGameKunskapsspel
                     if (floorSegment.hitBox.Top <= hitBox.Bottom - velocity.Y && floorSegment.hitBox.Bottom >= hitBox.Bottom - velocity.Y)
                         CanMoveY = true;
                 }
-                else if (WillBeInsideOfFloorsegment(floorSegment))
+                else if (WillBeInsideOfComponent(floorSegment))
                 {
                     if (floorSegment.hitBox.Left <= hitBox.Right - velocity.X && floorSegment.hitBox.Right >= hitBox.Left - velocity.X)
                         CanMoveX = true;
@@ -147,28 +146,43 @@ namespace MonoGameKunskapsspel
                     if (floorSegment.hitBox.Top <= hitBox.Bottom - velocity.Y && floorSegment.hitBox.Bottom >= hitBox.Bottom - velocity.Y)
                         CanMoveY = true;
                 }
-                
             }
 
-            return Tuple.Create(CanMoveX, CanMoveY);
+            bool colidesX = false;
+            bool colidesY = false;
+            foreach (Component component in kunskapsSpel.roomManager.GetActiveRoom().components)
+            {
+                if (component.haveColisison == true && WillBeInsideOfComponent(component))
+                {
+                    if (component.hitBox.Contains(new Vector2(hitBox.Right - velocity.X, hitBox.Bottom)) || component.hitBox.Contains(new Vector2(hitBox.Left - velocity.X, hitBox.Bottom)))
+                        colidesX = true;
+
+                    if (component.hitBox.Contains(new Vector2(hitBox.Right, hitBox.Bottom - velocity.Y)) || component.hitBox.Contains(new Vector2(hitBox.Left, hitBox.Bottom - velocity.Y)))
+                        colidesY = true;
+                }
+            }
+                
+
+            return Tuple.Create(CanMoveX && !colidesX, CanMoveY && !colidesY);
         }
 
-        private bool WillBeInsideOfFloorsegment(FloorSegment floorSegment)
+        private bool WillBeInsideOfComponent(Component component)
         {
-            return (floorSegment.hitBox.Left <= hitBox.Right - velocity.X && floorSegment.hitBox.Right >= hitBox.Left - velocity.X) &&
-                (floorSegment.hitBox.Top <= hitBox.Bottom - velocity.Y && floorSegment.hitBox.Bottom >= hitBox.Bottom - velocity.Y);
+            return (component.hitBox.Left <= hitBox.Right - velocity.X && component.hitBox.Right >= hitBox.Left - velocity.X) &&
+                (component.hitBox.Top <= hitBox.Bottom - velocity.Y && component.hitBox.Bottom >= hitBox.Bottom - velocity.Y);
         }
 
-        private bool AreInsideOfFloorsegment(FloorSegment floorSegment)
+        private bool AreInsideOfComponent(Component component)
         {
-            return (floorSegment.hitBox.Left <= hitBox.Left && floorSegment.hitBox.Right >= hitBox.Right) &&
-                (floorSegment.hitBox.Top <= hitBox.Bottom && floorSegment.hitBox.Bottom >= hitBox.Bottom);
+            return (component.hitBox.Left <= hitBox.Left && component.hitBox.Right >= hitBox.Right) &&
+                (component.hitBox.Top <= hitBox.Bottom && component.hitBox.Bottom >= hitBox.Bottom);
         }
         
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             animationManager.Draw(spriteBatch);
+            inventoryTexture??= kunskapsSpel.Content.Load<Texture2D>("Msc/EmptyInventory");
             spriteBatch.Draw(inventoryTexture, inventoryHitbox, Color.White);
             if (keyAmount > 0)
                 spriteBatch.DrawString(kunskapsSpel.Content.Load<SpriteFont>("PlayerReady"), "x" + keyAmount.ToString(), inventoryHitbox.Center.ToVector2() + new Vector2(20, - 10), Color.White);

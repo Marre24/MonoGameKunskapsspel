@@ -11,6 +11,7 @@ namespace MonoGameKunskapsspel
 {
     public class MathiasIntroduction : CutScene
     {
+        private readonly Component target;
         public readonly Room room;
         private readonly List<string> dialogue;
         private DialogueWindow dialogueWindow;
@@ -18,14 +19,18 @@ namespace MonoGameKunskapsspel
         private Vector2 dir;
         private Vector2 speed = new(5f, 5f);
 
-        public MathiasIntroduction(Player player, KunskapsSpel kunskapsSpel, Room room, List<string> dialogue) : base(player, kunskapsSpel)
+        public MathiasIntroduction(Player player, KunskapsSpel kunskapsSpel, Component target, Room room, List<string> dialogue) : base(player, kunskapsSpel)
         {
+            this.target = target;
             this.room = room;
             this.dialogue = dialogue;
+            StartScene();
         }
 
         public override void Update(GameTime gameTime)
         {
+            kunskapsSpel.camera.Follow(hiddenFollowPoint);
+
             if (phaseCounter == 1)
                 PhaseOne();
 
@@ -38,7 +43,7 @@ namespace MonoGameKunskapsspel
 
         private void PhaseOne()
         {
-            if (IsGoingAway(hiddenFollowPoint, hiddenFollowPoint + dir * speed, room.mathias.hitBox.Center.ToVector2()))
+            if (IsGoingAway(hiddenFollowPoint, hiddenFollowPoint + dir * speed, target.hitBox.Center.ToVector2()))
                 phaseCounter = 2;
 
             hiddenFollowPoint += dir * speed;
@@ -77,14 +82,14 @@ namespace MonoGameKunskapsspel
             player.activeState = State.WatchingCutScene;
             hiddenFollowPoint = player.hitBox.Location.ToVector2();
 
-            dir = room.mathias.hitBox.Center.ToVector2() - hiddenFollowPoint;
+            dir = target.hitBox.Center.ToVector2() - hiddenFollowPoint;
             dir.Normalize();
         }
 
         public override void EndScene()
         {
             player.activeState = State.Walking;
-            room.mathias.hasInteracted = true;
+            target.hasInteracted = true;
         }
     }
 }

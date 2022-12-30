@@ -13,7 +13,6 @@ namespace MonoGameKunskapsspel
     public class FloorSegment : Component
     {
         public List<List<Tile>> tiles = new();
-        public Rectangle hitBox;
 
         private readonly Point tileSize = new Point(96, 96);
 

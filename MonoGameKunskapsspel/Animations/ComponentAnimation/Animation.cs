@@ -23,7 +23,7 @@ namespace MonoGameKunskapsspel
             FrameCount = frameCount;
 
             IsLooping = true;
-            FrameSpeed = 0.3f;
+            FrameSpeed = 0.2f;
         }
 
     }

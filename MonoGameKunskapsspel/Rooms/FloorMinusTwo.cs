@@ -70,6 +70,10 @@ namespace MonoGameKunskapsspel
             {
 
             };
+            foreach (FloorSegment floorSegment in floorSegments)
+                components.Add(floorSegment);
+            foreach (Chest chest in chests)
+                components.Add(chest);
         }
 
         public override void SetDoorLocations()

@@ -17,7 +17,7 @@ namespace MonoGameKunskapsspel
             //Create Floors
             floorSegments = new List<FloorSegment> {
                 new FloorSegment(new(12, 6), new(0, 0), kunskapsSpel, "Grass"),                                         //Main
-                new FloorSegment(new(2, 12), new(4, - 12), kunskapsSpel, "Grass"),                            //Going North
+                new FloorSegment(new(2, 14), new(4, - 14), kunskapsSpel, "Grass"),                            //Going North
                 new FloorSegment(new(12, 2), new(12, 3), kunskapsSpel, "Grass"),                              //Going East
                 new FloorSegment(new(2, 8), new(22, - 5), kunskapsSpel, "Grass"),            //Going North from East road
                 new FloorSegment(new(4, 4), new Point(21, - 8), kunskapsSpel, "Grass"),      //Around the Cave Door
@@ -25,8 +25,8 @@ namespace MonoGameKunskapsspel
 
             floorSegments[0].tiles[0][4].ChangeToMiddleTexture();
             floorSegments[0].tiles[0][5].ChangeToMiddleTexture();
-            floorSegments[1].tiles[11][0].ChangeToEdgeTexture("Left");
-            floorSegments[1].tiles[11][1].ChangeToEdgeTexture("Right");
+            floorSegments[1].tiles[13][0].ChangeToEdgeTexture("Left");
+            floorSegments[1].tiles[13][1].ChangeToEdgeTexture("Right");
 
             floorSegments[0].tiles[3][11].ChangeToMiddleTexture();
             floorSegments[0].tiles[4][11].ChangeToMiddleTexture();
@@ -44,23 +44,26 @@ namespace MonoGameKunskapsspel
             floorSegments[4].tiles[3][2].ChangeToMiddleTexture();
 
             //Create NPC
-            npc = new NPC(new(500, 200, 200, 200), kunskapsSpel, new()
+            npc = new NPC(new(floorSegments[0].hitBox.Right - 100, 200), kunskapsSpel, new()
             {
-                "Hej det här rummet är det första",
-                "Ooga booga"
+                "Välkommen nykommling, mitt namn är _____ . När du har läst klart så kan du klicka på högerpilen för att se vad mer jag har att säga",
+                "Du går med W, A, S och D om du vill interagera med något objekt eller prata med mig så klickar du space",
+                "Du ser precis ut som någon jag behöver.",
+                "Följ stigen som är til vänster om mig så"
             }, kunskapsSpel.animations);
 
 
-            chests = new()
-            {
-                new Chest(kunskapsSpel.player.hitBox.Location, kunskapsSpel),
-            };
 
+            foreach (FloorSegment floorSegment in floorSegments)
+                components.Add(floorSegment);
+            foreach (Chest chest in chests)
+                components.Add(chest);
+            components.Add(npc);
         }
 
         public override void CreateDoors()
         {
-            backDoor = new Door(new(new(floorSegments[1].hitBox.Left, floorSegments[1].hitBox.Top + 500),
+            backDoor = new Door(new(new(floorSegments[1].hitBox.Left, floorSegments[1].hitBox.Top + 550),
                 new(floorSegments[1].hitBox.Width, 60)), back, kunskapsSpel);
 
             frontDoor = new Door(
@@ -88,7 +91,7 @@ namespace MonoGameKunskapsspel
 
         public override void SetDoorLocations()
         {
-            backSpawnLocation = new(floorSegments[1].hitBox.Left + 48, floorSegments[1].hitBox.Top + 700);
+            backSpawnLocation = new(floorSegments[1].hitBox.Left + 48, floorSegments[1].hitBox.Top + 650);
             frontSpawnLocation = frontDoor.hitBox.Location + new Point(30, 200);
         }
 

@@ -42,6 +42,8 @@ namespace MonoGameKunskapsspel
 
             foreach (SideWall sideWall in sideWalls)
                 sideWall.Draw(gameTime, spriteBatch);
+            foreach (Chest chest in chests)
+                chest.Draw(gameTime, spriteBatch);
 
             frontDoor.Draw(gameTime, spriteBatch);
             backDoor.Draw(gameTime, spriteBatch);
@@ -73,10 +75,26 @@ namespace MonoGameKunskapsspel
                 
             };
 
+            //Create SideWalls
             sideWalls = new()
             {
                 
             };
+
+            //Create Chests
+            chests = new()
+            {
+                new Chest(floorSegments[1].hitBox.Location + new Point(0,80), kunskapsSpel),
+                new Chest(floorSegments[4].hitBox.Location + new Point(floorSegments[4].hitBox.Width - 64, 80) , kunskapsSpel),
+                new Chest(floorSegments[7].hitBox.Location + new Point(0, 120), kunskapsSpel),
+                new Chest(floorSegments[10].hitBox.Location + new Point(floorSegments[10].hitBox.Width - 64, 80) , kunskapsSpel),
+            };
+
+
+            foreach (FloorSegment floorSegment in floorSegments)
+                components.Add(floorSegment);
+            foreach (Chest chest in chests)
+                components.Add(chest);
         }
 
         public override void SetDoorLocations()
@@ -89,6 +107,8 @@ namespace MonoGameKunskapsspel
         {
             frontDoor.Update(gameTime);
             backDoor.Update(gameTime);
+            foreach (Chest chest in chests)
+                chest.Update(gameTime);
         }
     }
 }

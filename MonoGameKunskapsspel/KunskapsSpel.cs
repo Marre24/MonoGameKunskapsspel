@@ -47,7 +47,7 @@ namespace MonoGameKunskapsspel
                 {"WalkLeft", new Animation(Content.Load<Texture2D>("Player/RunLeft"), 6) },
                 {"WalkRight", new Animation(Content.Load<Texture2D>("Player/RunRight"), 6) },
                 {"Idle", new Animation(Content.Load<Texture2D>("Player/Idle"), 4) },
-                {"NpcIdle", new Animation(Content.Load<Texture2D>("Npc/Idle-Sheet"), 4) },
+                {"NpcIdle", new Animation(Content.Load<Texture2D>("Npc/WizzardIdleSheet"), 4) },
             };
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -78,8 +78,8 @@ namespace MonoGameKunskapsspel
         {
             if (player.activeState == State.Walking)
             {
-                roomManager.Update(gameTime);
                 player.Update(gameTime);
+                roomManager.Update(gameTime);
                 camera.Follow(player.hitBox);
             }
 
@@ -89,7 +89,6 @@ namespace MonoGameKunskapsspel
             if (player.activeState == State.WatchingCutScene)
             {
                 activeCutscene.Update(gameTime);
-                //roomManager.GetActiveRoom().mathias.cutScene.Update(gameTime);
             }
 
             if (player.activeState == State.InStartScreen)
@@ -103,7 +102,7 @@ namespace MonoGameKunskapsspel
 
         protected override void Draw(GameTime gameTime)
         {
-            if (roomManager.activeRoomId > 1)
+            if (roomManager.activeRoomId > 2)
                 _graphics.GraphicsDevice.Clear(Color.Black);
             else
                 _graphics.GraphicsDevice.Clear(Color.DarkGreen);

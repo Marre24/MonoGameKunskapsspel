@@ -373,6 +373,13 @@
 /processorParam:TextureFormat=Color
 /build:Enviroment/GrassTileTopRight.png
 
+#begin LargePlayerReady.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:LargePlayerReady.spritefont
+
 #begin Msc/Codelock1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -493,7 +500,7 @@
 /processorParam:TextureFormat=Color
 /build:Msc/UnlockedPadlock.png
 
-#begin Npc/Idle-Sheet.png
+#begin Npc/WizzardIdleSheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -503,7 +510,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Npc/Idle-Sheet.png
+/build:Npc/WizzardIdleSheet.png
 
 #begin Player/Idle.png
 /importer:TextureImporter
@@ -559,4 +566,52 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:StartScreen.png
+
+#begin UI/ButtonDown.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UI/ButtonDown.png
+
+#begin UI/ButtonUp.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UI/ButtonUp.png
+
+#begin UI/LeftArrow.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UI/LeftArrow.png
+
+#begin UI/RightArrow.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UI/RightArrow.png
 

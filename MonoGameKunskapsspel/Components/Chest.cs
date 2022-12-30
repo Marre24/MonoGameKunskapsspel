@@ -15,7 +15,6 @@ namespace MonoGameKunskapsspel
     public class Chest : Component
     {
         private readonly Point size = new(64, 80);
-        private Rectangle hitBox;
         private readonly string problem;
         private readonly int rightAnswer;
         private readonly List<string> solutions;
@@ -30,6 +29,7 @@ namespace MonoGameKunskapsspel
 
             openTexture = kunskapsSpel.Content.Load<Texture2D>("Dungeon./OpenChest");
             closedTexture = kunskapsSpel.Content.Load<Texture2D>("Dungeon./ClosedChest");
+            haveColisison = true;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)

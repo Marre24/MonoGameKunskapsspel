@@ -23,9 +23,10 @@ namespace MonoGameKunskapsspel
         {
             foreach (FloorSegment floorSegment in floorSegments)
                 floorSegment.Draw(gameTime, spriteBatch);
+            foreach (Chest chest in chests)
+                chest.Draw(gameTime, spriteBatch);
 
             frontDoor.Draw(gameTime, spriteBatch);
-
             npc.Draw(gameTime, spriteBatch);
         }
 
@@ -43,11 +44,23 @@ namespace MonoGameKunskapsspel
             floorSegments[1].tiles[0][1].ChangeToEdgeTexture("Right");
 
             //Create NPC
-            npc = new NPC(new(500, 200, 200, 200), kunskapsSpel, new()
+            npc = new NPC(floorSegments[0].hitBox.Center - new Point(25, 150), kunskapsSpel, new()
             {
                 "Hej det här rummet är det första",
                 "Ooga booga"
             }, kunskapsSpel.animations);
+
+            //Create chest
+            chests = new()
+            {
+                new Chest(floorSegments[0].hitBox.Center - new Point(32, 300), kunskapsSpel),
+            };
+
+            foreach (FloorSegment floorSegment in floorSegments)
+                components.Add(floorSegment);
+            foreach (Chest chest in chests)
+                components.Add(chest);
+            components.Add(npc);
         }
 
         public override void SetDoorLocations()
@@ -58,8 +71,9 @@ namespace MonoGameKunskapsspel
         public override void Update(GameTime gameTime)
         {
             npc.Update(gameTime);
-
             frontDoor.Update(gameTime);
+            foreach (Chest chest in chests)
+                chest.Update(gameTime);
         }
     }
 }

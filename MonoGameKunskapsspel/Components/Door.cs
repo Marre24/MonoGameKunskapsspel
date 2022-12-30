@@ -18,7 +18,6 @@ namespace MonoGameKunskapsspel
         private readonly Texture2D openTexture;
         private int amountOfKeysToOpen;
         public bool open;
-        public Rectangle hitBox;
         private readonly bool showDoor;
 
         public Door(Rectangle hitBox, bool open, Room doorLeedsTo, KunskapsSpel kunskapsSpel, Texture2D shutTexture, Texture2D openTexture, int amountOfKeysToOpen) : base(kunskapsSpel)              //Visible door
