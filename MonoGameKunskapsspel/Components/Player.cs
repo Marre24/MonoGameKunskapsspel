@@ -23,6 +23,7 @@ namespace MonoGameKunskapsspel
         WatchingCutScene,
         Walking,
         SolvingProblems,
+        Dead,
     }
 
     public class Player : Component

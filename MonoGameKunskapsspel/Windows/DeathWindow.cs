@@ -10,55 +10,40 @@ using System.Windows.Forms;
 
 namespace MonoGameKunskapsspel
 {
-    internal class StartScreen : Room
+    class DeathWindow : Window
     {
-        private readonly SpriteFont font;
         private readonly SpriteFont buttonFont;
         private readonly Texture2D buttonUpTexture;
+        private readonly SpriteFont font;
+        private readonly Rectangle window;
         private readonly Texture2D buttonDownTexture;
+        private readonly Enemy enemy;
         private Rectangle buttonHitBox;
         private bool buttonIsUp = true;
-        public StartScreen(int RoomID, KunskapsSpel kunskapsSpel) : base(RoomID, kunskapsSpel)
+        public DeathWindow(KunskapsSpel kunskapsSpel, Camera camera, Enemy enemy, Player player, State prevousState) : base(kunskapsSpel, camera, player, prevousState)
         {
-            window = new(new(0, 0), new (Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height));
+            font = kunskapsSpel.Content.Load<SpriteFont>("LargePlayerReady");
+            window = new(0,0,Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
             buttonDownTexture = kunskapsSpel.Content.Load<Texture2D>("UI/ButtonDown");
             buttonUpTexture = kunskapsSpel.Content.Load<Texture2D>("UI/ButtonUp");
-            font = kunskapsSpel.Content.Load<SpriteFont>("LargePlayerReady");
             buttonFont = kunskapsSpel.Content.Load<SpriteFont>("PlayerReady");
             buttonHitBox = new(window.Center - new Point(92, 0), new(46 * 4, 14 * 4));
-            npc = new NPC(new(1270, 50), kunskapsSpel, new List<string>(), kunskapsSpel.animations);
-        }
-
-        public override void CreateDoors()
-        {
-
+            this.enemy = enemy;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            kunskapsSpel.player.Draw(gameTime, spriteBatch);
-            npc.Draw(gameTime, spriteBatch);
-            spriteBatch.DrawString(font, "Mattehjälten", window.Center.ToVector2() - new Point(180, 465).ToVector2(), Color.Wheat);
+            spriteBatch.DrawString(font, "Du dog", window.Center.ToVector2() - new Point(6 * 15, 465).ToVector2(), Color.Wheat);
             if (buttonIsUp)
                 spriteBatch.Draw(buttonUpTexture, buttonHitBox, Color.White);
             else
                 spriteBatch.Draw(buttonDownTexture, buttonHitBox, Color.White);
-            spriteBatch.DrawString(buttonFont, "Starta spelet", buttonHitBox.Center.ToVector2() - new Point(13 * 10, 10).ToVector2(), Color.White);
-        }
-
-        public override void Initialize()
-        {
-
-        }
-
-        public override void SetDoorLocations()
-        {
+            spriteBatch.DrawString(buttonFont, "Försök Igen", buttonHitBox.Center.ToVector2() - new Point(11 * 10, 20).ToVector2(), Color.White);
         }
 
         public override void Update(GameTime gameTime)
         {
-            kunskapsSpel.player.Update(gameTime);
-            npc.Update(gameTime);
+            camera.Follow(window);
             kunskapsSpel.IsMouseVisible = true;
             var mouseState = Mouse.GetState();
 
@@ -72,12 +57,11 @@ namespace MonoGameKunskapsspel
             buttonHitBox = new(window.Center - new Point(92, -6), new(46 * 6, 13 * 6));
             if (mouseState.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
             {
-                kunskapsSpel.player.hitBox.Location = new(7 * 96, 16 * 96 - 182);
                 kunskapsSpel.player.activeState = State.Walking;
-                //kunskapsSpel.player.hitBox.Location = new Point(100, 150);
-                kunskapsSpel.roomManager.SetActiveRoom(kunskapsSpel.roomManager.rooms[6]);
+                kunskapsSpel.activeWindow = null;
+                
+                enemy.hasInteracted = false;
             }
-
         }
     }
 }

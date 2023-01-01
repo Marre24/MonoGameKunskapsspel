@@ -1,1 +1,11 @@
-Bra;Bättre;Bäst;Dålig
+4;2;0;6
+2sinx;-sinx;-cosx;2cosx
+-5sinx;5cosx;5sinx;sinx
+-2sinx - 1,3cosx;3.3cosx;2sinx - 1.3cosx;2sinx + 1,3cosx
+x/3 - sinx/3;1/3 + sinx/ 3;sin x/3;x/3 + sinx/3
+-2;0;1;-1 
+-1;-0,7;0;1,1
+~-1,7;~2.4;0;~1,7
+0;-1;1;-0
+-x;3x + 5;x;x + 1
+-π/2;-x - π/4;x;-x + π/2

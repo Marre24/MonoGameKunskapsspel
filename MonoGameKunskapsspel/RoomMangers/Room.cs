@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -19,13 +20,13 @@ namespace MonoGameKunskapsspel
         public List<Wall> walls = new();
         public List<SideWall> sideWalls = new();
         public List<Chest> chests = new();
+        public List<Enemy> enemies;
 
         public NPC npc;
         public Room back;
         public Room front;
         public Door frontDoor;
         public Door backDoor;
-        public Mathias mathias;
 
         public Point frontSpawnLocation;
         public Point backSpawnLocation;

@@ -14,19 +14,21 @@ namespace MonoGameKunskapsspel
         public readonly KunskapsSpel kunskapsSpel;
         public readonly Camera camera;
         public readonly Player player;
+        private readonly State previousState;
 
-        public Window(KunskapsSpel kunskapsSpel, Camera camera, Player player)
+        public Window(KunskapsSpel kunskapsSpel, Camera camera, Player player, State previousState)
         {
             this.kunskapsSpel = kunskapsSpel;
             this.camera = camera;
             this.player = player;
+            this.previousState = previousState;
         }
         public abstract void Draw(GameTime gameTime, SpriteBatch spriteBatch);
         public abstract void Update(GameTime gameTime);
         public virtual void EndScene()
         {
             kunskapsSpel.activeWindow = null;
-            player.activeState = State.Walking;
+            player.activeState = previousState;
         }
     }
 }

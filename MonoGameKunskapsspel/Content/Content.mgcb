@@ -241,7 +241,7 @@
 /processorParam:TextureFormat=Color
 /build:Dungeon/WallStartAndEnd.png
 
-#begin Enemy/Idle-Sheet.png
+#begin Enemy/OrcDeath.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -251,7 +251,19 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Enemy/Idle-Sheet.png
+/build:Enemy/OrcDeath.png
+
+#begin Enemy/OrcIdle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Enemy/OrcIdle.png
 
 #begin Enviroment/CaveEntrance.png
 /importer:TextureImporter

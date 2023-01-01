@@ -23,12 +23,13 @@ namespace MonoGameKunskapsspel
         private readonly List<List<char>> words = new();
         private List<char> activeWord = new();
 
+        public bool ended = false;
         private double timeSpan = 0.0;
-        private double interval = 0.08;
+        private double interval = 0.04;
         private int rowCount = 1;
         private string sentence = "";
 
-        public DialogueWindow(KunskapsSpel kunskapsSpel, Player player, Camera camera, List<string> dialogue) : base(kunskapsSpel, camera, player)
+        public DialogueWindow(KunskapsSpel kunskapsSpel, Player player, Camera camera, List<string> dialogue, State prevousState) : base(kunskapsSpel, camera, player, prevousState)
         {
             kunskapsSpel.activeWindow = this;
             playerReady = kunskapsSpel.Content.Load<SpriteFont>("PlayerReady");
@@ -71,6 +72,7 @@ namespace MonoGameKunskapsspel
                 if (dialogue.Count == 0)
                 {
                     EndScene();
+                    ended = true;
                     return;
                 }
 
@@ -96,8 +98,16 @@ namespace MonoGameKunskapsspel
                 rowCount++;
             }
 
-            sentence += activeWord[0];
-            activeWord.RemoveAt(0);
+            if (activeWord.Count == 0)
+            {
+                sentence += "\n";
+                rowCount++;
+            }
+            else
+            {
+                sentence += activeWord[0];
+                activeWord.RemoveAt(0);
+            }
 
             if (activeWord.Count == 0)                  //Word has ended
             {

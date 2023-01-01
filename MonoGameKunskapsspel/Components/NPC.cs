@@ -16,8 +16,8 @@ namespace MonoGameKunskapsspel
     {
         private readonly Dictionary<string, Animation> animations;
         private readonly AnimationManager animationManager;
-        private readonly List<string> dialogue;
-        private readonly Point size = new(50,64);
+        public List<string> dialogue;
+        private readonly Point size = new(50, 64);
         public NPC(Point location, KunskapsSpel kunskapsSpel, List<string> dialog, Dictionary<string, Animation> animations) : base(kunskapsSpel)
         {
             this.animations = animations;
@@ -37,7 +37,12 @@ namespace MonoGameKunskapsspel
             if (!hasInteracted && kunskapsSpel.roomManager.GetActiveRoom().RoomID == 1 && (kunskapsSpel.player.velocity.X != 0 || kunskapsSpel.player.velocity.Y != 0))
             {
                 kunskapsSpel.player.activeState = State.WatchingCutScene;
-                kunskapsSpel.activeCutscene = new MathiasIntroduction(kunskapsSpel.player, kunskapsSpel, this, kunskapsSpel.roomManager.GetActiveRoom(), dialogue);
+                _ = new PanToTarget(kunskapsSpel.player, kunskapsSpel, this, kunskapsSpel.roomManager.GetActiveRoom(), new()
+                {
+                    "Välkommen nykommling, mitt namn är _____ . När du har läst klart så kan du klicka på högerpilen för att se vad mer jag har att säga",
+                    "Du går med W, A, S och D. Om du vill interagera med något objekt eller prata med mig så klickar du SPACE",
+                    "Testa och gå fram till mig och prata",
+                }, true);
                 hasInteracted = true;
             }
             animationManager.Position = hitBox.Location.ToVector2();
@@ -50,7 +55,8 @@ namespace MonoGameKunskapsspel
             if (!Keyboard.GetState().IsKeyDown(Keys.Space))
                 return;
 
-            _ = new DialogueWindow(kunskapsSpel, kunskapsSpel.player, kunskapsSpel.camera, dialogue);
+            kunskapsSpel.player.activeState = State.ReadingText;
+            _ = new DialogueWindow(kunskapsSpel, kunskapsSpel.player, kunskapsSpel.camera, dialogue, kunskapsSpel.player.activeState);
         }
 
         public bool PlayerCanInteract(Player player)

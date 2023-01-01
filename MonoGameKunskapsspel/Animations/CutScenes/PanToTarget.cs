@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using MonoGame.Extended.Timers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,7 +10,7 @@ using System.Windows.Forms;
 
 namespace MonoGameKunskapsspel
 {
-    public class MathiasIntroduction : CutScene
+    public class PanToTarget : CutScene
     {
         private readonly Component target;
         public readonly Room room;
@@ -19,7 +20,13 @@ namespace MonoGameKunskapsspel
         private Vector2 dir;
         private Vector2 speed = new(5f, 5f);
 
-        public MathiasIntroduction(Player player, KunskapsSpel kunskapsSpel, Component target, Room room, List<string> dialogue) : base(player, kunskapsSpel)
+        public PanToTarget(Player player, KunskapsSpel kunskapsSpel, Component target, Room room, List<string> dialogue) : base(player, kunskapsSpel)
+        {
+            this.target = target;
+            this.room = room;
+            this.dialogue = dialogue;
+        }
+        public PanToTarget(Player player, KunskapsSpel kunskapsSpel, Component target, Room room, List<string> dialogue, bool runOnCreate) : base(player, kunskapsSpel)
         {
             this.target = target;
             this.room = room;
@@ -32,13 +39,22 @@ namespace MonoGameKunskapsspel
             kunskapsSpel.camera.Follow(hiddenFollowPoint);
 
             if (phaseCounter == 1)
+            {
                 PhaseOne();
+                return;
+            }
 
             if (phaseCounter == 2)
+            {
                 PhaseTwo();
+                return;
+            }
 
             if (phaseCounter == 3)
+            {
                 EndScene();
+                return;
+            }
         }
 
         private void PhaseOne()
@@ -48,12 +64,17 @@ namespace MonoGameKunskapsspel
 
             hiddenFollowPoint += dir * speed;
         }
-
+        FinalBattle finalBattle;
         private void PhaseTwo()
         {
-            if (dialogueWindow == null)
-                dialogueWindow = new DialogueWindow(kunskapsSpel, player, kunskapsSpel.camera, dialogue);
-            else
+            dialogueWindow ??= new DialogueWindow(kunskapsSpel, player, kunskapsSpel.camera, dialogue, player.activeState);
+            
+            if (dialogueWindow.ended && finalBattle == null)
+            {
+                (string problem, int rightAnswer, List<string> solutions) = new Problems().GetLastProblem();
+                finalBattle = new FinalBattle(rightAnswer, problem, solutions, kunskapsSpel, kunskapsSpel.camera, room.enemies[1], player, player.activeState);
+            }
+            else if(dialogueWindow.ended)
                 phaseCounter++;
         }
 
@@ -79,8 +100,13 @@ namespace MonoGameKunskapsspel
 
         public override void StartScene()
         {
+            phaseCounter = 1;
+            kunskapsSpel.activeCutscene = this;
             player.activeState = State.WatchingCutScene;
             hiddenFollowPoint = player.hitBox.Location.ToVector2();
+            target.hasInteracted = true;
+            finalBattle = null;
+            dialogueWindow = null;
 
             dir = target.hitBox.Center.ToVector2() - hiddenFollowPoint;
             dir.Normalize();

@@ -113,7 +113,7 @@ namespace MonoGameKunskapsspel
                 _ = new DialogueWindow(kunskapsSpel, kunskapsSpel.player, kunskapsSpel.camera, new()
                 {
                     "*Knak*"
-                });
+                }, kunskapsSpel.player.activeState);
                 open = true;
                 return;
             }
@@ -123,7 +123,7 @@ namespace MonoGameKunskapsspel
             _ = new DialogueWindow(kunskapsSpel, kunskapsSpel.player, kunskapsSpel.camera, new()
             {
                 $"Du behöver {amountOfKeysToOpen} st nycklar till för att öppna denna dörr"
-            });
+            }, kunskapsSpel.player.activeState);
         }
     }
 }

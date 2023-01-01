@@ -48,6 +48,8 @@ namespace MonoGameKunskapsspel
                 {"WalkRight", new Animation(Content.Load<Texture2D>("Player/RunRight"), 6) },
                 {"Idle", new Animation(Content.Load<Texture2D>("Player/Idle"), 4) },
                 {"NpcIdle", new Animation(Content.Load<Texture2D>("Npc/WizzardIdleSheet"), 4) },
+                {"OrcIdle", new Animation(Content.Load<Texture2D>("Enemy/OrcIdle"), 4) },
+                {"OrcDeath", new Animation(Content.Load<Texture2D>("Enemy/OrcDeath"), 7) },
             };
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -61,6 +63,7 @@ namespace MonoGameKunskapsspel
             roomManager.Add(new FloorZero(3, this));
             roomManager.Add(new FloorMinusOne(4, this));
             roomManager.Add(new FloorMinusTwo(5, this));
+            roomManager.Add(new BossFightRoom(6, this));
 
 
             //Set destinations for doors in Rooms
@@ -69,7 +72,8 @@ namespace MonoGameKunskapsspel
             roomManager.rooms[2].CreateDoorsThatLeedsTo(null, roomManager.rooms[1]);
             roomManager.rooms[3].CreateDoorsThatLeedsTo(roomManager.rooms[1], roomManager.rooms[4]);
             roomManager.rooms[4].CreateDoorsThatLeedsTo(roomManager.rooms[3], roomManager.rooms[5]);
-            roomManager.rooms[5].CreateDoorsThatLeedsTo(roomManager.rooms[4], null);
+            roomManager.rooms[5].CreateDoorsThatLeedsTo(roomManager.rooms[4], roomManager.rooms[6]);
+            roomManager.rooms[6].CreateDoorsThatLeedsTo(roomManager.rooms[5], null);
 
             roomManager.SetActiveRoom(roomManager.rooms[0]);
         }
@@ -83,13 +87,15 @@ namespace MonoGameKunskapsspel
                 camera.Follow(player.hitBox);
             }
 
+            if (player.activeState == State.Dead)
+                activeWindow.Update(gameTime);
+
             if (player.activeState == State.WaitingForNextLine || player.activeState == State.ReadingText || player.activeState == State.SolvingProblems)
                 activeWindow.Update(gameTime);
 
             if (player.activeState == State.WatchingCutScene)
-            {
                 activeCutscene.Update(gameTime);
-            }
+
 
             if (player.activeState == State.InStartScreen)
             {
@@ -115,6 +121,13 @@ namespace MonoGameKunskapsspel
             if (player.activeState == State.InStartScreen)
             {
                 roomManager.Draw(gameTime, spriteBatch);
+                spriteBatch.End();
+                return;
+            }
+
+            if (player.activeState == State.Dead)
+            {
+                activeWindow.Draw(gameTime, spriteBatch);
                 spriteBatch.End();
                 return;
             }

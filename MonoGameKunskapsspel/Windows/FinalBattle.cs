@@ -1,27 +1,24 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.BitmapFonts;
-using MonoGame.Extended.Timers;
+﻿using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MessageBox = System.Windows.Forms.MessageBox;
+using Microsoft.Xna.Framework.Input;
 using System.Windows.Forms;
+using MessageBox = System.Windows.Forms.MessageBox;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace MonoGameKunskapsspel
 {
-    public class UnlockChestWindow : Window
+    public class FinalBattle : Window
     {
         private Rectangle window;
         private Point size = new(Screen.PrimaryScreen.Bounds.Height, Screen.PrimaryScreen.Bounds.Height);
         private readonly int rightAnswer;
         private readonly List<string> solutions;
-        private readonly Chest chest;
+        private readonly Enemy enemy;
         private readonly List<Texture2D> numberLockTextures;
         private Texture2D activeNumberTexture;
         private Texture2D padlockTexture;
@@ -33,13 +30,13 @@ namespace MonoGameKunskapsspel
         private readonly SpriteFont playerReady;
         private int lockNumber = 1;
 
-        public UnlockChestWindow(int rightAnswer, string problem, List<string> solutions, KunskapsSpel kunskapsSpel, Camera camera, Player player, Chest chest, State prevousState) : base(kunskapsSpel, camera, player, prevousState)
+        public FinalBattle(int rightAnswer, string problem, List<string> solutions, KunskapsSpel kunskapsSpel, Camera camera, Enemy enemy, Player player, State prevousState) : base(kunskapsSpel, camera, player, prevousState)
         {
             player.activeState = State.SolvingProblems;
             kunskapsSpel.activeWindow = this;
             this.rightAnswer = rightAnswer;
             this.solutions = solutions;
-            this.chest = chest;
+            this.enemy = enemy;
             padlockBox = new(camera.window.Center + new Point(-131, 200), new(232, 268));
             numberBox = new(padlockBox.Center + new Point(-50, 50), new(100, 36));
             upperPaperScrollBox = new(camera.window.Center - new Point(400, 500), new(800, 300));
@@ -137,10 +134,11 @@ namespace MonoGameKunskapsspel
                 padlockTexture = kunskapsSpel.Content.Load<Texture2D>("Msc/UnlockedPadlock");
                 kunskapsSpel.activeWindow = null;
                 player.activeState = State.Walking;
-                chest.Open();
                 return;
             }
-            MessageBox.Show("false");
+            kunskapsSpel.activeWindow = new DeathWindow(kunskapsSpel, camera, enemy, player, player.activeState);
+            player.hitBox.Location = new(7 * 96, 16 * 96 - player.hitBox.Height - 120);
+            player.activeState = State.Dead;
         }
 
 

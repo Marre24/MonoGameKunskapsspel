@@ -46,10 +46,12 @@ namespace MonoGameKunskapsspel
             //Create NPC
             npc = new NPC(new(floorSegments[0].hitBox.Right - 100, 200), kunskapsSpel, new()
             {
-                "Välkommen nykommling, mitt namn är _____ . När du har läst klart så kan du klicka på högerpilen för att se vad mer jag har att säga",
-                "Du går med W, A, S och D om du vill interagera med något objekt eller prata med mig så klickar du space",
-                "Du ser precis ut som någon jag behöver.",
-                "Följ stigen som är til vänster om mig så"
+                "Super!",
+                "Du ser stark, smart och tapper ut, det är inte så att du kan hjälpa mig?",
+                "Tack så mycket, vill du ha någon betalning för detta?",
+                "Är du säker på att du inte vill ha någon betalning?",
+                "Om du säger det så...",
+                "Följ stigen den vänstra stigen som går norr så förklarar jag mer",
             }, kunskapsSpel.animations);
 
 

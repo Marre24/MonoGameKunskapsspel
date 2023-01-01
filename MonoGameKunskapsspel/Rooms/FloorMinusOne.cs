@@ -24,10 +24,9 @@ namespace MonoGameKunskapsspel
 
             frontDoor = new Door(
                 new Rectangle(floorSegments[11].hitBox.Location + new Point(floorSegments[11].hitBox.Width - 128, -184),
-                new(128, 184)),
-                false, front, kunskapsSpel,
+                new(128, 184)), false, front, kunskapsSpel,
                 kunskapsSpel.Content.Load<Texture2D>("Dungeon/ClosedDoor"),
-                kunskapsSpel.Content.Load<Texture2D>("Dungeon/OpenDoor"), 5);
+                kunskapsSpel.Content.Load<Texture2D>("Dungeon/OpenDoor"), 4);
 
             SetDoorLocations();
         }
@@ -84,10 +83,10 @@ namespace MonoGameKunskapsspel
             //Create Chests
             chests = new()
             {
-                new Chest(floorSegments[1].hitBox.Location + new Point(0,80), kunskapsSpel),
-                new Chest(floorSegments[4].hitBox.Location + new Point(floorSegments[4].hitBox.Width - 64, 80) , kunskapsSpel),
-                new Chest(floorSegments[7].hitBox.Location + new Point(0, 120), kunskapsSpel),
-                new Chest(floorSegments[10].hitBox.Location + new Point(floorSegments[10].hitBox.Width - 64, 80) , kunskapsSpel),
+                new Chest(floorSegments[1].hitBox.Location + new Point(0,80), kunskapsSpel, 1),
+                new Chest(floorSegments[4].hitBox.Location + new Point(floorSegments[4].hitBox.Width - 64, 80) , kunskapsSpel, 1),
+                new Chest(floorSegments[7].hitBox.Location + new Point(0, 120), kunskapsSpel, 1),
+                new Chest(floorSegments[10].hitBox.Location + new Point(floorSegments[10].hitBox.Width - 64, 80) , kunskapsSpel, 1),
             };
 
 

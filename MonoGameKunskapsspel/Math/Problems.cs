@@ -30,19 +30,13 @@ namespace MonoGameKunskapsspel
                 File.ReadLines(solutionFileName).Skip(i).Take(1).First().Split(';').ToList()));
             }
 
-            problemAndAnswers = Shuffle(problemAndAnswers);
-        }
-
-        public static Dictionary<TKey, TValue> Shuffle<TKey, TValue>(Dictionary<TKey, TValue> source)
-        {
-            Random r = new();
-            return source.OrderBy(x => r.Next())
-               .ToDictionary(item => item.Key, item => item.Value);
         }
 
         public (string, int, List<string>) GetCurrentProblem()
         {
-            return (problemAndAnswers.Keys.First(), problemAndAnswers.Values.First().Item1, problemAndAnswers.Values.First().Item2);
+            var problem = (problemAndAnswers.Keys.First(), problemAndAnswers.Values.First().Item1, problemAndAnswers.Values.First().Item2);
+            NextProblem();
+            return problem;
         }
 
         public void NextProblem()
@@ -50,5 +44,9 @@ namespace MonoGameKunskapsspel
             problemAndAnswers.Remove(problemAndAnswers.Keys.First());
         }
 
+        public (string, int, List<string>) GetLastProblem()
+        {
+            return (problemAndAnswers.Keys.Last(), problemAndAnswers.Values.Last().Item1, problemAndAnswers.Values.Last().Item2);
+        }
     }
 }

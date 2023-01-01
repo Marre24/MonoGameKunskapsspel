@@ -18,7 +18,7 @@ namespace MonoGameKunskapsspel
         private Rectangle window;
         private Point size = new(Screen.PrimaryScreen.Bounds.Height, Screen.PrimaryScreen.Bounds.Height);
 
-        public UnlockDoorWindow(KunskapsSpel kunskapsSpel, Camera camera, Player player) : base(kunskapsSpel, camera, player)
+        public UnlockDoorWindow(KunskapsSpel kunskapsSpel, Camera camera, Player player, State prevousState) : base(kunskapsSpel, camera, player, prevousState)
         {
             kunskapsSpel.activeWindow = this;
             
