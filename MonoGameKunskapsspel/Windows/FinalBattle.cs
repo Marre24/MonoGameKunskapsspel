@@ -21,8 +21,6 @@ namespace MonoGameKunskapsspel
         private readonly Enemy enemy;
         private readonly List<Texture2D> numberLockTextures;
         private Texture2D activeNumberTexture;
-        private Texture2D padlockTexture;
-        private Rectangle padlockBox;
         private readonly Rectangle numberBox;
         private readonly Texture2D paperScroll;
         private readonly Rectangle upperPaperScrollBox;
@@ -37,11 +35,9 @@ namespace MonoGameKunskapsspel
             this.rightAnswer = rightAnswer;
             this.solutions = solutions;
             this.enemy = enemy;
-            padlockBox = new(camera.window.Center + new Point(-131, 200), new(232, 268));
-            numberBox = new(padlockBox.Center + new Point(-50, 50), new(100, 36));
             upperPaperScrollBox = new(camera.window.Center - new Point(400, 500), new(800, 300));
             lowerPaperScrollBox = new(camera.window.Center - new Point(420, 200), new(840, 392));
-
+            numberBox = new(camera.window.Center + new Point(-50, 300), new(100, 36));
             playerReady = kunskapsSpel.Content.Load<SpriteFont>("PlayerReady");
             window = new Rectangle(new(
                 camera.window.X + camera.window.Size.X / 2 - size.X / 2,
@@ -55,7 +51,6 @@ namespace MonoGameKunskapsspel
                 kunskapsSpel.Content.Load<Texture2D>("Msc/Codelock4"),
             };
 
-            padlockTexture = kunskapsSpel.Content.Load<Texture2D>("Msc/LockedPadlock");
             paperScroll = kunskapsSpel.Content.Load<Texture2D>("Msc/PaperScroll");
             activeNumberTexture = numberLockTextures[lockNumber - 1];
 
@@ -81,16 +76,15 @@ namespace MonoGameKunskapsspel
         {
             spriteBatch.Draw(kunskapsSpel.Content.Load<Texture2D>("Msc/LargeDialogbox"), window, Color.White);
 
-            spriteBatch.Draw(padlockTexture, padlockBox, Color.White);
             spriteBatch.Draw(activeNumberTexture, numberBox, Color.White);
             spriteBatch.Draw(paperScroll, upperPaperScrollBox, Color.White);
             spriteBatch.Draw(paperScroll, lowerPaperScrollBox, Color.White);
 
-            spriteBatch.DrawString(playerReady, sentence, upperPaperScrollBox.Center.ToVector2() - new Vector2(20 * firstRowWords / 2, 20 * rowCount / 2), Color.White);
+            spriteBatch.DrawString(playerReady, sentence, upperPaperScrollBox.Center.ToVector2() - new Vector2(20 * (firstRowWords - 1) / 2, 20 * rowCount / 2), Color.White);
 
-            spriteBatch.DrawString(playerReady, "1) " + solutions[0], lowerPaperScrollBox.Location.ToVector2() + new Vector2(150, 100), Color.White);
+            spriteBatch.DrawString(playerReady, "1) " + solutions[0], lowerPaperScrollBox.Location.ToVector2() + new Vector2(120, 100), Color.White);
             spriteBatch.DrawString(playerReady, "2) " + solutions[1], lowerPaperScrollBox.Location.ToVector2() + new Vector2(lowerPaperScrollBox.Width / 2, 100), Color.White);
-            spriteBatch.DrawString(playerReady, "3) " + solutions[2], lowerPaperScrollBox.Location.ToVector2() + new Vector2(150, lowerPaperScrollBox.Height / 2), Color.White);
+            spriteBatch.DrawString(playerReady, "3) " + solutions[2], lowerPaperScrollBox.Location.ToVector2() + new Vector2(120, lowerPaperScrollBox.Height / 2), Color.White);
             spriteBatch.DrawString(playerReady, "4) " + solutions[3], lowerPaperScrollBox.Location.ToVector2() + new Vector2(lowerPaperScrollBox.Width / 2, lowerPaperScrollBox.Height / 2), Color.White);
         }
 
@@ -130,10 +124,9 @@ namespace MonoGameKunskapsspel
         {
             if (lockNumber == rightAnswer)
             {
-                padlockBox = new(camera.window.Center + new Point(-131, 180), new(232, 288));
-                padlockTexture = kunskapsSpel.Content.Load<Texture2D>("Msc/UnlockedPadlock");
                 kunskapsSpel.activeWindow = null;
                 player.activeState = State.Walking;
+                enemy.Kill();
                 return;
             }
             kunskapsSpel.activeWindow = new DeathWindow(kunskapsSpel, camera, enemy, player, player.activeState);

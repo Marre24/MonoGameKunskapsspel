@@ -16,6 +16,9 @@ namespace MonoGameKunskapsspel
         public readonly Room room;
         private readonly List<string> dialogue;
         private DialogueWindow dialogueWindow;
+        private readonly bool lastBatttle;
+        private readonly State activeState;
+
 
         private Vector2 dir;
         private Vector2 speed = new(5f, 5f);
@@ -25,12 +28,16 @@ namespace MonoGameKunskapsspel
             this.target = target;
             this.room = room;
             this.dialogue = dialogue;
+            activeState = State.WatchingCutScene;
+            lastBatttle = true;
         }
         public PanToTarget(Player player, KunskapsSpel kunskapsSpel, Component target, Room room, List<string> dialogue, bool runOnCreate) : base(player, kunskapsSpel)
         {
             this.target = target;
             this.room = room;
             this.dialogue = dialogue;
+            lastBatttle = false;
+            activeState = State.Walking;
             StartScene();
         }
 
@@ -65,11 +72,12 @@ namespace MonoGameKunskapsspel
             hiddenFollowPoint += dir * speed;
         }
         FinalBattle finalBattle;
+
         private void PhaseTwo()
         {
-            dialogueWindow ??= new DialogueWindow(kunskapsSpel, player, kunskapsSpel.camera, dialogue, player.activeState);
+            dialogueWindow ??= new DialogueWindow(kunskapsSpel, player, kunskapsSpel.camera, dialogue, activeState);
             
-            if (dialogueWindow.ended && finalBattle == null)
+            if (dialogueWindow.ended && finalBattle == null && lastBatttle)
             {
                 (string problem, int rightAnswer, List<string> solutions) = new Problems().GetLastProblem();
                 finalBattle = new FinalBattle(rightAnswer, problem, solutions, kunskapsSpel, kunskapsSpel.camera, room.enemies[1], player, player.activeState);

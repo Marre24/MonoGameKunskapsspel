@@ -9,3 +9,4 @@ s'(1,2) då  s(r) = 3,2 cos r + 0,3r3;1
 Vilken lutning har tangenten till y = cos x i punkten (0,0)?;3
 Bestäm ekvationen för tangenten till kurvan y = sin x i punkten (0,0);3
 Bestäm ekvationen för tangenten till kurvan y = cos x då x = π/2;4
+Funktionen f(x) = A sinx + B cosx är given. Ange talen A och B om f(0) = 4 och f'(0) = 5;2

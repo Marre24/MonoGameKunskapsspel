@@ -14,7 +14,7 @@ namespace MonoGameKunskapsspel
     {
         public CutScene cutScene;
         private readonly Point size = new(238, 254);
-        private readonly AnimationManager animationManager;
+        private AnimationManager animationManager;
         private readonly Room room;
         public bool isDead = false;
 
@@ -35,13 +35,16 @@ namespace MonoGameKunskapsspel
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            animationManager.Draw(spriteBatch);
+            animationManager?.Draw(spriteBatch);
         }
 
         public override void Update(GameTime gameTime)
         {
-            animationManager.Position = hitBox.Location.ToVector2();
-            animationManager.Update(gameTime);
+            if (animationManager != null)
+            {
+                animationManager.Position = hitBox.Location.ToVector2();
+                animationManager.Update(gameTime);
+            }
             if (cutScene != null)
                 if (PlayerCanInteract(kunskapsSpel.player, room.floorSegments[0]) && !hasInteracted && !isDead)
                     cutScene.StartScene();
@@ -60,6 +63,13 @@ namespace MonoGameKunskapsspel
         private static bool IsBetweenY(int yCord, Rectangle hitBox)
         {
             return hitBox.Top <= yCord && hitBox.Bottom >= yCord;
+        }
+
+        public void Kill()
+        {
+            isDead = true;
+            //animationManager.Play(kunskapsSpel.animations["OrcDeath"]);
+            //animationManager = null;
         }
     }
 }

@@ -34,8 +34,9 @@ namespace MonoGameKunskapsspel
 
         public override void Update(GameTime gameTime)
         {
-            if (!hasInteracted && kunskapsSpel.roomManager.GetActiveRoom().RoomID == 1 && (kunskapsSpel.player.velocity.X != 0 || kunskapsSpel.player.velocity.Y != 0))
+            if (!hasInteracted && kunskapsSpel.roomManager.GetActiveRoom().RoomID == 1)
             {
+                kunskapsSpel.player.Update(gameTime);
                 kunskapsSpel.player.activeState = State.WatchingCutScene;
                 _ = new PanToTarget(kunskapsSpel.player, kunskapsSpel, this, kunskapsSpel.roomManager.GetActiveRoom(), new()
                 {
@@ -56,7 +57,7 @@ namespace MonoGameKunskapsspel
                 return;
 
             kunskapsSpel.player.activeState = State.ReadingText;
-            _ = new DialogueWindow(kunskapsSpel, kunskapsSpel.player, kunskapsSpel.camera, dialogue, kunskapsSpel.player.activeState);
+            _ = new DialogueWindow(kunskapsSpel, kunskapsSpel.player, kunskapsSpel.camera, dialogue, State.Walking);
         }
 
         public bool PlayerCanInteract(Player player)

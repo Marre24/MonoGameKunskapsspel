@@ -91,9 +91,9 @@ namespace MonoGameKunskapsspel
 
             spriteBatch.DrawString(playerReady, sentence, upperPaperScrollBox.Center.ToVector2() - new Vector2(20 * firstRowWords / 2, 20 * rowCount / 2), Color.White);
 
-            spriteBatch.DrawString(playerReady, "1) " + solutions[0], lowerPaperScrollBox.Location.ToVector2() + new Vector2(150, 100), Color.White);
+            spriteBatch.DrawString(playerReady, "1) " + solutions[0], lowerPaperScrollBox.Location.ToVector2() + new Vector2(120, 100), Color.White);
             spriteBatch.DrawString(playerReady, "2) " + solutions[1], lowerPaperScrollBox.Location.ToVector2() + new Vector2(lowerPaperScrollBox.Width / 2, 100), Color.White);
-            spriteBatch.DrawString(playerReady, "3) " + solutions[2], lowerPaperScrollBox.Location.ToVector2() + new Vector2(150, lowerPaperScrollBox.Height / 2), Color.White);
+            spriteBatch.DrawString(playerReady, "3) " + solutions[2], lowerPaperScrollBox.Location.ToVector2() + new Vector2(120, lowerPaperScrollBox.Height / 2), Color.White);
             spriteBatch.DrawString(playerReady, "4) " + solutions[3], lowerPaperScrollBox.Location.ToVector2() + new Vector2(lowerPaperScrollBox.Width / 2, lowerPaperScrollBox.Height / 2), Color.White);
         }
 
@@ -140,7 +140,7 @@ namespace MonoGameKunskapsspel
                 chest.Open();
                 return;
             }
-            MessageBox.Show("false");
+            MessageBox.Show("Fel! Försök Igen");
         }
 
 
