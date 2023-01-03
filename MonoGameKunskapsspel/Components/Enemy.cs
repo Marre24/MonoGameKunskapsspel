@@ -1,10 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Sprites;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -14,23 +16,28 @@ namespace MonoGameKunskapsspel
     {
         public CutScene cutScene;
         private readonly Point size = new(238, 254);
-        private AnimationManager animationManager;
+        private readonly AnimationManager animationManager;
         private readonly Room room;
+        private readonly int id;
         public bool isDead = false;
 
-        public Enemy(KunskapsSpel kunskapsSpel, Point position, Room room) : base(kunskapsSpel)
+        public Enemy(KunskapsSpel kunskapsSpel, Point position, Room room, int id) : base(kunskapsSpel)
         {
             if (room != null)
             {
                 cutScene = new PanToTarget(kunskapsSpel.player, kunskapsSpel, this, room, new()
                 {
-                    "Muhahahaha",
+                    "Huh? Vem är du och vad gör du här?",
+                    "Hade du tänkt att stoppa oss?!? Hahahahaha det kommer aldrig hända",
+                    "Ojoj jag skakar i mina skor för att är så rädd",
+                    "Nä nu är det slutlekt, dags att dö",
                 });
             }
             hitBox = new(position, size);
-            animationManager = new AnimationManager(kunskapsSpel.animations["OrcIdle"]);
+            animationManager = new AnimationManager(kunskapsSpel.animations[$"OrcIdle{id}"]);
             haveColisison = true;
             this.room = room;
+            this.id = id;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -40,13 +47,26 @@ namespace MonoGameKunskapsspel
 
         public override void Update(GameTime gameTime)
         {
+            if (isDead && animationManager._animation.CurrentFrame < animationManager._animation.FrameCount - 1)
+            {
+                animationManager.Update(gameTime);
+                return;
+            }
+
+            if (isDead)
+            {
+                kunskapsSpel.player.activeState = State.Ended;
+                kunskapsSpel.activeWindow = new EndScreen(kunskapsSpel, kunskapsSpel.camera, kunskapsSpel.player, State.InStartScreen);
+                return;
+            }
+
             if (animationManager != null)
             {
                 animationManager.Position = hitBox.Location.ToVector2();
                 animationManager.Update(gameTime);
             }
             if (cutScene != null)
-                if (PlayerCanInteract(kunskapsSpel.player, room.floorSegments[0]) && !hasInteracted && !isDead)
+                if (PlayerCanInteract(kunskapsSpel.player, room.floorSegments[0]) && !hasInteracted)
                     cutScene.StartScene();
         }
 
@@ -68,8 +88,8 @@ namespace MonoGameKunskapsspel
         public void Kill()
         {
             isDead = true;
-            //animationManager.Play(kunskapsSpel.animations["OrcDeath"]);
-            //animationManager = null;
+            kunskapsSpel.animations[$"OrcDeath{id}"].FrameSpeed = 0.4f;
+            animationManager.Play(kunskapsSpel.animations[$"OrcDeath{id}"]);
         }
     }
 }

@@ -37,6 +37,8 @@ namespace MonoGameKunskapsspel
             _graphics.PreferredBackBufferHeight = Screen.PrimaryScreen.Bounds.Height;
             _graphics.SynchronizeWithVerticalRetrace = true;
             IsMouseVisible = true;
+            //_graphics.IsFullScreen = true;
+
             _graphics.ApplyChanges();
         }
 
@@ -48,8 +50,12 @@ namespace MonoGameKunskapsspel
                 {"WalkRight", new Animation(Content.Load<Texture2D>("Player/RunRight"), 6) },
                 {"Idle", new Animation(Content.Load<Texture2D>("Player/Idle"), 4) },
                 {"NpcIdle", new Animation(Content.Load<Texture2D>("Npc/WizzardIdleSheet"), 4) },
-                {"OrcIdle", new Animation(Content.Load<Texture2D>("Enemy/OrcIdle"), 4) },
-                {"OrcDeath", new Animation(Content.Load<Texture2D>("Enemy/OrcDeath"), 7) },
+                {"OrcIdle1", new Animation(Content.Load<Texture2D>("Enemy/OrcIdle"), 4) },
+                {"OrcIdle2", new Animation(Content.Load<Texture2D>("Enemy/OrcIdle"), 4) },
+                {"OrcIdle3", new Animation(Content.Load<Texture2D>("Enemy/OrcIdle"), 4) },
+                {"OrcDeath1", new Animation(Content.Load<Texture2D>("Enemy/OrcDeath"), 7) },
+                {"OrcDeath2", new Animation(Content.Load<Texture2D>("Enemy/OrcDeath"), 7) },
+                {"OrcDeath3", new Animation(Content.Load<Texture2D>("Enemy/OrcDeath"), 7) },
             };
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -90,7 +96,7 @@ namespace MonoGameKunskapsspel
             if (player.activeState == State.Dead)
                 activeWindow.Update(gameTime);
 
-            if (player.activeState == State.WaitingForNextLine || player.activeState == State.ReadingText || player.activeState == State.SolvingProblems)
+            if (player.activeState == State.WaitingForNextLine || player.activeState == State.ReadingText || player.activeState == State.SolvingProblems || player.activeState == State.Ended)
                 activeWindow.Update(gameTime);
 
             if (player.activeState == State.WatchingCutScene)
@@ -125,7 +131,7 @@ namespace MonoGameKunskapsspel
                 return;
             }
 
-            if (player.activeState == State.Dead)
+            if (player.activeState == State.Dead || player.activeState == State.Ended)
             {
                 activeWindow.Draw(gameTime, spriteBatch);
                 spriteBatch.End();

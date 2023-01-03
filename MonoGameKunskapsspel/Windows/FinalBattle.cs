@@ -90,6 +90,7 @@ namespace MonoGameKunskapsspel
 
         private const double interval = 0.2;
         private double elsapsedTime = 0;
+        private bool spaceWasUp = false;
         public override void Update(GameTime gameTime)
         {
             if (elsapsedTime + interval > gameTime.TotalGameTime.TotalSeconds)
@@ -116,8 +117,11 @@ namespace MonoGameKunskapsspel
                 lockNumber = 1;
             activeNumberTexture = numberLockTextures[lockNumber - 1];
 
-            if (state.IsKeyDown(Keys.Enter))
+            if (state.IsKeyDown(Keys.Space) && spaceWasUp)
                 CheckAnswer();
+
+            if (state.IsKeyUp(Keys.Space))
+                spaceWasUp = true;
         }
 
         private void CheckAnswer()
@@ -126,7 +130,9 @@ namespace MonoGameKunskapsspel
             {
                 kunskapsSpel.activeWindow = null;
                 player.activeState = State.Walking;
-                enemy.Kill();
+                player.hitBox.Location -= new Point(0, 300);
+                foreach (Enemy enemy in kunskapsSpel.roomManager.GetActiveRoom().enemies)
+                    enemy.Kill();
                 return;
             }
             kunskapsSpel.activeWindow = new DeathWindow(kunskapsSpel, camera, enemy, player, player.activeState);

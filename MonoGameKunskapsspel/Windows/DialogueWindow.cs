@@ -15,7 +15,7 @@ namespace MonoGameKunskapsspel
     public class DialogueWindow : Window
     {
         private Rectangle dialogueWindow;
-        private readonly Point size = new(900, 300);
+        private Point size = new(900, 250);
         private Vector2 textPosition;
         private readonly SpriteFont playerReady;
 
@@ -64,11 +64,20 @@ namespace MonoGameKunskapsspel
 
         public override void Update(GameTime gameTime)
         {
+            player.Update(gameTime);
+            kunskapsSpel.roomManager.GetActiveRoom().npc?.Update(gameTime);
+            if (kunskapsSpel.roomManager.GetActiveRoom().enemies != null)
+                foreach (Enemy enemy in kunskapsSpel.roomManager.GetActiveRoom().enemies)
+                    enemy.Update(gameTime);
+
+            
+
             if (player.activeState == State.ReadingText && timeSpan + interval <= gameTime.TotalGameTime.TotalSeconds)               //Writes out the phrase 
                 WriteOutText(gameTime);
 
-            if (player.activeState == State.WaitingForNextLine && Keyboard.GetState().IsKeyDown(Keys.Right))                         //Initializes the next phrase
+            if (player.activeState == State.WaitingForNextLine && Keyboard.GetState().IsKeyDown(Keys.Space))                         //Initializes the next phrase
             {
+                spaceWasUp = false;
                 if (dialogue.Count == 0)
                 {
                     EndScene();
@@ -83,11 +92,15 @@ namespace MonoGameKunskapsspel
                 player.activeState = State.ReadingText;
             }
         }
+        private bool spaceWasUp = false;
 
         private void WriteOutText(GameTime gameTime)
         {
-            if (Keyboard.GetState().GetPressedKeys().Contains(Keys.Up))                                                 //Fast forward
+            if (Keyboard.GetState().IsKeyDown(Keys.Space) && spaceWasUp)                                                 //Fast forward
+            {
                 interval = 0;
+                spaceWasUp = false;
+            }
 
             activeWord = words[0];
             timeSpan = gameTime.TotalGameTime.TotalSeconds;
@@ -122,6 +135,9 @@ namespace MonoGameKunskapsspel
                 rowCount = 1;
                 interval = 0.08;
             }
+
+            if (Keyboard.GetState().IsKeyUp(Keys.Space))
+                spaceWasUp = true;
         }
     }
 }

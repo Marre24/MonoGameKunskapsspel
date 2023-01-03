@@ -44,6 +44,11 @@ namespace MonoGameKunskapsspel
         public override void Update(GameTime gameTime)
         {
             kunskapsSpel.camera.Follow(hiddenFollowPoint);
+            player.Update(gameTime);
+            room.npc?.Update(gameTime);
+            if (room.enemies != null)
+                foreach (Enemy enemy in room.enemies)
+                    enemy.Update(gameTime);
 
             if (phaseCounter == 1)
             {

@@ -80,9 +80,9 @@ namespace MonoGameKunskapsspel
 
             chests = new()
             {
-                new Chest(floorSegments[12].hitBox.Location - new Point(0,40), kunskapsSpel, 1),
-                new Chest(floorSegments[9].hitBox.Location + new Point(floorSegments[9].hitBox.Width - 64, -40), kunskapsSpel, 1),
-                new Chest(floorSegments[6].hitBox.Location - new Point(-64,40), kunskapsSpel, 1),
+                new Chest(floorSegments[12].hitBox.Location - new Point(0,20), kunskapsSpel, 1),
+                new Chest(floorSegments[9].hitBox.Location + new Point(floorSegments[9].hitBox.Width - 64, -20), kunskapsSpel, 1),
+                new Chest(floorSegments[6].hitBox.Location - new Point(-64,20), kunskapsSpel, 1),
             };
 
             foreach (FloorSegment floorSegment in floorSegments)

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MessageBox = System.Windows.Forms.MessageBox;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
+using MonoGame.Extended.Timers;
 
 namespace MonoGameKunskapsspel
 {
@@ -25,54 +26,62 @@ namespace MonoGameKunskapsspel
             dialogue = dialog.ToList();
             haveColisison = true;
             hitBox = new(location, size);
+            interactHitBox = new Rectangle(location - new Point(20, 20), size + new Point(40, 40));
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             animationManager.Draw(spriteBatch);
         }
+        private bool spaceWasUp = false;
 
         public override void Update(GameTime gameTime)
         {
+            
             if (!hasInteracted && kunskapsSpel.roomManager.GetActiveRoom().RoomID == 1)
-            {
-                kunskapsSpel.player.Update(gameTime);
-                kunskapsSpel.player.activeState = State.WatchingCutScene;
-                _ = new PanToTarget(kunskapsSpel.player, kunskapsSpel, this, kunskapsSpel.roomManager.GetActiveRoom(), new()
-                {
-                    "Välkommen nykommling, mitt namn är _____ . När du har läst klart så kan du klicka på högerpilen för att se vad mer jag har att säga",
-                    "Du går med W, A, S och D. Om du vill interagera med något objekt eller prata med mig så klickar du SPACE",
-                    "Testa och gå fram till mig och prata",
-                }, true);
-                hasInteracted = true;
-            }
+                StartCutScene(gameTime);
+
             animationManager.Position = hitBox.Location.ToVector2();
             animationManager.Update(gameTime);
             animationManager.Play(animations["NpcIdle"]);
 
-            if (!PlayerCanInteract(kunskapsSpel.player))
-                return;
 
-            if (!Keyboard.GetState().IsKeyDown(Keys.Space))
-                return;
+            if (Keyboard.GetState().IsKeyDown(Keys.Space) && PlayerCanInteract(kunskapsSpel.player) && spaceWasUp && kunskapsSpel.player.activeState == State.Walking)
+            {
+                spaceWasUp = false;
+                kunskapsSpel.player.activeState = State.ReadingText;
+                _ = new DialogueWindow(kunskapsSpel, kunskapsSpel.player, kunskapsSpel.camera, dialogue, State.Walking);
+            }
+            if (Keyboard.GetState().IsKeyUp(Keys.Space) && kunskapsSpel.player.activeState == State.Walking)
+                spaceWasUp = true;
+        }
 
-            kunskapsSpel.player.activeState = State.ReadingText;
-            _ = new DialogueWindow(kunskapsSpel, kunskapsSpel.player, kunskapsSpel.camera, dialogue, State.Walking);
+        private void StartCutScene(GameTime gameTime)
+        {
+            kunskapsSpel.player.Update(gameTime);
+            kunskapsSpel.player.activeState = State.WatchingCutScene;
+            _ = new PanToTarget(kunskapsSpel.player, kunskapsSpel, this, kunskapsSpel.roomManager.GetActiveRoom(), new()
+            {
+                "Välkommen nykommling, mitt namn är Edazor. När du har läst klart så kan du klicka på SPACE för att se vad mer jag har att säga",
+                "Du går med W, A, S och D eller Pilarna. Om du vill interagera med något objekt eller prata med mig så klickar du SPACE",
+                "Testa och gå fram till mig och prata",
+            }, true);
+            hasInteracted = true;
         }
 
         public bool PlayerCanInteract(Player player)
         {
-            return (IsBetweenX(player.hitBox.Right) || IsBetweenX(player.hitBox.Left)) && IsBetweenY(player.hitBox.Top);
+            return (IsBetweenX(player.hitBox.Right) || IsBetweenX(player.hitBox.Left)) && (IsBetweenY(player.hitBox.Top) || IsBetweenY(player.hitBox.Bottom));
         }
 
         private bool IsBetweenX(int xCord)
         {
-            return hitBox.Left <= xCord && hitBox.Right >= xCord;
+            return interactHitBox.Left <= xCord && interactHitBox.Right >= xCord;
         }
 
         private bool IsBetweenY(int yCord)
         {
-            return hitBox.Top <= yCord && hitBox.Bottom >= yCord;
+            return interactHitBox.Top <= yCord && interactHitBox.Bottom >= yCord;
         }
     }
 }

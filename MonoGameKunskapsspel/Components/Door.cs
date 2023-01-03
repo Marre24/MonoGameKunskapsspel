@@ -109,11 +109,11 @@ namespace MonoGameKunskapsspel
         {
             if (kunskapsSpel.player.keyAmount >= amountOfKeysToOpen)
             {
-                kunskapsSpel.player.keyAmount -= amountOfKeysToOpen;
                 _ = new DialogueWindow(kunskapsSpel, kunskapsSpel.player, kunskapsSpel.camera, new()
                 {
-                    "*Knak*"
+                    $"*Knak* Du använde {kunskapsSpel.player.keyAmount} st nycklar för att öppna denna dörr"
                 }, kunskapsSpel.player.activeState);
+                kunskapsSpel.player.keyAmount -= amountOfKeysToOpen;
                 open = true;
                 return;
             }

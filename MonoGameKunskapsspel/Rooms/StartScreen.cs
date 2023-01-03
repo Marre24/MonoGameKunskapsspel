@@ -73,8 +73,8 @@ namespace MonoGameKunskapsspel
             if (mouseState.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
             {
                 kunskapsSpel.player.activeState = State.Walking;
-                kunskapsSpel.player.hitBox.Location = new Point(700, 1200);
-                kunskapsSpel.roomManager.SetActiveRoom(kunskapsSpel.roomManager.rooms[6]);
+                kunskapsSpel.player.hitBox.Location = new Point(100,150);
+                kunskapsSpel.roomManager.SetActiveRoom(kunskapsSpel.roomManager.rooms[1]);
             }
 
         }

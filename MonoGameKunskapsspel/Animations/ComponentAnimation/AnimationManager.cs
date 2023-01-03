@@ -11,7 +11,7 @@ namespace MonoGameKunskapsspel
 {
     public class AnimationManager
     {
-        private Animation _animation;
+        public Animation _animation;
 
         private float _timer;
 

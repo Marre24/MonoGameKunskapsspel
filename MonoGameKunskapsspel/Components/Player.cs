@@ -12,6 +12,7 @@ using SharpDX.Direct3D9;
 using System.Windows.Forms;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 using SharpDX.Direct2D1.Effects;
+using System.Reflection;
 
 namespace MonoGameKunskapsspel
 {
@@ -24,6 +25,7 @@ namespace MonoGameKunskapsspel
         Walking,
         SolvingProblems,
         Dead,
+        Ended,
     }
 
     public class Player : Component
@@ -32,7 +34,7 @@ namespace MonoGameKunskapsspel
         readonly Dictionary<string, Animation> animations;
         public State activeState = State.InStartScreen;
 
-        private Rectangle inventoryHitbox;
+        private Rectangle inventoryHitbox = new(-10000,-10000,0,0);
         private Texture2D inventoryTexture;
         private readonly Point position = new(700, 50);
         public Point size = new(48, 62);
@@ -40,22 +42,28 @@ namespace MonoGameKunskapsspel
         public Point velocity = new(0, 0);
         private const int movementSpeed = 5;
 
-        public int keyAmount = 0;
+        public int keyAmount = 10;
+        public int wrongAnswers;
 
         public Player(KunskapsSpel kunskapsSpel, Dictionary<string, Animation> animations) : base(kunskapsSpel)
         {
             hitBox = new(position, size);
             this.animations = animations;
             animationManager = new AnimationManager(animations.First().Value);
+            inventoryTexture = kunskapsSpel.Content.Load<Texture2D>("Msc/KeyInventory");
+
         }
 
         public override void Update(GameTime gameTime)
         {
+            var keyboardState = Keyboard.GetState();
+
+            
+
+            if (keyboardState.IsKeyDown(Keys.O) && keyboardState.IsKeyDown(Keys.I))
+                hitBox.Location = kunskapsSpel.roomManager.GetActiveRoom().backSpawnLocation;
+
             velocity = new(0, 0);
-            if (keyAmount > 0)
-                inventoryTexture = kunskapsSpel.Content.Load<Texture2D>("Msc/KeyInventory");
-            else
-                inventoryTexture = kunskapsSpel.Content.Load<Texture2D>("Msc/EmptyInventory");
 
             if (activeState == State.Walking)
                 Move();
@@ -88,6 +96,17 @@ namespace MonoGameKunskapsspel
             if (velocity == Point.Zero)                                                                 //Standing still
                 return;
 
+            if (!kunskapsSpel.roomManager.rooms[2].chests[0].open)
+            {
+                if (kunskapsSpel.roomManager.GetActiveRoom().RoomID == 1 && WillBeInsideOfComponent(kunskapsSpel.roomManager.GetActiveRoom().floorSegments[2]))
+                {
+                    _ = new DialogueWindow(kunskapsSpel, kunskapsSpel.player, kunskapsSpel.camera, new()
+                    {
+                        "Jag tror att Edazor sa att jag skulle ta den vänstra stigen innan jag gör något annat"
+                    }, State.Walking);
+                }
+            }
+
             (bool canMoveX, bool canMoveY) = CanMove();
 
             if (canMoveX)                                                                               
@@ -104,19 +123,19 @@ namespace MonoGameKunskapsspel
 
             var keyboardState = Keyboard.GetState();
 
-            if (keyboardState.IsKeyDown(Keys.W))
+            if (keyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up))
             {
                 y += movementSpeed;
             }
-            if (keyboardState.IsKeyDown(Keys.S))
+            if (keyboardState.IsKeyDown(Keys.S) || keyboardState.IsKeyDown(Keys.Down))
             {
                 y -= movementSpeed;
             }
-            if (keyboardState.IsKeyDown(Keys.A))
+            if (keyboardState.IsKeyDown(Keys.A) || keyboardState.IsKeyDown(Keys.Left))
             {
                 x += movementSpeed;
             }
-            if (keyboardState.IsKeyDown(Keys.D))
+            if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right))
             {
                 x -= movementSpeed;
             }
@@ -184,9 +203,13 @@ namespace MonoGameKunskapsspel
         {
             animationManager.Draw(spriteBatch);
             inventoryTexture??= kunskapsSpel.Content.Load<Texture2D>("Msc/EmptyInventory");
-            spriteBatch.Draw(inventoryTexture, inventoryHitbox, Color.White);
-            if (keyAmount > 0)
-                spriteBatch.DrawString(kunskapsSpel.Content.Load<SpriteFont>("PlayerReady"), "x" + keyAmount.ToString(), inventoryHitbox.Center.ToVector2() + new Vector2(20, - 10), Color.White);
+
+            if (activeState == State.Walking)
+            {
+                spriteBatch.Draw(inventoryTexture, inventoryHitbox, Color.White);
+                spriteBatch.DrawString(kunskapsSpel.Content.Load<SpriteFont>("PlayerReady"), "x" + keyAmount.ToString(), inventoryHitbox.Center.ToVector2() + new Vector2(20, -15), Color.White);
+            }
+            
         }
     }
 }

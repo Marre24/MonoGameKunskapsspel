@@ -23,9 +23,10 @@ namespace MonoGameKunskapsspel
         private readonly Texture2D closedTexture;
         private readonly int amountOfKeysInChest;
 
-        public Chest(Point locaiton, KunskapsSpel kunskapsSpel, int amountOfKeysInChest) : base(kunskapsSpel)
+        public Chest(Point location, KunskapsSpel kunskapsSpel, int amountOfKeysInChest) : base(kunskapsSpel)
         {
-            hitBox = new Rectangle(locaiton, size);
+            hitBox = new Rectangle(location, size);
+            interactHitBox = new Rectangle(location - new Point(20,20), size + new Point(40,40));
             (problem, rightAnswer, solutions) = kunskapsSpel.problems.GetCurrentProblem();
 
             openTexture = kunskapsSpel.Content.Load<Texture2D>("Dungeon./OpenChest");
@@ -60,17 +61,17 @@ namespace MonoGameKunskapsspel
 
         public bool PlayerCanInteract(Player player)
         {
-            return (IsBetweenX(player.hitBox.Right) || IsBetweenX(player.hitBox.Left)) && IsBetweenY(player.hitBox.Top);
+            return (IsBetweenX(player.hitBox.Right) || IsBetweenX(player.hitBox.Left)) && (IsBetweenY(player.hitBox.Top) || IsBetweenY(player.hitBox.Bottom));
         }
 
         private bool IsBetweenX(int xCord)
         {
-            return hitBox.Left <= xCord && hitBox.Right >= xCord;
+            return interactHitBox.Left <= xCord && interactHitBox.Right >= xCord;
         }
 
         private bool IsBetweenY(int yCord)
         {
-            return hitBox.Top <= yCord && hitBox.Bottom >= yCord;
+            return interactHitBox.Top <= yCord && interactHitBox.Bottom >= yCord;
         }
 
         private readonly Point diff = new(0, 24);

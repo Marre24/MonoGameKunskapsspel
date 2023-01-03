@@ -18,6 +18,7 @@ namespace MonoGameKunskapsspel
         {
             backDoor = new Door(new(floorSegments[1].hitBox.Left, floorSegments[1].hitBox.Bottom - kunskapsSpel.player.hitBox.Height - 20, floorSegments[1].hitBox.Width, kunskapsSpel.player.hitBox.Height),
                 back, kunskapsSpel);
+            SetDoorLocations();
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -53,14 +54,19 @@ namespace MonoGameKunskapsspel
                 new SideWall(8, new(16,0), kunskapsSpel, "RightWall"),
             };
 
+
+
+
             enemies = new()
             {
-                new Enemy(kunskapsSpel, floorSegments[0].hitBox.Center + new Point(-100, -300), null),
-                new Enemy(kunskapsSpel, floorSegments[0].hitBox.Center + new Point(0,-300), this),
-                new Enemy(kunskapsSpel, floorSegments[0].hitBox.Center + new Point(100, -300), null),
+                new Enemy(kunskapsSpel, floorSegments[0].hitBox.Center + new Point(-200, -300), null, 1),
+                new Enemy(kunskapsSpel, floorSegments[0].hitBox.Center + new Point(0,-300), this, 2),
+                new Enemy(kunskapsSpel, floorSegments[0].hitBox.Center + new Point(200, -300), null, 3),
             };
 
             CreateDoors();
+            foreach (Enemy enemy in enemies)
+                components.Add(enemy);
         }
 
         public override void SetDoorLocations()

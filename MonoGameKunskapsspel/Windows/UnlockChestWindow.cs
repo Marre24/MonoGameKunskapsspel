@@ -12,6 +12,7 @@ using MessageBox = System.Windows.Forms.MessageBox;
 using System.Windows.Forms;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
+using System.Security.AccessControl;
 
 namespace MonoGameKunskapsspel
 {
@@ -32,6 +33,8 @@ namespace MonoGameKunskapsspel
         private readonly Rectangle lowerPaperScrollBox;
         private readonly SpriteFont playerReady;
         private int lockNumber = 1;
+        private bool anweredWrong = false;
+        private int wrongNumber;
 
         public UnlockChestWindow(int rightAnswer, string problem, List<string> solutions, KunskapsSpel kunskapsSpel, Camera camera, Player player, Chest chest, State prevousState) : base(kunskapsSpel, camera, player, prevousState)
         {
@@ -40,7 +43,7 @@ namespace MonoGameKunskapsspel
             this.rightAnswer = rightAnswer;
             this.solutions = solutions;
             this.chest = chest;
-            padlockBox = new(camera.window.Center + new Point(-131, 200), new(232, 268));
+            padlockBox = new(camera.window.Center + new Point(-331, 200), new(232, 268));
             numberBox = new(padlockBox.Center + new Point(-50, 50), new(100, 36));
             upperPaperScrollBox = new(camera.window.Center - new Point(400, 500), new(800, 300));
             lowerPaperScrollBox = new(camera.window.Center - new Point(420, 200), new(840, 392));
@@ -89,18 +92,22 @@ namespace MonoGameKunskapsspel
             spriteBatch.Draw(paperScroll, upperPaperScrollBox, Color.White);
             spriteBatch.Draw(paperScroll, lowerPaperScrollBox, Color.White);
 
-            spriteBatch.DrawString(playerReady, sentence, upperPaperScrollBox.Center.ToVector2() - new Vector2(20 * firstRowWords / 2, 20 * rowCount / 2), Color.White);
+            spriteBatch.DrawString(playerReady, sentence, upperPaperScrollBox.Center.ToVector2() - new Vector2((20 * firstRowWords / 2) - 20, 20 * rowCount / 2), Color.White);
 
-            spriteBatch.DrawString(playerReady, "1) " + solutions[0], lowerPaperScrollBox.Location.ToVector2() + new Vector2(120, 100), Color.White);
+            spriteBatch.DrawString(playerReady, "1) " + solutions[0], lowerPaperScrollBox.Location.ToVector2() + new Vector2(100, 100), Color.White);
             spriteBatch.DrawString(playerReady, "2) " + solutions[1], lowerPaperScrollBox.Location.ToVector2() + new Vector2(lowerPaperScrollBox.Width / 2, 100), Color.White);
-            spriteBatch.DrawString(playerReady, "3) " + solutions[2], lowerPaperScrollBox.Location.ToVector2() + new Vector2(120, lowerPaperScrollBox.Height / 2), Color.White);
+            spriteBatch.DrawString(playerReady, "3) " + solutions[2], lowerPaperScrollBox.Location.ToVector2() + new Vector2(100, lowerPaperScrollBox.Height / 2), Color.White);
             spriteBatch.DrawString(playerReady, "4) " + solutions[3], lowerPaperScrollBox.Location.ToVector2() + new Vector2(lowerPaperScrollBox.Width / 2, lowerPaperScrollBox.Height / 2), Color.White);
+            if (anweredWrong)
+                spriteBatch.DrawString(playerReady,$"{wrongNumber} är fel svar, försök igen",padlockBox.Center.ToVector2() + new Vector2(200, 0), Color.White);
         }
 
         private const double interval = 0.2;
         private double elsapsedTime = 0;
+        private bool spaceWasUp = false;
         public override void Update(GameTime gameTime)
         {
+
             if (elsapsedTime + interval > gameTime.TotalGameTime.TotalSeconds)
                 return;
 
@@ -125,8 +132,11 @@ namespace MonoGameKunskapsspel
                 lockNumber = 1;
             activeNumberTexture = numberLockTextures[lockNumber - 1];
 
-            if (state.IsKeyDown(Keys.Enter))
+            if (state.IsKeyDown(Keys.Space) && spaceWasUp)
                 CheckAnswer();
+
+            if (state.IsKeyUp(Keys.Space))
+                spaceWasUp = true;
         }
 
         private void CheckAnswer()
@@ -140,9 +150,14 @@ namespace MonoGameKunskapsspel
                 chest.Open();
                 return;
             }
-            MessageBox.Show("Fel! Försök Igen");
+            SetWrongAnswerTo(lockNumber);
         }
 
+        private void SetWrongAnswerTo(int lockNumber)
+        {
+            wrongNumber = lockNumber;
+            anweredWrong = true;
+        }
 
         public override void EndScene()
         {

@@ -83,10 +83,10 @@ namespace MonoGameKunskapsspel
             //Create Chests
             chests = new()
             {
-                new Chest(floorSegments[1].hitBox.Location + new Point(0,80), kunskapsSpel, 1),
-                new Chest(floorSegments[4].hitBox.Location + new Point(floorSegments[4].hitBox.Width - 64, 80) , kunskapsSpel, 1),
-                new Chest(floorSegments[7].hitBox.Location + new Point(0, 120), kunskapsSpel, 1),
-                new Chest(floorSegments[10].hitBox.Location + new Point(floorSegments[10].hitBox.Width - 64, 80) , kunskapsSpel, 1),
+                new Chest(floorSegments[0].hitBox.Location + new Point(floorSegments[0].hitBox.Width - 100, -20), kunskapsSpel, 1),
+                new Chest(floorSegments[3].hitBox.Location + new Point(64, -20) , kunskapsSpel, 1),
+                new Chest(floorSegments[6].hitBox.Location + new Point(floorSegments[6].hitBox.Width - 64, -20), kunskapsSpel, 1),
+                new Chest(floorSegments[9].hitBox.Location + new Point(64, -20) , kunskapsSpel, 1),
             };
 
 

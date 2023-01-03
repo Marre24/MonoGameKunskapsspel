@@ -51,7 +51,7 @@ namespace MonoGameKunskapsspel
                 "Tack så mycket, vill du ha någon betalning för detta?",
                 "Är du säker på att du inte vill ha någon betalning?",
                 "Om du säger det så...",
-                "Följ stigen den vänstra stigen som går norr så förklarar jag mer",
+                "Följ den vänstra stigen som går mot norr så möter jag dig där och förklarar mer",
             }, kunskapsSpel.animations);
 
 
