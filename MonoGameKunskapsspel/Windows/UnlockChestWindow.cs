@@ -13,6 +13,8 @@ using System.Windows.Forms;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 using System.Security.AccessControl;
+using Microsoft.Xna.Framework.Audio;
+using System.Threading;
 
 namespace MonoGameKunskapsspel
 {
@@ -35,6 +37,8 @@ namespace MonoGameKunskapsspel
         private int lockNumber = 1;
         private bool anweredWrong = false;
         private int wrongNumber;
+        readonly SoundEffect chestSound;
+        readonly SoundEffect keySound;
 
         public UnlockChestWindow(int rightAnswer, string problem, List<string> solutions, KunskapsSpel kunskapsSpel, Camera camera, Player player, Chest chest, State prevousState) : base(kunskapsSpel, camera, player, prevousState)
         {
@@ -43,6 +47,8 @@ namespace MonoGameKunskapsspel
             this.rightAnswer = rightAnswer;
             this.solutions = solutions;
             this.chest = chest;
+            chestSound = kunskapsSpel.Content.Load<SoundEffect>("Music/ChestOpening");
+            keySound = kunskapsSpel.Content.Load<SoundEffect>("Music/KeySound");
             padlockBox = new(camera.window.Center + new Point(-331, 200), new(232, 268));
             numberBox = new(padlockBox.Center + new Point(-50, 50), new(100, 36));
             upperPaperScrollBox = new(camera.window.Center - new Point(400, 500), new(800, 300));
@@ -139,6 +145,7 @@ namespace MonoGameKunskapsspel
                 spaceWasUp = true;
         }
 
+
         private void CheckAnswer()
         {
             if (lockNumber == rightAnswer)
@@ -148,8 +155,13 @@ namespace MonoGameKunskapsspel
                 kunskapsSpel.activeWindow = null;
                 player.activeState = State.Walking;
                 chest.Open();
+                SoundEffect.MasterVolume = 0.6f;
+                chestSound.Play();
+                Thread.Sleep(1000);
+                keySound.Play();
                 return;
             }
+            player.wrongAnswers++;
             SetWrongAnswerTo(lockNumber);
         }
 

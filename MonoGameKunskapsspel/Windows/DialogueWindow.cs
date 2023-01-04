@@ -31,6 +31,9 @@ namespace MonoGameKunskapsspel
 
         public DialogueWindow(KunskapsSpel kunskapsSpel, Player player, Camera camera, List<string> dialogue, State prevousState) : base(kunskapsSpel, camera, player, prevousState)
         {
+            if (kunskapsSpel.roomManager.activeRoomId == 6)
+                kunskapsSpel.musicManager.PlayBossFightMusic();
+
             kunskapsSpel.activeWindow = this;
             playerReady = kunskapsSpel.Content.Load<SpriteFont>("PlayerReady");
             playerReady.LineSpacing = 30;

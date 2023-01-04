@@ -512,6 +512,108 @@
 /processorParam:TextureFormat=Color
 /build:Msc/UnlockedPadlock.png
 
+#begin Music/063 Investigating the Caves.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/063 Investigating the Caves.mp3
+
+#begin Music/064 Lair of Harpies.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/064 Lair of Harpies.mp3
+
+#begin Music/Barrier.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/Barrier.mp3
+
+#begin Music/Bwanga.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/Bwanga.mp3
+
+#begin Music/ChestOpening.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Music/ChestOpening.wav
+
+#begin Music/DoorOpening.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Music/DoorOpening.wav
+
+#begin Music/GrassStep1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Music/GrassStep1.wav
+
+#begin Music/GrassStep2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Music/GrassStep2.wav
+
+#begin Music/GrassStep3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Music/GrassStep3.wav
+
+#begin Music/GrassStep4.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Music/GrassStep4.wav
+
+#begin Music/KeySound.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Music/KeySound.wav
+
+#begin Music/OnceOponATime.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/OnceOponATime.mp3
+
+#begin Music/StoneStep1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Music/StoneStep1.wav
+
+#begin Music/StoneStep2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Music/StoneStep2.wav
+
+#begin Music/StoneStep3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Music/StoneStep3.wav
+
+#begin Music/StoneStep4.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Music/StoneStep4.wav
+
+#begin Music/UnderTale.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/UnderTale.mp3
+
 #begin Npc/WizzardIdleSheet.png
 /importer:TextureImporter
 /processor:TextureProcessor

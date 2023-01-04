@@ -55,7 +55,7 @@ namespace MonoGameKunskapsspel
 
             if (!Keyboard.GetState().IsKeyDown(Keys.Space))
                 return;
-
+            kunskapsSpel.player.velocity = Point.Zero;  
             _ = new UnlockChestWindow(rightAnswer, problem, solutions, kunskapsSpel, kunskapsSpel.camera, kunskapsSpel.player, this, kunskapsSpel.player.activeState);
         }
 

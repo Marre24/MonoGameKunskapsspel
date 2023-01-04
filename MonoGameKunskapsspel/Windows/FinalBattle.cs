@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Windows.Forms;
 using MessageBox = System.Windows.Forms.MessageBox;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
+using Microsoft.Xna.Framework.Media;
 
 namespace MonoGameKunskapsspel
 {
@@ -137,6 +138,7 @@ namespace MonoGameKunskapsspel
             }
             kunskapsSpel.activeWindow = new DeathWindow(kunskapsSpel, camera, enemy, player, player.activeState);
             player.hitBox.Location = new(7 * 96, 16 * 96 - player.hitBox.Height - 120);
+            player.wrongAnswers++;
             player.activeState = State.Dead;
         }
 

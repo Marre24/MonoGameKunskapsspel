@@ -57,6 +57,7 @@ namespace MonoGameKunskapsspel
             {
                 kunskapsSpel.player.activeState = State.Ended;
                 kunskapsSpel.activeWindow = new EndScreen(kunskapsSpel, kunskapsSpel.camera, kunskapsSpel.player, State.InStartScreen);
+                Thread.Sleep(1000);
                 return;
             }
 
@@ -88,6 +89,7 @@ namespace MonoGameKunskapsspel
         public void Kill()
         {
             isDead = true;
+            kunskapsSpel.musicManager.ChangeSlowlyToEnding();
             kunskapsSpel.animations[$"OrcDeath{id}"].FrameSpeed = 0.4f;
             animationManager.Play(kunskapsSpel.animations[$"OrcDeath{id}"]);
         }

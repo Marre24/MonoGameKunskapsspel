@@ -21,6 +21,7 @@ namespace MonoGameKunskapsspel
         public CutScene activeCutscene;
         public Dictionary<string, Animation> animations;
         public Problems problems = new();
+        public MusicManager musicManager;
 
         public KunskapsSpel()
         {
@@ -61,6 +62,7 @@ namespace MonoGameKunskapsspel
             spriteBatch = new SpriteBatch(GraphicsDevice);
             player = new Player(this, animations);
             camera = new Camera(player.hitBox);
+            musicManager = new(this);
 
             //Add rooms in list
             roomManager.Add(new StartScreen(0, this));
@@ -86,6 +88,11 @@ namespace MonoGameKunskapsspel
 
         protected override void Update(GameTime gameTime)
         {
+            //Music
+            musicManager.Update(roomManager.activeRoomId, gameTime);
+
+
+            //Checking states
             if (player.activeState == State.Walking)
             {
                 player.Update(gameTime);
@@ -101,7 +108,6 @@ namespace MonoGameKunskapsspel
 
             if (player.activeState == State.WatchingCutScene)
                 activeCutscene.Update(gameTime);
-
 
             if (player.activeState == State.InStartScreen)
             {

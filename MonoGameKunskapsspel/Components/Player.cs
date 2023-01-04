@@ -42,7 +42,7 @@ namespace MonoGameKunskapsspel
         public Point velocity = new(0, 0);
         private const int movementSpeed = 5;
 
-        public int keyAmount = 10;
+        public int keyAmount = 0;
         public int wrongAnswers;
 
         public Player(KunskapsSpel kunskapsSpel, Dictionary<string, Animation> animations) : base(kunskapsSpel)

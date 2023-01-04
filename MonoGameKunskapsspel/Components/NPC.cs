@@ -34,11 +34,18 @@ namespace MonoGameKunskapsspel
             animationManager.Draw(spriteBatch);
         }
         private bool spaceWasUp = false;
+        private bool first = true;
+        private double gameTimeElapsed = 0;
+        private const double interval = 2;
 
         public override void Update(GameTime gameTime)
         {
-            
-            if (!hasInteracted && kunskapsSpel.roomManager.GetActiveRoom().RoomID == 1)
+            if (first && kunskapsSpel.roomManager.GetActiveRoom().RoomID == 1)
+            {
+                gameTimeElapsed = gameTime.TotalGameTime.TotalSeconds;
+                first = false;
+            }
+            if (!hasInteracted && kunskapsSpel.roomManager.GetActiveRoom().RoomID == 1 && interval + gameTimeElapsed < gameTime.TotalGameTime.TotalSeconds)
                 StartCutScene(gameTime);
 
             animationManager.Position = hitBox.Location.ToVector2();
@@ -50,6 +57,7 @@ namespace MonoGameKunskapsspel
             {
                 spaceWasUp = false;
                 kunskapsSpel.player.activeState = State.ReadingText;
+                kunskapsSpel.player.velocity = new(0, 0);
                 _ = new DialogueWindow(kunskapsSpel, kunskapsSpel.player, kunskapsSpel.camera, dialogue, State.Walking);
             }
             if (Keyboard.GetState().IsKeyUp(Keys.Space) && kunskapsSpel.player.activeState == State.Walking)

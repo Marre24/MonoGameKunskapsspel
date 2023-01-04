@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,7 @@ namespace MonoGameKunskapsspel
         private bool buttonIsUp = true;
         public DeathWindow(KunskapsSpel kunskapsSpel, Camera camera, Enemy enemy, Player player, State prevousState) : base(kunskapsSpel, camera, player, prevousState)
         {
+            kunskapsSpel.musicManager.ChangeSlowlyToEnding();
             font = kunskapsSpel.Content.Load<SpriteFont>("LargePlayerReady");
             window = new(0,0,Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
             buttonDownTexture = kunskapsSpel.Content.Load<Texture2D>("UI/ButtonDown");
@@ -59,7 +61,7 @@ namespace MonoGameKunskapsspel
             {
                 kunskapsSpel.player.activeState = State.Walking;
                 kunskapsSpel.activeWindow = null;
-                
+                kunskapsSpel.musicManager.increment = 0;
                 enemy.hasInteracted = false;
             }
         }

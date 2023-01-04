@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -111,10 +112,12 @@ namespace MonoGameKunskapsspel
             {
                 _ = new DialogueWindow(kunskapsSpel, kunskapsSpel.player, kunskapsSpel.camera, new()
                 {
-                    $"*Knak* Du använde {kunskapsSpel.player.keyAmount} st nycklar för att öppna denna dörr"
+                    $"Du använde {kunskapsSpel.player.keyAmount} st nycklar för att öppna denna dörr"
                 }, kunskapsSpel.player.activeState);
                 kunskapsSpel.player.keyAmount -= amountOfKeysToOpen;
                 open = true;
+                SoundEffect.MasterVolume = 0.8f;
+                kunskapsSpel.Content.Load<SoundEffect>("Music/DoorOpening").Play();
                 return;
             }
 
