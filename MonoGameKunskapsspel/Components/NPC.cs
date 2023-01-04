@@ -13,6 +13,7 @@ namespace MonoGameKunskapsspel
         private readonly AnimationManager animationManager;
         public List<string> dialogue;
         private readonly Point size = new(50, 64);
+        public int interactionPhase = 0;
         public NPC(Point location, KunskapsSpel kunskapsSpel, List<string> dialog, Dictionary<string, Animation> animations) : base(kunskapsSpel)
         {
             this.animations = animations;
@@ -52,12 +53,17 @@ namespace MonoGameKunskapsspel
                 spaceWasUp = false;
                 kunskapsSpel.player.activeState = State.ReadingText;
                 kunskapsSpel.player.velocity = new(0, 0);
+                if (dialogue != tempDialogue)
+                {
+                    interactionPhase++;
+                    tempDialogue = dialogue;
+                }
                 _ = new DialogueWindow(kunskapsSpel, kunskapsSpel.player, kunskapsSpel.camera, dialogue, State.Walking);
             }
             if (Keyboard.GetState().IsKeyUp(Keys.Space) && kunskapsSpel.player.activeState == State.Walking)
                 spaceWasUp = true;
         }
-
+        List<string> tempDialogue;
         private void StartCutScene(GameTime gameTime)
         {
             kunskapsSpel.player.Update(gameTime);

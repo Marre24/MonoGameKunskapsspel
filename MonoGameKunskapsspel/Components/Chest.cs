@@ -15,6 +15,7 @@ namespace MonoGameKunskapsspel
         private readonly Texture2D openTexture;
         private readonly Texture2D closedTexture;
         private readonly int amountOfKeysInChest;
+        public bool canBeInteractedWith;
 
         public Chest(Point location, KunskapsSpel kunskapsSpel, int amountOfKeysInChest) : base(kunskapsSpel)
         {
@@ -26,6 +27,20 @@ namespace MonoGameKunskapsspel
             closedTexture = kunskapsSpel.Content.Load<Texture2D>("Dungeon./ClosedChest");
             haveColisison = true;
             this.amountOfKeysInChest = amountOfKeysInChest;
+            canBeInteractedWith = true;
+        }
+
+        public Chest(Point location, KunskapsSpel kunskapsSpel) : base(kunskapsSpel)
+        {
+            hitBox = new Rectangle(location, size);
+            interactHitBox = new Rectangle(location - new Point(20, 20), size + new Point(40, 40));
+            (problem, rightAnswer, solutions) = kunskapsSpel.problems.GetCurrentProblem();
+
+            openTexture = kunskapsSpel.Content.Load<Texture2D>("Dungeon./OpenChest");
+            closedTexture = kunskapsSpel.Content.Load<Texture2D>("Dungeon./ClosedChest");
+            haveColisison = true;
+            amountOfKeysInChest = 0;
+            canBeInteractedWith = false;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -43,11 +58,15 @@ namespace MonoGameKunskapsspel
             if (open)
                 return;
 
+            if (!canBeInteractedWith)
+                return;
+
             if (!PlayerCanInteract(kunskapsSpel.player))
                 return;
 
             if (!Keyboard.GetState().IsKeyDown(Keys.Space))
                 return;
+
             kunskapsSpel.player.velocity = Point.Zero;  
             _ = new UnlockChestWindow(rightAnswer, problem, solutions, kunskapsSpel, kunskapsSpel.camera, kunskapsSpel.player, this, kunskapsSpel.player.activeState);
         }

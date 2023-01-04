@@ -89,15 +89,40 @@ namespace MonoGameKunskapsspel
                 return;
 
             if (!kunskapsSpel.roomManager.rooms[2].chests[0].open)
-            {
                 if (kunskapsSpel.roomManager.GetActiveRoom().RoomID == 1 && WillBeInsideOfComponent(kunskapsSpel.roomManager.GetActiveRoom().floorSegments[2]))
                 {
                     _ = new DialogueWindow(kunskapsSpel, kunskapsSpel.player, kunskapsSpel.camera, new()
                     {
-                        "Jag tror att Edazor sa att jag skulle ta den vänstra stigen innan jag gör något annat"
+                        "Jag tror att Edazor sa att jag skulle prata med honom och sen ta den vänstra stigen"
                     }, State.Walking);
+                    return;
                 }
-            }
+
+            if (kunskapsSpel.roomManager.rooms[2].npc.interactionPhase <= 1 && kunskapsSpel.roomManager.rooms[2].npc.interactionPhase != 0)
+                if (kunskapsSpel.roomManager.GetActiveRoom().RoomID == 2 && WillBeInsideOfComponent(kunskapsSpel.roomManager.GetActiveRoom().floorSegments[1]))
+                {
+                    kunskapsSpel.roomManager.rooms[1].npc.dialogue = new()
+                    {
+                        "Halloj igen, fortsätt österut till grottan"
+                    };
+                    _ = new DialogueWindow(kunskapsSpel, kunskapsSpel.player, kunskapsSpel.camera, new()
+                    {
+                        "Det känns som att jag har saker kvar att göra i det här rummet"
+                    }, State.Walking);
+                    return;
+                }
+
+            if (kunskapsSpel.roomManager.rooms[1].npc.interactionPhase == 0)
+                if (kunskapsSpel.roomManager.GetActiveRoom().RoomID == 1 && WillBeInsideOfComponent(
+                    new Rectangle(kunskapsSpel.roomManager.GetActiveRoom().floorSegments[1].hitBox.Location - new Point(0, 550), 
+                    kunskapsSpel.roomManager.GetActiveRoom().floorSegments[1].hitBox.Size)))
+                {
+                    _ = new DialogueWindow(kunskapsSpel, kunskapsSpel.player, kunskapsSpel.camera, new()
+                    {
+                        "Det känns som att jag har saker kvar att göra i det här rummet"
+                    }, State.Walking);
+                    return;
+                }
 
             (bool canMoveX, bool canMoveY) = CanMove();
 
@@ -182,6 +207,11 @@ namespace MonoGameKunskapsspel
         {
             return (component.hitBox.Left <= hitBox.Right - velocity.X && component.hitBox.Right >= hitBox.Left - velocity.X) &&
                 (component.hitBox.Top <= hitBox.Bottom - velocity.Y && component.hitBox.Bottom >= hitBox.Bottom - velocity.Y);
+        }
+        private bool WillBeInsideOfComponent(Rectangle rectangle)
+        {
+            return (rectangle.Left <= hitBox.Right - velocity.X && rectangle.Right >= hitBox.Left - velocity.X) &&
+                (rectangle.Top <= hitBox.Bottom - velocity.Y && rectangle.Bottom >= hitBox.Bottom - velocity.Y);
         }
 
         private bool AreInsideOfComponent(Component component)

@@ -55,7 +55,7 @@ namespace MonoGameKunskapsspel
             //Create chest
             chests = new()
             {
-                new Chest(floorSegments[0].hitBox.Center - new Point(32, 300), kunskapsSpel, 0),
+                new Chest(floorSegments[0].hitBox.Location + new Point(floorSegments[0].hitBox.Width / 2, - 20), kunskapsSpel),
             };
 
             foreach (FloorSegment floorSegment in floorSegments)
@@ -86,6 +86,9 @@ namespace MonoGameKunskapsspel
                     "Om det var oklart eller du behöver repetera så är det bara att prata med mig igen så förklarar jag allt detta igen",
                     "Annars så kan du följa sigen i öster till grottan där du får använda dina kunskaper",
                 };
+
+            if (npc.interactionPhase == 1)
+                chests[0].canBeInteractedWith = true;
 
             npc.Update(gameTime);
             frontDoor.Update(gameTime);
