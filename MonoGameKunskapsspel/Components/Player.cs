@@ -3,16 +3,8 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Diagnostics;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Input;
-using SharpDX.Direct3D9;
-using System.Windows.Forms;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
-using SharpDX.Direct2D1.Effects;
-using System.Reflection;
 
 namespace MonoGameKunskapsspel
 {

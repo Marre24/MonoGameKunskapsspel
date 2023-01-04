@@ -1,18 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.BitmapFonts;
-using MonoGame.Extended.Timers;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MessageBox = System.Windows.Forms.MessageBox;
 using System.Windows.Forms;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
-using System.Security.AccessControl;
 using Microsoft.Xna.Framework.Audio;
 using System.Threading;
 
