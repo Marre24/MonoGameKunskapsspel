@@ -26,6 +26,8 @@ namespace MonoGameKunskapsspel
                 sidewall.Draw(gameTime, spriteBatch);
             foreach (Enemy enemy in enemies)
                 enemy.Draw(gameTime, spriteBatch);
+
+
         }
 
         public override void Initialize()
@@ -49,9 +51,6 @@ namespace MonoGameKunskapsspel
                 new SideWall(8, new(16,0), kunskapsSpel, "RightWall"),
             };
 
-
-
-
             enemies = new()
             {
                 new Enemy(kunskapsSpel, floorSegments[0].hitBox.Center + new Point(-200, -300), null, 1),
@@ -61,7 +60,7 @@ namespace MonoGameKunskapsspel
 
             CreateDoors();
             foreach (Enemy enemy in enemies)
-                components.Add(enemy);
+                components.Add(enemy.hitBox);
         }
 
         public override void SetDoorLocations()

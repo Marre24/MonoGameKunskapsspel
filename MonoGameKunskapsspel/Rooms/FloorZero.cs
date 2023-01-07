@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SharpDX.Direct2D1.Effects;
 using System.Collections.Generic;
 
 namespace MonoGameKunskapsspel
@@ -13,14 +14,14 @@ namespace MonoGameKunskapsspel
         public override void CreateDoors()
         {
             backDoor = new Door(
-                new Rectangle(floorSegments[0].hitBox.Location + new Point(floorSegments[0].hitBox.Width / 2 - 64, - 184),
-                new(128, 184)), 
+                new Rectangle(floorSegments[0].hitBox.Location + new Point(floorSegments[0].hitBox.Width / 2 - 64, -184),
+                new(128, 184)),
                 true, back, kunskapsSpel,
                 kunskapsSpel.Content.Load<Texture2D>("Dungeon/ClosedDoor"),
                 kunskapsSpel.Content.Load<Texture2D>("Dungeon/OpenDoor"), 5);
 
             frontDoor = new Door(
-                new Rectangle(floorSegments[6].hitBox.Location + new Point(floorSegments[6].hitBox.Width / 2 - 64, - 184),
+                new Rectangle(floorSegments[6].hitBox.Location + new Point(floorSegments[6].hitBox.Width / 2 - 64, -184),
                 new(128, 184)),
                 false, front, kunskapsSpel,
                 kunskapsSpel.Content.Load<Texture2D>("Dungeon/ClosedDoor"),
@@ -42,6 +43,12 @@ namespace MonoGameKunskapsspel
 
             foreach (Chest chest in chests)
                 chest.Draw(gameTime, spriteBatch);
+
+            foreach (Table table in tables)
+                table.Draw(gameTime, spriteBatch);
+
+            foreach (BoxesAndBarrels boxesAndBarrels in boxesAndBarrels)
+                boxesAndBarrels.Draw(gameTime, spriteBatch);
 
             frontDoor.Draw(gameTime, spriteBatch);
             backDoor.Draw(gameTime, spriteBatch);
@@ -109,14 +116,57 @@ namespace MonoGameKunskapsspel
                 new Chest(floorSegments[3].hitBox.Location + new Point(100, -20), kunskapsSpel, 1),
             };
 
-            foreach (FloorSegment floorSegment in floorSegments)
-                components.Add(floorSegment);
-            foreach (Wall wall in walls)
-                components.Add(wall);
-            foreach (SideWall sideWall in sideWalls)
-                components.Add(sideWall);
+            //Create Tables
+            tables = new()
+            {
+                new Table(floorSegments[3].hitBox.Location + new Point(floorSegments[3].hitBox.Width - 500, floorSegments[3].hitBox.Bottom - 400), "Horizontal", kunskapsSpel),
+                new Table(floorSegments[5].hitBox.Location + new Point(0, floorSegments[5].hitBox.Height), "Horizontal", kunskapsSpel),
+                new Table(floorSegments[6].hitBox.Location + new Point(200, floorSegments[6].hitBox.Height ), "Horizontal", kunskapsSpel),
+                //new Table(floorSegments[0].hitBox.Location + new Point(0, 1536), "Vertical", kunskapsSpel),
+            };
+
+            boxesAndBarrels = new()
+            {
+                new(floorSegments[0].hitBox.Location + new Point(700, 300), true, kunskapsSpel),
+                new(floorSegments[0].hitBox.Location + new Point(50, 800), true, kunskapsSpel),
+                new(floorSegments[0].hitBox.Location + new Point(400, 1500), false, kunskapsSpel),
+                new(floorSegments[0].hitBox.Location + new Point(500, 2800), false, kunskapsSpel),
+                new(floorSegments[0].hitBox.Location + new Point(200, 3000), true, kunskapsSpel),
+                new(floorSegments[0].hitBox.Location + new Point(0, 4200), false, kunskapsSpel),
+
+                new(floorSegments[6].hitBox.Location + new Point(600, 400), false, kunskapsSpel),
+                new(floorSegments[6].hitBox.Location + new Point(200, 900), true, kunskapsSpel),
+                new(floorSegments[6].hitBox.Location + new Point(300, 1500), false, kunskapsSpel),
+                new(floorSegments[6].hitBox.Location + new Point(500, 3000), true, kunskapsSpel),
+            };
+
+            foreach (BoxesAndBarrels boxesAndBarrels in boxesAndBarrels)
+                components.Add(boxesAndBarrels.hitBox);
+
+
+            foreach (Table table in tables)
+
+                if (table.typeOfTable == "Horizontal")
+                {
+                    components.Add(table.downChairBox1);
+                    components.Add(table.downChairBox2);
+                    components.Add(table.leftChairBox);
+                    components.Add(table.rightChairBox);
+                    components.Add(table.upChairBox1);
+                    components.Add(table.upChairBox2);
+                    components.Add(table.tableBox);
+                }
+                else
+                {
+                    components.Add(table.downChairBox1);
+                    components.Add(table.leftChairBox);
+                    components.Add(table.rightChairBox);
+                    components.Add(table.upChairBox1);
+                    components.Add(table.tableBox);
+                }
+
             foreach (Chest chest in chests)
-                components.Add(chest);
+                components.Add(chest.hitBox);
 
         }
 

@@ -28,7 +28,7 @@ namespace MonoGameKunskapsspel
 
         private Rectangle inventoryHitbox = new(-10000,-10000,0,0);
         private Texture2D inventoryTexture;
-        private readonly Point position = new(700, 100);
+        private readonly Point position = new(650, 100);
         public Point size = new(48, 62);
 
         public Point velocity = new(0, 0);
@@ -188,14 +188,14 @@ namespace MonoGameKunskapsspel
 
             bool colidesX = false;
             bool colidesY = false;
-            foreach (Component component in kunskapsSpel.roomManager.GetActiveRoom().components)
+            foreach (Rectangle rectangle in kunskapsSpel.roomManager.GetActiveRoom().components)
             {
-                if (component.haveColisison == true && WillBeInsideOfComponent(component))
+                if (WillBeInsideOfComponent(rectangle))
                 {
-                    if (component.hitBox.Contains(new Vector2(hitBox.Right - velocity.X, hitBox.Bottom)) || component.hitBox.Contains(new Vector2(hitBox.Left - velocity.X, hitBox.Bottom)))
+                    if (rectangle.Contains(new Vector2(hitBox.Right - velocity.X, hitBox.Bottom)) || rectangle.Contains(new Vector2(hitBox.Left - velocity.X, hitBox.Bottom)))
                         colidesX = true;
 
-                    if (component.hitBox.Contains(new Vector2(hitBox.Right, hitBox.Bottom - velocity.Y)) || component.hitBox.Contains(new Vector2(hitBox.Left, hitBox.Bottom - velocity.Y)))
+                    if (rectangle.Contains(new Vector2(hitBox.Right, hitBox.Bottom - velocity.Y)) || rectangle.Contains(new Vector2(hitBox.Left, hitBox.Bottom - velocity.Y)))
                         colidesY = true;
                 }
             }

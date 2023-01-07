@@ -57,12 +57,10 @@ namespace MonoGameKunskapsspel
             {
                 new Chest(floorSegments[0].hitBox.Location + new Point(floorSegments[0].hitBox.Width / 2, - 20), kunskapsSpel),
             };
-
-            foreach (FloorSegment floorSegment in floorSegments)
-                components.Add(floorSegment);
+            
             foreach (Chest chest in chests)
-                components.Add(chest);
-            components.Add(npc);
+                components.Add(chest.hitBox);
+            components.Add(npc.hitBox);
         }
 
         public override void SetDoorLocations()

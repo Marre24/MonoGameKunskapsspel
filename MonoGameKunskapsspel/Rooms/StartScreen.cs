@@ -21,7 +21,7 @@ namespace MonoGameKunskapsspel
             buttonUpTexture = kunskapsSpel.Content.Load<Texture2D>("UI/ButtonUp");
             font = kunskapsSpel.Content.Load<SpriteFont>("LargePlayerReady");
             buttonFont = kunskapsSpel.Content.Load<SpriteFont>("PlayerReady");
-            npc = new NPC(new(1270, 100), kunskapsSpel, new List<string>(), kunskapsSpel.animations);
+            npc = new NPC(new(1205, 100), kunskapsSpel, new List<string>(), kunskapsSpel.animations);
         }
 
         public override void CreateDoors()
@@ -33,7 +33,7 @@ namespace MonoGameKunskapsspel
         {
             kunskapsSpel.player.Draw(gameTime, spriteBatch);
             npc.Draw(gameTime, spriteBatch);
-            spriteBatch.DrawString(font, "Mattehjälten", window.Center.ToVector2() - new Point(180, 435).ToVector2(), Color.Wheat);
+            spriteBatch.DrawString(font, "Mattehjälten", window.Center.ToVector2() - new Point(240, 435).ToVector2(), Color.Wheat);
             if (buttonIsUp)
                 spriteBatch.Draw(buttonUpTexture, buttonHitBox, Color.White);
             else
@@ -70,7 +70,7 @@ namespace MonoGameKunskapsspel
                 kunskapsSpel.player.activeState = State.Walking;
                 kunskapsSpel.player.hitBox.Location = new Point(100,150);
                 kunskapsSpel.player.startTime = gameTime.TotalGameTime.TotalSeconds;
-                kunskapsSpel.roomManager.SetActiveRoom(kunskapsSpel.roomManager.rooms[4]);
+                kunskapsSpel.roomManager.SetActiveRoom(kunskapsSpel.roomManager.rooms[1]);
             }
 
         }

@@ -40,6 +40,10 @@ namespace MonoGameKunskapsspel
             foreach (Chest chest in chests)
                 chest.Draw(gameTime, spriteBatch);
 
+            foreach (BoxesAndBarrels boxesAndBarrels in boxesAndBarrels)
+                boxesAndBarrels.Draw(gameTime, spriteBatch);
+
+            tables[0].Draw(gameTime, spriteBatch);
             frontDoor.Draw(gameTime, spriteBatch);
             backDoor.Draw(gameTime, spriteBatch);
         }
@@ -101,11 +105,42 @@ namespace MonoGameKunskapsspel
                 new Chest(floorSegments[9].hitBox.Location + new Point(64, -20) , kunskapsSpel, 1),
             };
 
+            tables = new()
+            {
+                new Table(floorSegments[2].hitBox.Location + new Point(500, 1100), "Horizontal", kunskapsSpel),
+            };
 
-            foreach (FloorSegment floorSegment in floorSegments)
-                components.Add(floorSegment);
+            boxesAndBarrels = new()
+            {
+                new(floorSegments[0].hitBox.Location + new Point(700, 300), true, kunskapsSpel),
+                new(floorSegments[0].hitBox.Location + new Point(2000, 100), true, kunskapsSpel),
+
+                new(floorSegments[2].hitBox.Location + new Point(1000, 1000), false, kunskapsSpel),
+                new(floorSegments[2].hitBox.Location + new Point(700, 500), false, kunskapsSpel),
+
+                new(floorSegments[4].hitBox.Location + new Point(200, 0), true, kunskapsSpel),
+                new(floorSegments[4].hitBox.Location + new Point(450, 200), false, kunskapsSpel),
+
+                new(floorSegments[7].hitBox.Location + new Point(200, 190), false, kunskapsSpel),
+                new(floorSegments[7].hitBox.Location + new Point(280, 200), true, kunskapsSpel),
+
+                new(floorSegments[10].hitBox.Location + new Point(500, 100), false, kunskapsSpel),
+            };
+
+
+            foreach (BoxesAndBarrels boxesAndBarrels in boxesAndBarrels)
+                components.Add(boxesAndBarrels.hitBox);
+
+            components.Add(tables[0].downChairBox1);
+            components.Add(tables[0].downChairBox2);
+            components.Add(tables[0].leftChairBox);
+            components.Add(tables[0].rightChairBox);
+            components.Add(tables[0].upChairBox1);
+            components.Add(tables[0].upChairBox2);
+            components.Add(tables[0].tableBox);
+
             foreach (Chest chest in chests)
-                components.Add(chest);
+                components.Add(chest.hitBox);
         }
 
         public override void SetDoorLocations()

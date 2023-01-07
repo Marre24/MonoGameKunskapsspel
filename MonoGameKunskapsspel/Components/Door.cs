@@ -12,6 +12,7 @@ namespace MonoGameKunskapsspel
         private readonly Texture2D shutTexture;
         private readonly Texture2D openTexture;
         private int amountOfKeysToOpen;
+        private readonly int keysToOpen;
         public bool open;
         private readonly bool showDoor;
 
@@ -22,6 +23,7 @@ namespace MonoGameKunskapsspel
             this.shutTexture = shutTexture;
             this.openTexture = openTexture;
             this.amountOfKeysToOpen = amountOfKeysToOpen;
+            keysToOpen = amountOfKeysToOpen;
             this.hitBox = hitBox;
             showDoor = true;
         }
@@ -110,7 +112,7 @@ namespace MonoGameKunskapsspel
             {
                 _ = new DialogueWindow(kunskapsSpel, kunskapsSpel.player, kunskapsSpel.camera, new()
                 {
-                    $"Du använde {kunskapsSpel.player.keyAmount} st nycklar för att öppna denna dörr"
+                    $"Du använde {keysToOpen} st nycklar för att öppna denna dörr"
                 }, kunskapsSpel.player.activeState);
                 kunskapsSpel.player.keyAmount -= amountOfKeysToOpen;
                 open = true;

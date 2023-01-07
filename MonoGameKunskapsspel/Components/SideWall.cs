@@ -38,7 +38,7 @@ namespace MonoGameKunskapsspel
                 new Rectangle(location + new Point(0, 8), new(xSize, ySize - 8)),
                 new Rectangle(location, new(xSize, 8)),
             };
-            hitBox = new(location, new(xSize, ySize));
+            hitBox = new(hitBoxes[0].Location, hitBoxes[0].Size + hitBoxes[1].Size + hitBoxes[2].Size);
         }
 
         public SideWall(int ySize, Point location, KunskapsSpel kunskapsSpel, string key, bool nearWall) : base(kunskapsSpel)

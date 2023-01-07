@@ -34,7 +34,7 @@ namespace MonoGameKunskapsspel
             _graphics.PreferredBackBufferHeight = Screen.PrimaryScreen.Bounds.Height;
             _graphics.SynchronizeWithVerticalRetrace = true;
             IsMouseVisible = true;
-            //_graphics.IsFullScreen = true;
+            _graphics.IsFullScreen = true;
 
             _graphics.ApplyChanges();
         }

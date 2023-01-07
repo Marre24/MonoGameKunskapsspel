@@ -52,11 +52,9 @@ namespace MonoGameKunskapsspel
 
 
 
-            foreach (FloorSegment floorSegment in floorSegments)
-                components.Add(floorSegment);
             foreach (Chest chest in chests)
-                components.Add(chest);
-            components.Add(npc);
+                components.Add(chest.hitBox);
+            components.Add(npc.hitBox);
         }
 
         public override void CreateDoors()

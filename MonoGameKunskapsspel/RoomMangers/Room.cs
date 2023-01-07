@@ -9,12 +9,14 @@ namespace MonoGameKunskapsspel
         public KunskapsSpel kunskapsSpel;
         public Rectangle window;
 
-        public List<Component> components = new();
+        public List<Rectangle> components = new();
         public List<FloorSegment> floorSegments = new();
         public List<Wall> walls = new();
         public List<SideWall> sideWalls = new();
         public List<Chest> chests = new();
         public List<Enemy> enemies;
+        public List<Table> tables;
+        public List<BoxesAndBarrels> boxesAndBarrels = new();
 
         public NPC npc;
         public Room back;
