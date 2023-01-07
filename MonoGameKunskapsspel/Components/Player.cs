@@ -28,14 +28,15 @@ namespace MonoGameKunskapsspel
 
         private Rectangle inventoryHitbox = new(-10000,-10000,0,0);
         private Texture2D inventoryTexture;
-        private readonly Point position = new(700, 50);
+        private readonly Point position = new(700, 100);
         public Point size = new(48, 62);
 
         public Point velocity = new(0, 0);
         private const int movementSpeed = 5;
 
+        public double startTime;
         public int keyAmount = 0;
-        public int wrongAnswers;
+        public int wrongAnswers = 0;
 
         public Player(KunskapsSpel kunskapsSpel, Dictionary<string, Animation> animations) : base(kunskapsSpel)
         {

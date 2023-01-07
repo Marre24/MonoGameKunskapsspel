@@ -67,13 +67,29 @@ namespace MonoGameKunskapsspel
             //Create Walls
             walls = new()
             {
-                
+                new Wall(4 * x, new(0, 0), kunskapsSpel),
+                new Wall(5 * x, floorSegments[3].hitBox.Location, kunskapsSpel),
+                new Wall(2 * x, floorSegments[5].hitBox.Location + new Point(96 * x, 0), kunskapsSpel),
+                new Wall(2 * x + x / 2, floorSegments[7].hitBox.Location + new Point(48 * x, 0), kunskapsSpel),
+                new Wall(4 * x + x / 2, floorSegments[9].hitBox.Location, kunskapsSpel),
+                new Wall(4 * x, floorSegments[11].hitBox.Location + new Point(96 * x, 0), kunskapsSpel),
             };
 
             //Create SideWalls
             sideWalls = new()
             {
-                
+                new SideWall(x, new(0, 0), kunskapsSpel, "LeftWall"),
+                new SideWall(4 * x, new(4 * x, 0), kunskapsSpel, "RightWall"),
+                new SideWall(x, new(3 * x, x), kunskapsSpel, "LeftWall", false),
+                new SideWall(x, new(2 * x, 3 * x), kunskapsSpel, "LeftWall", false),
+                new SideWall(3 * x, new(-2 * x, 2 * x), kunskapsSpel, "LeftWall"),
+                new SideWall(x, new(-x, 3 * x), kunskapsSpel, "LeftWall", false),
+                new SideWall(x / 2, new(x, 4 * x), kunskapsSpel, "RightWall"),
+                new SideWall(2 * x + x / 2, new(3 * x + x / 2, 4 * x + x / 2), kunskapsSpel, "RightWall"),
+                new SideWall(x, new(3 * x, 5 * x), kunskapsSpel, "LeftWall", false),
+                new SideWall(3 * x, new(-x - x / 2, 6 * x), kunskapsSpel, "LeftWall"),
+                new SideWall(x, new(-x / 2, 7 * x), kunskapsSpel, "RightWall", false),
+                new SideWall(x, new(3 * x + x / 2 , 8 * x), kunskapsSpel, "RightWall"),
             };
 
             //Create Chests

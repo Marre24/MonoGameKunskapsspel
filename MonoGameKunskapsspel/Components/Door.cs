@@ -48,6 +48,7 @@ namespace MonoGameKunskapsspel
         }
 
         public bool first = true;
+        private bool spaceWasUp = false;
         public override void Update(GameTime gameTime)
         {
             if (!PlayerCanInteract(kunskapsSpel.player))
@@ -65,12 +66,15 @@ namespace MonoGameKunskapsspel
                     GoThroughDoor(kunskapsSpel.roomManager);
             }
 
-
-            if (!Keyboard.GetState().IsKeyDown(Keys.Space))
-                return;
-
-            if (!open)
+            
+            if (!open && Keyboard.GetState().IsKeyDown(Keys.Space) && spaceWasUp)
                 TryToOpen();
+
+            if (Keyboard.GetState().IsKeyUp(Keys.Space))
+                spaceWasUp = true;
+            else
+                spaceWasUp = false;
+
         }
 
         public void GoThroughDoor(RoomManager roomManager)

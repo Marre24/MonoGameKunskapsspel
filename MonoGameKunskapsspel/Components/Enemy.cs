@@ -12,24 +12,26 @@ namespace MonoGameKunskapsspel
         private readonly Room room;
         private readonly int id;
         public bool isDead = false;
+        public bool hasReadText = false;
 
         public Enemy(KunskapsSpel kunskapsSpel, Point position, Room room, int id) : base(kunskapsSpel)
         {
-            if (room != null)
-            {
-                cutScene = new PanToTarget(kunskapsSpel.player, kunskapsSpel, this, room, new()
-                {
-                    "Huh? Vem är du och vad gör du här?",
-                    "Hade du tänkt att stoppa oss?!? Hahahahaha det kommer aldrig hända",
-                    "Ojoj jag skakar i mina skor för att är så rädd",
-                    "Nä nu är det slutlekt, dags att dö",
-                });
-            }
-            hitBox = new(position, size);
-            animationManager = new AnimationManager(kunskapsSpel.animations[$"OrcIdle{id}"]);
-            haveColisison = true;
             this.room = room;
             this.id = id;
+            animationManager = new AnimationManager(kunskapsSpel.animations[$"OrcIdle{id}"]);
+            hitBox = new(position, size);
+            haveColisison = true;
+
+            if (room == null)
+                return;
+            cutScene = new PanToTarget(kunskapsSpel.player, kunskapsSpel, this, room, new()
+            {
+                "Huh? Vem är du och vad gör du här?",
+                "Hade du tänkt att stoppa oss?!? Hahahahaha det kommer aldrig hända.",
+                "Jag skakar i mina skor för att är så rädd! HAHAHAHAHAHAHHA",
+                "Nä nu är det slutlekt, dags att dö.",
+            });
+
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -58,9 +60,18 @@ namespace MonoGameKunskapsspel
                 animationManager.Position = hitBox.Location.ToVector2();
                 animationManager.Update(gameTime);
             }
+
             if (cutScene != null)
+            {
                 if (PlayerCanInteract(kunskapsSpel.player, room.floorSegments[0]) && !hasInteracted)
                     cutScene.StartScene();
+
+                if (hasReadText)
+                    cutScene = new PanToTarget(kunskapsSpel.player, kunskapsSpel, this, room, new()
+                    {
+                        "Nä nu är det slutlekt, dags att dö.",
+                    });
+            }
         }
 
         public static bool PlayerCanInteract(Player player, FloorSegment floorSegment)

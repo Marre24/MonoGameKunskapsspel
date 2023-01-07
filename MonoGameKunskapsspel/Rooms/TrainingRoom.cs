@@ -44,12 +44,12 @@ namespace MonoGameKunskapsspel
             {
                 "Problemet som jag har påverkar inte bara mig utan hela riket.",
                 "Det har börjat krylla av vättar som plundrar byar.",
-                "Detta måste sättas stopp för, vilket jag har försökt, men min fragila kropp klarar inte av besegra vättarnaerna. Det gör att du får vara min muskelkraft.",
-                "Det du behöver göra är att gå ner i deras lya och ta itu med några av dessa vättar",
+                "Detta måste sättas stopp för, vilket jag har försökt, men min fragila kropp klarar inte av besegra vättarna. Det gör att du får vara min muskelkraft.",
+                "Det du behöver göra är att gå ner i deras lya och ta itu med några av dessa vättar.",
                 "För att komma fram till dessa vättar så behöver du låsa upp kistor för att få nycklar.",
                 "Dessa nycklar leder till dörrar som tar dig djupare i grottan.",
-                "För att kunna öppna kistorna så behöver du låsa upp kodlåset. Koden till kodlåset är svaret på en mattematisk flervals fråga, testa på min kista",
-                "Du byter kodlåsnummer med hjälp av Vänster och Höger pil, när du är nöjd med svaret så trycker du SPACE för att testa svaret",
+                "För att kunna öppna kistorna så behöver du låsa upp kodlåset. Koden till kodlåset är svaret på en mattematisk flervals fråga, testa på min kista.",
+                "Du byter kodlåsnummer med hjälp av Vänster och Höger pil, när du är nöjd med svaret så trycker du SPACE för att testa svaret.",
             }, kunskapsSpel.animations);
 
             //Create chest
@@ -75,16 +75,16 @@ namespace MonoGameKunskapsspel
             if (chests[0].open)
                 npc.dialogue = new()
                 {
-                    "Bra jobbat",
-                    "Men vättarna kommer att använda sig av mycket svårare frågor",
-                    "Dessa frågor kommer att vara om derivatan av de trigonometriska funkitionerna sinx och cosx",
-                    "När man löser dessa problem så är det väldigt viktigt att vinkeln x är skriven i radianer",
-                    "Om vinkeln x är skriven i radianer så ger det två stycken enkla samband  f(x) = sin x ger f'(x) = cos x  och  f(x) = cos x ger f'(x) = - sin x",
-                    "Jag kan gå igenom hur jag löser en exempeluppgifft",
-                    "\"Bestäm f'(π/2) då f(x) = 3 sinx - 2 cosx\",  tänk lite själv innan jag går igenom lösningen",
+                    "Bra jobbat!",
+                    "Men vättarna kommer att använda sig av mycket svårare frågor.",
+                    "Dessa frågor kommer att vara om derivatan av de trigonometriska funkitionerna sinx och cosx.",
+                    "När man löser dessa problem så är det väldigt viktigt att vinkeln x är skriven i radianer.",
+                    "Om vinkeln x är skriven i radianer så ger det två stycken enkla samband.  f(x) = sin x ger f'(x) = cos x  och  f(x) = cos x ger f'(x) = - sin x",
+                    "Jag kan gå igenom hur jag löser en exempeluppgifft.",
+                    "\"Bestäm f'(π/2) då f(x) = 3 sinx - 2 cosx\",  tänk lite själv innan jag går igenom lösningen.",
                     "sinx => cosx och cosx => -sinx  vilket gör att f'(x) = 3 (cosx) - 2 (-sinx)  = 3 cosx + 2 sinx vilket ger  f'(π/2) = 3 cos(π/2) + 2 sin(π/2)  = 3 * 0 + 2 * 1 = 2   Svar: f'(π/2) = 2",
-                    "Om det var oklart eller du behöver repetera så är det bara att prata med mig igen så förklarar jag allt detta igen",
-                    "Annars så kan du följa sigen i öster till grottan där du får använda dina kunskaper",
+                    "Om det var oklart eller du behöver repetera så är det bara att prata med mig igen så förklarar jag allt detta igen.",
+                    "Annars så kan du följa stigen i öster till grottan där du får använda dina kunskaper.",
                 };
 
             if (npc.interactionPhase == 1)

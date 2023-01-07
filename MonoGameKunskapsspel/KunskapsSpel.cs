@@ -128,6 +128,7 @@ namespace MonoGameKunskapsspel
 
             if (player.activeState == State.InStartScreen)
             {
+                IsMouseVisible = true;
                 roomManager.Draw(gameTime, spriteBatch);
                 spriteBatch.End();
                 return;
@@ -135,11 +136,13 @@ namespace MonoGameKunskapsspel
 
             if (player.activeState == State.Dead || player.activeState == State.Ended)
             {
+                IsMouseVisible = true;
                 activeWindow.Draw(gameTime, spriteBatch);
                 spriteBatch.End();
                 return;
             }
 
+            IsMouseVisible = false;
             roomManager.Draw(gameTime, spriteBatch);
             player.Draw(gameTime, spriteBatch);
             activeWindow?.Draw(gameTime, spriteBatch);

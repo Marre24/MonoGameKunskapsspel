@@ -12,8 +12,9 @@ namespace MonoGameKunskapsspel
     {
         private Rectangle window;
         private Point size = new(Screen.PrimaryScreen.Bounds.Height, Screen.PrimaryScreen.Bounds.Height);
-        private readonly int rightAnswer;
-        private readonly List<string> solutions;
+        private int rightAnswer;
+        private List<string> solutions;
+        private Dictionary<string, (int, List<string> solutions)> problems;
         private readonly Enemy enemy;
         private readonly List<Texture2D> numberLockTextures;
         private Texture2D activeNumberTexture;
@@ -23,13 +24,16 @@ namespace MonoGameKunskapsspel
         private readonly Rectangle lowerPaperScrollBox;
         private readonly SpriteFont playerReady;
         private int lockNumber = 1;
+        private string problem;
 
-        public FinalBattle(int rightAnswer, string problem, List<string> solutions, KunskapsSpel kunskapsSpel, Camera camera, Enemy enemy, Player player, State prevousState) : base(kunskapsSpel, camera, player, prevousState)
+
+
+        public FinalBattle(Dictionary<string, (int, List<string> solutions)> problems, KunskapsSpel kunskapsSpel, Camera camera, Enemy enemy, Player player, State prevousState) : base(kunskapsSpel, camera, player, prevousState)
         {
+            enemy.hasReadText = true;
             player.activeState = State.SolvingProblems;
             kunskapsSpel.activeWindow = this;
-            this.rightAnswer = rightAnswer;
-            this.solutions = solutions;
+            CopyList(problems);
             this.enemy = enemy;
             upperPaperScrollBox = new(camera.window.Center - new Point(400, 500), new(800, 300));
             lowerPaperScrollBox = new(camera.window.Center - new Point(420, 200), new(840, 392));
@@ -50,26 +54,47 @@ namespace MonoGameKunskapsspel
             paperScroll = kunskapsSpel.Content.Load<Texture2D>("Msc/PaperScroll");
             activeNumberTexture = numberLockTextures[lockNumber - 1];
 
-            List<string> words = problem.Split(" ").ToList();
-
-            foreach (string word in words)
-            {
-                if ((upperPaperScrollBox.Width - 150) * rowCount < 20 * (sentence.Length + word.Length))                   //Checks if there is space for the next word
-                {
-                    sentence += " \n ";
-                    rowCount++;
-                }
-                if (rowCount == 1)
-                    firstRowWords += word.Length + 1;
-                sentence += $"{word} ";
-            }
+            
         }
-        private readonly string sentence = "";
-        private readonly int firstRowWords = 0;
-        readonly int rowCount = 1;
+        private string sentence = "";
+        private int firstRowWords = 0;
+        private int rowCount = 1;
+
+        private void CopyList(Dictionary<string, (int, List<string> solutions)> problems)
+        {
+            this.problems = new Dictionary<string, (int, List<string> solutions)>(problems);
+        }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
+            if (temp != rightAnswers)
+            {
+                NextProblem();
+                problems.Remove(problem);
+                temp = rightAnswers;
+                List<string> words = problem.Split(" ").ToList();
+
+                foreach (string word in words)
+                {
+                    if (word.Contains(':'))
+                    {
+                        sentence += "\n";
+                        rowCount++;
+                    }
+                    else
+                    {
+                        if ((upperPaperScrollBox.Width - 150) * rowCount < 20 * (sentence.Length + word.Length))                   //Checks if there is space for the next word
+                        {
+                            sentence += " \n ";
+                            rowCount++;
+                        }
+                        if (rowCount == 1)
+                            firstRowWords += word.Length + 1;
+                        sentence += $"{word} ";
+                    }
+                }
+            }
+
             spriteBatch.Draw(kunskapsSpel.Content.Load<Texture2D>("Msc/LargeDialogbox"), window, Color.White);
 
             spriteBatch.Draw(activeNumberTexture, numberBox, Color.White);
@@ -79,14 +104,16 @@ namespace MonoGameKunskapsspel
             spriteBatch.DrawString(playerReady, sentence, upperPaperScrollBox.Center.ToVector2() - new Vector2(20 * (firstRowWords - 1) / 2, 20 * rowCount / 2), Color.White);
 
             spriteBatch.DrawString(playerReady, "1) " + solutions[0], lowerPaperScrollBox.Location.ToVector2() + new Vector2(120, 100), Color.White);
-            spriteBatch.DrawString(playerReady, "2) " + solutions[1], lowerPaperScrollBox.Location.ToVector2() + new Vector2(lowerPaperScrollBox.Width / 2, 100), Color.White);
-            spriteBatch.DrawString(playerReady, "3) " + solutions[2], lowerPaperScrollBox.Location.ToVector2() + new Vector2(120, lowerPaperScrollBox.Height / 2), Color.White);
-            spriteBatch.DrawString(playerReady, "4) " + solutions[3], lowerPaperScrollBox.Location.ToVector2() + new Vector2(lowerPaperScrollBox.Width / 2, lowerPaperScrollBox.Height / 2), Color.White);
+            spriteBatch.DrawString(playerReady, "2) " + solutions[1], lowerPaperScrollBox.Location.ToVector2() + new Vector2(120, 150), Color.White);
+            spriteBatch.DrawString(playerReady, "3) " + solutions[2], lowerPaperScrollBox.Location.ToVector2() + new Vector2(120, 200), Color.White);
+            spriteBatch.DrawString(playerReady, "4) " + solutions[3], lowerPaperScrollBox.Location.ToVector2() + new Vector2(120, 250), Color.White);
         }
 
         private const double interval = 0.2;
         private double elsapsedTime = 0;
         private bool spaceWasUp = false;
+        private int temp = -1;
+
         public override void Update(GameTime gameTime)
         {
             if (elsapsedTime + interval > gameTime.TotalGameTime.TotalSeconds)
@@ -116,19 +143,25 @@ namespace MonoGameKunskapsspel
             if (state.IsKeyDown(Keys.Space) && spaceWasUp)
                 CheckAnswer();
 
+            if (state.IsKeyDown(Keys.Space))
+                spaceWasUp = false;
             if (state.IsKeyUp(Keys.Space))
                 spaceWasUp = true;
         }
-
+        private int rightAnswers = 0;
         private void CheckAnswer()
         {
             if (lockNumber == rightAnswer)
             {
-                kunskapsSpel.activeWindow = null;
-                player.activeState = State.Walking;
-                player.hitBox.Location -= new Point(0, 300);
-                foreach (Enemy enemy in kunskapsSpel.roomManager.GetActiveRoom().enemies)
-                    enemy.Kill();
+                if (++rightAnswers == 3)
+                {
+                    kunskapsSpel.activeWindow = null;
+                    player.activeState = State.Walking;
+                    player.hitBox.Location -= new Point(0, 300);
+                    foreach (Enemy enemy in kunskapsSpel.roomManager.GetActiveRoom().enemies)
+                        enemy.Kill();
+                    return;
+                }
                 return;
             }
             kunskapsSpel.activeWindow = new DeathWindow(kunskapsSpel, camera, enemy, player, player.activeState);
@@ -137,6 +170,11 @@ namespace MonoGameKunskapsspel
             player.activeState = State.Dead;
         }
 
+        private void NextProblem()
+        {
+            sentence = "";
+            (problem, rightAnswer, solutions) = (problems.Keys.Last(), problems.Values.Last().Item1, problems.Values.Last().solutions);
+        }
 
         public override void EndScene()
         {

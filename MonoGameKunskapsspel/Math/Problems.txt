@@ -6,7 +6,9 @@ Bestäm f'(x) då f(x) = x/3 - cosx/3;2
 f'(0) då f(x) = x^2 - 2sinx + 3;1	
 h'(π) då h(t) = 0,7sint - 1,1cost;2
 s'(1,2) då  s(r) = 3,2cosr + 0,3r^3;1
-Vilken lutning har tangenten till y = cosx i punkten (0,0)?;3
+Vilken lutning har tangenten till y = sinx i punkten (0,0)?;3
 Bestäm ekvationen för tangenten till kurvan y = sinx i punkten (0,0);3
 Bestäm ekvationen för tangenten till kurvan y = cosx då x = π/2;4
-Funktionen f(x) = A*sinx + B*cosx är given.  Ange talen A och B om f(0) = 4 och f'(0) = 5;2
+Bestäm x då f'(x) = 0 och f(x) = sinx;4
+Funktionen f(x) = A*sinx + B*cosx : är given. Ange talen A och : B om f(0) = 4 och f'(0) = 5;2
+Bestäm det exakta värdet av : f'(π/4) om f(x) = sinx/2 - cosx/3;3

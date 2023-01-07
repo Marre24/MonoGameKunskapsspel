@@ -130,7 +130,7 @@ namespace MonoGameKunskapsspel
                 lockNumber = 1;
             activeNumberTexture = numberLockTextures[lockNumber - 1];
 
-            if (state.IsKeyDown(Keys.Space) && spaceWasUp)
+            if (state.IsKeyDown(Keys.Space) && spaceWasUp && wrongNumber != lockNumber)
                 CheckAnswer();
 
             if (state.IsKeyUp(Keys.Space))

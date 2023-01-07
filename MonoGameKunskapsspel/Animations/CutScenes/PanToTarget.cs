@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MonoGameKunskapsspel
 {
@@ -24,6 +25,7 @@ namespace MonoGameKunskapsspel
             this.dialogue = dialogue;
             activeState = State.WatchingCutScene;
             lastBatttle = true;
+            problems = new Problems().GetTheThreeLastProblem();
         }
         public PanToTarget(Player player, KunskapsSpel kunskapsSpel, Component target, Room room, List<string> dialogue, bool runOnCreate) : base(player, kunskapsSpel)
         {
@@ -70,20 +72,22 @@ namespace MonoGameKunskapsspel
 
             hiddenFollowPoint += dir * speed;
         }
-        FinalBattle finalBattle;
+
+        readonly Dictionary<string, (int, List<string> solutions)> problems;
 
         private void PhaseTwo()
         {
             dialogueWindow ??= new DialogueWindow(kunskapsSpel, player, kunskapsSpel.camera, dialogue, activeState);
             
-            if (dialogueWindow.ended && finalBattle == null && lastBatttle)
+            if (dialogueWindow.ended && problems != null && lastBatttle)
             {
-                (string problem, int rightAnswer, List<string> solutions) = new Problems().GetLastProblem();
-                finalBattle = new FinalBattle(rightAnswer, problem, solutions, kunskapsSpel, kunskapsSpel.camera, room.enemies[1], player, player.activeState);
+                _ = new FinalBattle(problems, kunskapsSpel, kunskapsSpel.camera, room.enemies[1], player, player.activeState);
             }
             else if(dialogueWindow.ended)
                 phaseCounter++;
         }
+
+        
 
         private static bool IsGoingAway(Vector2 currentPoint, Vector2 nextPoint, Vector2 goToPoint)
         {
@@ -112,7 +116,6 @@ namespace MonoGameKunskapsspel
             player.activeState = State.WatchingCutScene;
             hiddenFollowPoint = player.hitBox.Location.ToVector2();
             target.hasInteracted = true;
-            finalBattle = null;
             dialogueWindow = null;
 
             dir = target.hitBox.Center.ToVector2() - hiddenFollowPoint;

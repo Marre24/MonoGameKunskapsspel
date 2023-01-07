@@ -11,7 +11,7 @@ namespace MonoGameKunskapsspel
         private const int ySize = 37 * multiplyer;
         readonly Texture2D wallTexture;
         readonly Texture2D StartAndEndOfWallTexture;
-        public Wall(int xSize, Point location, KunskapsSpel kunskapsSpel) : base(kunskapsSpel)
+        public Wall(int xSize, Point location, KunskapsSpel kunskapsSpel) : base(kunskapsSpel)              //pass bottom left corner of the wall as position
         {
             wallTexture = kunskapsSpel.Content.Load<Texture2D>("Dungeon/Wall");
             StartAndEndOfWallTexture = kunskapsSpel.Content.Load<Texture2D>("Dungeon/WallStartAndEnd");

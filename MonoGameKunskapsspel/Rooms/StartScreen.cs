@@ -21,8 +21,7 @@ namespace MonoGameKunskapsspel
             buttonUpTexture = kunskapsSpel.Content.Load<Texture2D>("UI/ButtonUp");
             font = kunskapsSpel.Content.Load<SpriteFont>("LargePlayerReady");
             buttonFont = kunskapsSpel.Content.Load<SpriteFont>("PlayerReady");
-            buttonHitBox = new(window.Center - new Point(92, 0), new(46 * 4, 14 * 4));
-            npc = new NPC(new(1270, 50), kunskapsSpel, new List<string>(), kunskapsSpel.animations);
+            npc = new NPC(new(1270, 100), kunskapsSpel, new List<string>(), kunskapsSpel.animations);
         }
 
         public override void CreateDoors()
@@ -34,12 +33,12 @@ namespace MonoGameKunskapsspel
         {
             kunskapsSpel.player.Draw(gameTime, spriteBatch);
             npc.Draw(gameTime, spriteBatch);
-            spriteBatch.DrawString(font, "Mattehjälten", window.Center.ToVector2() - new Point(180, 465).ToVector2(), Color.Wheat);
+            spriteBatch.DrawString(font, "Mattehjälten", window.Center.ToVector2() - new Point(180, 435).ToVector2(), Color.Wheat);
             if (buttonIsUp)
                 spriteBatch.Draw(buttonUpTexture, buttonHitBox, Color.White);
             else
                 spriteBatch.Draw(buttonDownTexture, buttonHitBox, Color.White);
-            spriteBatch.DrawString(buttonFont, "Starta spelet", buttonHitBox.Center.ToVector2() - new Point(13 * 10, 10).ToVector2(), Color.White);
+            spriteBatch.DrawString(buttonFont, "Starta spelet", buttonHitBox.Center.ToVector2() - new Point(12 * 10 + 5, 20).ToVector2(), Color.White);
         }
 
         public override void Initialize()
@@ -61,16 +60,17 @@ namespace MonoGameKunskapsspel
             if (!buttonHitBox.Contains(mouseState.Position))
             {
                 buttonIsUp = true;
-                buttonHitBox = new(window.Center - new Point(92, 0), new(46 * 6, 14 * 6));
+                buttonHitBox = new(window.Center - new Point(138, 0), new(46 * 6, 14 * 6));
                 return;
             }
             buttonIsUp = false;
-            buttonHitBox = new(window.Center - new Point(92, -6), new(46 * 6, 13 * 6));
+            buttonHitBox = new(window.Center - new Point(138, -6), new(46 * 6, 13 * 6));
             if (mouseState.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
             {
                 kunskapsSpel.player.activeState = State.Walking;
                 kunskapsSpel.player.hitBox.Location = new Point(100,150);
-                kunskapsSpel.roomManager.SetActiveRoom(kunskapsSpel.roomManager.rooms[1]);
+                kunskapsSpel.player.startTime = gameTime.TotalGameTime.TotalSeconds;
+                kunskapsSpel.roomManager.SetActiveRoom(kunskapsSpel.roomManager.rooms[4]);
             }
 
         }

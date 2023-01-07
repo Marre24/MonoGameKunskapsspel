@@ -41,9 +41,17 @@ namespace MonoGameKunskapsspel
             problemAndAnswers.Remove(problemAndAnswers.Keys.First());
         }
 
-        public (string, int, List<string>) GetLastProblem()
+        public Dictionary<string, (int, List<string>)> GetTheThreeLastProblem()
         {
-            return (problemAndAnswers.Keys.Last(), problemAndAnswers.Values.Last().Item1, problemAndAnswers.Values.Last().Item2);
+            Dictionary<string, (int, List<string>)> temp = new();
+
+            for (int i = 0; i < 3; i++)
+            {
+                temp.Add(problemAndAnswers.Keys.Last(), (problemAndAnswers.Values.Last().Item1, problemAndAnswers.Values.Last().Item2));
+                problemAndAnswers.Remove(problemAndAnswers.Keys.Last());
+            }
+
+            return temp;
         }
     }
 }
